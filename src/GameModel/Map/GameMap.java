@@ -3,6 +3,7 @@ package GameModel.Map;
 import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -29,7 +30,9 @@ public class GameMap {
 
     //using axial coordinate system, initialize the board to prepare it for play
     public void initializeBoard() {
+
         gameBoard = new BoardSpace[boardWidth][boardLength]; //TODO minimize this size to the max possible number of tiles
+        gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
 
         //assign each board space its adjacent boardspaces
         for(int x=0;x!=boardWidth; ++x){
