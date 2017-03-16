@@ -32,6 +32,19 @@ public class TriHexTile extends Tile {
         return false;
     }
 
+    public void rotateClockwise(){
+        HexTile tmp = a;
+        a = c;
+        c = b;
+        b = tmp;
+    }
+    public void rotateCounterClockwise(){
+        HexTile tmp = a;
+        a = b;
+        b = c;
+        c = tmp;
+    }
+
     public HexTile getTileOne(){
         return a; //exposes internals but arguably necessary
     }

@@ -31,10 +31,11 @@ public class GameMap {
     //using axial coordinate system, initialize the board to prepare it for play
     public void initializeBoard() {
 
-        gameBoard = new BoardSpace[boardWidth][boardLength]; //TODO minimize this size to the max possible number of tiles
+        //gameBoard = new BoardSpace[boardWidth][boardLength]; //TODO minimize this size to the max possible number of tiles
         gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
 
-        //assign each board space its adjacent boardspaces
+        /*
+        //assign each board space its adjacent boardspaces OLD WAY
         for(int x=0;x!=boardWidth; ++x){
             for(int y=0;y!=boardLength; ++y){
                 AxialCoordinate current = new AxialCoordinate(x,y);
@@ -51,15 +52,23 @@ public class GameMap {
         }
         gameBoard[boardWidth/2][boardLength/2].setActive(); //first tile is in the middle of the board to maximize distance to edge
         //gameBoard2.forEach();
+        */
+        //adding first board space
+        gameBoard2.put(new AxialCoordinate(0,0), new BoardSpace(new ArrayList<BoardSpace>()));
     }
 
+    public void placeTriHexTile(BoardSpace whereAWillGo, Directio)
 
 
     public void placeFirstTile(TriHexTile first) {
         //TODO we'll probably have to deal with orienting "north" when the opposing player starts.
-        gameBoard[boardWidth / 2][boardLength / 2].addTile(first.getTileOne()); //origin
-        gameBoard[boardWidth / 2][boardLength / 2 - 1].addTile(first.getTileTwo()); //northwest TODO allow user to rotate initial input
-        gameBoard[boardWidth / 2 + 1][boardLength / 2 - 1].addTile(first.getTileThree()); //northeast
+//        gameBoard[boardWidth / 2][boardLength / 2].addTile(first.getTileOne()); //origin
+//        gameBoard[boardWidth / 2][boardLength / 2 - 1].addTile(first.getTileTwo()); //northwest TODO allow user to rotate initial input
+//        gameBoard[boardWidth / 2 + 1][boardLength / 2 - 1].addTile(first.getTileThree()); //northeast
+        BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));
+        firstBS.addTile(first.a);
+        firstBS.getNorth().addTile(first.b);
+        firstBS.getNorthEast().addTile(first.c);
     }
 
     //TODO this currently doesn't work
