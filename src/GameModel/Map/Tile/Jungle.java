@@ -9,6 +9,11 @@ public class Jungle extends TerrainTile{
     public boolean isJungle(){
         return true;
     }
+
+    @Override
+    public String toString(){
+        return "Jungle";
+    }
 }
 
 

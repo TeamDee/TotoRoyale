@@ -26,7 +26,7 @@ public class TileView{
     public TileView() {
         age = 0;
         hasBeenSeen = false;
-        tileableViews = new ArrayList<>();
+        //tileableViews = new ArrayList<>();
     }
 
     public List<TileableView> getList() {

@@ -22,7 +22,7 @@ public abstract class HexTile extends Tile {
 
     private BoardSpace myBoardSpace;
 
-    private TerrainTile terrainTile = null; //null implies this is an empty board space
+    //private TerrainTile terrainTile = null; //null implies this is an empty board space
 
     private int meepleCount;//TODO fix these two to include player
     private boolean hasTotoro;
@@ -84,6 +84,12 @@ public abstract class HexTile extends Tile {
         return ht.ofSameType(this);
     }
     //end TODO
+
+    @Override
+    public String toString(){
+        String returnMe = "HexTile";
+        return returnMe;
+    }
 
     public HexTile getNorth(){
         return north;

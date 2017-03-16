@@ -17,7 +17,7 @@ public class GameMap {
 
     //todo decide between these two
     private BoardSpace[][] gameBoard;
-    private Map<AxialCoordinate, BoardSpace> gameBoard2;
+    private HashMap<AxialCoordinate, BoardSpace> gameBoard2;
 
 
     private static int boardLength = 20, boardWidth = 20;
@@ -53,27 +53,85 @@ public class GameMap {
         gameBoard[boardWidth/2][boardLength/2].setActive(); //first tile is in the middle of the board to maximize distance to edge
         //gameBoard2.forEach();
         */
+
         //adding first board space
-        gameBoard2.put(new AxialCoordinate(0,0), new BoardSpace(new ArrayList<BoardSpace>()));
+        BoardSpace first = new BoardSpace(new ArrayList<BoardSpace>());
+        first.setLocation(new AxialCoordinate(0,0));
+        gameBoard2.put(first.getLocation(), first);
     }
 
-    public void placeTriHexTile(BoardSpace whereAWillGo, Directio)
+    public void placeTriHexTile(BoardSpace whereAWillGo, Direction whereWillBGo, TriHexTile toPlace){
+        //whereAWillGo.addTile();
+    }
 
+    //call this whenever you place a hextile on an empty boardspace.
+    public void addAdjacentBoardSpaces(AxialCoordinate initial){
+        //given an axial coordinate
+        //     check to see if adjacent boardspaces are active
+        //          if they are not, add them to board map
+        BoardSpace newBS;
+        BoardSpace initialBS = gameBoard2.get(initial);
+
+        if(gameBoard2.get(initial.getNorth()) == null){
+            newBS = new BoardSpace();
+            newBS.setLocation(initial.getNorth());
+            gameBoard2.put(newBS.getLocation(), newBS);
+        }
+        initialBS.setNorth(gameBoard2.get(initial.getNorth()));
+
+        if(gameBoard2.get(initial.getNorthEast()) == null){
+            newBS = new BoardSpace();
+            newBS.setLocation(initial.getNorthEast());
+            gameBoard2.put(newBS.getLocation(), newBS);
+        }
+        initialBS.setNorthEast(gameBoard2.get(initial.getNorthEast()));
+
+        if(gameBoard2.get(initial.getNorthWest()) == null){
+            newBS = new BoardSpace();
+            newBS.setLocation(initial.getNorthWest());
+            gameBoard2.put(newBS.getLocation(), newBS);
+        }
+        initialBS.setNorthWest(gameBoard2.get(initial.getNorthWest()));
+
+        if(gameBoard2.get(initial.getSouth()) == null){
+            newBS = new BoardSpace();
+            newBS.setLocation(initial.getSouth());
+            gameBoard2.put(newBS.getLocation(), newBS);
+        }
+        initialBS.setSouth(gameBoard2.get(initial.getSouth()));
+        if(gameBoard2.get(initial.getSouthEast()) == null){
+            newBS = new BoardSpace();
+            newBS.setLocation(initial.getSouthEast());
+            gameBoard2.put(newBS.getLocation(), newBS);
+        }
+        initialBS.setSouthEast(gameBoard2.get(initial.getSouthEast()));
+        if(gameBoard2.get(initial.getSouthWest()) == null){
+            newBS = new BoardSpace();
+            newBS.setLocation(initial.getSouthWest());
+            gameBoard2.put(newBS.getLocation(), newBS);
+        }
+        initialBS.setSouthWest(gameBoard2.get(initial.getSouthWest()));
+    }
 
     public void placeFirstTile(TriHexTile first) {
         //TODO we'll probably have to deal with orienting "north" when the opposing player starts.
 //        gameBoard[boardWidth / 2][boardLength / 2].addTile(first.getTileOne()); //origin
 //        gameBoard[boardWidth / 2][boardLength / 2 - 1].addTile(first.getTileTwo()); //northwest TODO allow user to rotate initial input
 //        gameBoard[boardWidth / 2 + 1][boardLength / 2 - 1].addTile(first.getTileThree()); //northeast
-        BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));
-        firstBS.addTile(first.a);
-        firstBS.getNorth().addTile(first.b);
-        firstBS.getNorthEast().addTile(first.c);
+        BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
+        addAdjacentBoardSpaces(firstBS.getLocation());
+
+        gameBoard2.get(firstBS.getLocation()).addTile(first.a);
+        gameBoard2.get(firstBS.getNorth().getLocation()).addTile(first.b);
+        addAdjacentBoardSpaces(firstBS.getNorth().getLocation());
+        gameBoard2.get(firstBS.getNorthEast().getLocation()).addTile(first.c);
+        addAdjacentBoardSpaces(firstBS.getNorthEast().getLocation());
+
     }
 
     //TODO this currently doesn't work
     public List<Placement> getLegalPlacements(TriHexTile tht) {
-        List<Placement> returnMe;
+        List<Placement> returnMe = new ArrayList<Placement>();
         HexTile ht1,ht2,ht3;
 
         ht1 = tht.getTileOne();
@@ -238,7 +296,7 @@ public class GameMap {
                 }
             }
         }
-
+        return null;
     }
 
     /*
@@ -271,6 +329,13 @@ public class GameMap {
             }
         }
         return list;
+    }
+
+    public void printInfoAboutMap(){
+        for(BoardSpace bs: gameBoard2.values()){
+            if(bs.topTile() != null)
+                System.out.println(bs.topTile() + " " + bs.getLocation());
+        }
     }
 
 

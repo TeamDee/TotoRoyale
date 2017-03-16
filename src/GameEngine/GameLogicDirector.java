@@ -39,7 +39,7 @@ public class GameLogicDirector implements Runnable{
         }
         else{
             //game logic
-            updateView();
+            //updateView();
         }
     }
 

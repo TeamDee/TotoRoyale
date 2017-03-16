@@ -26,8 +26,8 @@ public class MainMenuController extends Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             //System.out.println("NEW GAME");
-            GameController.getInstance().swapViews(new CharacterCreationController());
-            GameController.getInstance().swapViews(new CharacterCreationController());
+          //  GameController.getInstance().swapViews(new CharacterCreationController());
+            //GameController.getInstance().swapViews(new CharacterCreationController());
         }
     }
 

@@ -26,8 +26,7 @@ public class ActiveGameViewport extends Viewport {
     Player currentPlayer;
     Deck deck = GameLogicDirector.getInstance().deck;
 
-    private static ActiveGameViewport activeGameViewport =
-            new ActiveGameViewport();
+    private static ActiveGameViewport activeGameViewport = new ActiveGameViewport(new Player());
 
     public ActiveGameViewport(Player ownedBy) {
         this.setPreferredSize(ViewFrame.getInstance().getSize());

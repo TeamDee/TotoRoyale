@@ -9,4 +9,9 @@ public class Grass extends TerrainTile {
     public boolean isGrass(){
         return true;
     }
+
+    @Override
+    public String toString(){
+        return "Grass";
+    }
 }

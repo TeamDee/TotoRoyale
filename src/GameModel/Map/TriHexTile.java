@@ -8,7 +8,10 @@ import GameModel.Map.Tile.*;
 
 public class TriHexTile extends Tile {
     //TODO validate that a, b, and c are properly referencing each other
+    //A is the "center" tile, b is clockwise to a
     public HexTile a, b, c; //note that order is important a->b->c->a is clockwise
+
+    public Direction directionOfBRelativeToA = Direction.NORTH; //default value
 
     public boolean isLegalPlacement(HexTile oldA, HexTile oldB, HexTile oldC){
         if(oldA.getTriHexTile().areSameTriHexTileAsMe(oldA, oldB, oldC))
@@ -32,13 +35,20 @@ public class TriHexTile extends Tile {
         return false;
     }
 
+    //rotates b and c about a
     public void rotateClockwise(){
+        directionOfBRelativeToA = Direction.getClockwise(directionOfBRelativeToA);
+
+    }
+
+    //these basically make b or c the new a tile (a is the "center" tile, the one being placed on the desired boardspace)
+    public void changeCenterTile(){
         HexTile tmp = a;
         a = c;
         c = b;
         b = tmp;
     }
-    public void rotateCounterClockwise(){
+    public void changeCenterTile2(){
         HexTile tmp = a;
         a = b;
         b = c;
@@ -53,5 +63,15 @@ public class TriHexTile extends Tile {
     }
     public HexTile getTileThree(){
         return c; //exposes internals but arguably necessary  TODO attempt to avoid
+    }
+
+    public void setTileOne(HexTile hexTile){
+        a = hexTile;
+    }
+    public void setTileTwo(HexTile hexTile){
+        b = hexTile;
+    }
+    public void setTileThree(HexTile hexTile){
+        c = hexTile;
     }
 }

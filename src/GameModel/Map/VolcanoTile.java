@@ -14,4 +14,9 @@ public class VolcanoTile extends HexTile {
     public boolean ofSameType(TerrainTile tt){
         return false;
     }
+
+    @Override
+    public String toString(){
+        return "Volcano";
+    }
 }

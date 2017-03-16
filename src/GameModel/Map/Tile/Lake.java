@@ -8,4 +8,8 @@ public class Lake extends TerrainTile{
     public boolean isLake(){
         return true;
     }
+    @Override
+    public String toString(){
+        return "Lake";
+    }
 }

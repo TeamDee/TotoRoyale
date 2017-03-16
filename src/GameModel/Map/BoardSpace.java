@@ -21,12 +21,21 @@ public class BoardSpace extends Tile {
 
     public BoardSpace(ArrayList<BoardSpace> adjacentBoardSpaces){
         this.hasTile = false;
+        tiles = new ArrayList<HexTile>();
        //make sure you call setAdjacentSpaces from somewhere. Currently being done in GameMap as of 3/10/17
+    }
+    public BoardSpace(){
+
+        this.hasTile = false;
+        tiles = new ArrayList<HexTile>();
     }
 
 
     public HexTile topTile(){
-        return tiles.get(tiles.size()-1);
+        if(tiles.size()>0)
+            return tiles.get(tiles.size()-1);
+        else
+            return null;
     }
     public boolean hasTile(){
         return hasTile;
@@ -37,7 +46,7 @@ public class BoardSpace extends Tile {
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
         if(!hasTile){
-            activateAdjacentBoardSpaces();
+//            activateAdjacentBoardSpaces();
         }
         hasTile = true;
         if(tiles == null){
@@ -58,6 +67,13 @@ public class BoardSpace extends Tile {
         for(BoardSpace b: adjacentSpaces){
             b.setActive();
         }
+    }
+
+    public AxialCoordinate getLocation(){
+        return location;
+    }
+    public void setLocation(AxialCoordinate ac){
+        this.location = ac;
     }
 
     public BoardSpace getNorth(){

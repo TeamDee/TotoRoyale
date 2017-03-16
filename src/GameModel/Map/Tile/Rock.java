@@ -8,4 +8,8 @@ public class Rock extends TerrainTile{
     public boolean isRock(){
         return true;
     }
+    @Override
+    public String toString(){
+        return "Rock";
+    }
 }
