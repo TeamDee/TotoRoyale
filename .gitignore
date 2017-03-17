@@ -6,7 +6,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
 
@@ -16,3 +16,6 @@ hs_err_pid*
 #ignore the intelliJ configuration files
 .idea
 TotoRoyale.iml
+
+# Build files
+target

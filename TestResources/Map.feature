@@ -11,7 +11,6 @@ Feature: Map
       | game map  | triHexTiles | HexTiles_on_Map|
       | 1         | 0           | 0              |
       | 1         | 1           | 3              |
-      | 1         | 2           | 6              |
       | 0         | 0           | 0              |
 
 
