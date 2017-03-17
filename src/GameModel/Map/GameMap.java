@@ -2,13 +2,11 @@ package GameModel.Map;
 
 import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Tile.HexTile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-
-import GameModel.Map.Tile.*;
 
 /**
  * Created by jowens on 3/8/17.
@@ -18,7 +16,7 @@ public class GameMap {
     //todo decide between these two
     private BoardSpace[][] gameBoard;
     private HashMap<AxialCoordinate, BoardSpace> gameBoard2;
-
+    private int numberOfTriHextiles;
 
     private static int boardLength = 20, boardWidth = 20;
 
@@ -58,6 +56,7 @@ public class GameMap {
         BoardSpace first = new BoardSpace(new ArrayList<BoardSpace>());
         first.setLocation(new AxialCoordinate(0,0));
         gameBoard2.put(first.getLocation(), first);
+        numberOfTriHextiles = 0;
     }
 
     public void placeTriHexTile(BoardSpace whereAWillGo, Direction whereWillBGo, TriHexTile toPlace){
@@ -126,6 +125,9 @@ public class GameMap {
         addAdjacentBoardSpaces(firstBS.getNorth().getLocation());
         gameBoard2.get(firstBS.getNorthEast().getLocation()).addTile(first.c);
         addAdjacentBoardSpaces(firstBS.getNorthEast().getLocation());
+
+
+        numberOfTriHextiles++;
     }
 
     //TODO this currently doesn't work
@@ -338,5 +340,7 @@ public class GameMap {
         }
     }
 
-
+    public int getNumberOfTriHextiles(){
+        return numberOfTriHextiles;
+    }
 }

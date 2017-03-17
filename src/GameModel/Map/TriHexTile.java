@@ -16,6 +16,9 @@ public class TriHexTile extends Tile {
     //A is the "center" tile, b is clockwise to a
     public HexTile a, b, c; //note that order is important a->b->c->a is clockwise
     // public HexTile a, b, c; note that order is important a->b->c->a is clockwise
+    public TriHexTile(){
+
+    }
     public TriHexTile(HexTile a, HexTile b, HexTile c){
         HexTile tileOne = a;
         HexTile tileTwo = b;
@@ -90,8 +93,8 @@ public class TriHexTile extends Tile {
     public Direction directionOfBRelativeToA = Direction.NORTH; //default value
 
     public boolean isLegalPlacement(HexTile oldA, HexTile oldB, HexTile oldC){
-        if(oldA.getTriHexTile().areSameTriHexTileAsMe(oldA, oldB, oldC))
-            return false;
+//        if(oldA.getTriHexTile().areSameTriHexTileAsMe(oldA, oldB, oldC))
+//            return false;
         if(oldA.getLevel() == oldB.getLevel() && oldB.getLevel() == oldC.getLevel()) { //all on same level
             //TODO validate volcano placement
             return true;
@@ -134,6 +137,15 @@ public class TriHexTile extends Tile {
 
     public HexTile getTileOne() {
         return a; //exposes internals but arguably necessary
+    }
+
+    public HexTile getTileTwo() {
+        return b; //exposes internals but arguably necessary
+    }
+
+    public HexTile getTileThree() {
+        return c; //exposes internals but arguably necessary
+    }
 
     public HexTile getTileOne(TriHexTile tile) {
         return tile.tileOne; //exposes internals but arguably necessary
