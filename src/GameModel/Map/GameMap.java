@@ -126,7 +126,6 @@ public class GameMap {
         addAdjacentBoardSpaces(firstBS.getNorth().getLocation());
         gameBoard2.get(firstBS.getNorthEast().getLocation()).addTile(first.c);
         addAdjacentBoardSpaces(firstBS.getNorthEast().getLocation());
-
     }
 
     //TODO this currently doesn't work
@@ -134,11 +133,12 @@ public class GameMap {
         List<Placement> returnMe = new ArrayList<Placement>();
         HexTile ht1,ht2,ht3;
 
+        //hextiles contained in tri-hex to be placed
         ht1 = tht.getTileOne();
         ht2 = tht.getTileTwo();
         ht3 = tht.getTileThree();
 
-        for(BoardSpace bs: activeSpaces){ //for each active board space (i.e. above a played tile, or adjacent to one)
+        for(BoardSpace bs: gameBoard2.values()){ //for each active board space (i.e. above a played tile, or adjacent to one)
             if(bs.isEmpty()){
                 //get all placements that are possible given adjacent empty boardspaces
                 if(bs.getNorth().isEmpty()) {
