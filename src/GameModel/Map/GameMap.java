@@ -321,12 +321,8 @@ public class GameMap {
      */
     public List<HexTile> getGameBoard() {
         ArrayList<HexTile> list = new ArrayList<HexTile>();
-        for (BoardSpace[] ht : gameBoard) {
-            for (BoardSpace ht2 : ht) {
-                if (!ht2.isEmpty()) {
-                    list.add(ht2.topTile());
-                }
-            }
+        for (BoardSpace bs : gameBoard2.values()) {
+            list.add(bs.topTile());
         }
         return list;
     }
