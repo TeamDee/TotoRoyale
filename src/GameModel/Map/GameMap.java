@@ -3,6 +3,7 @@ package GameModel.Map;
 import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
+import GameModel.Map.Tile.TerrainType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -140,140 +141,46 @@ public class GameMap {
         ht2 = toBePlaced.getTileTwo();
         ht3 = toBePlaced.getTileThree();
 
-        //ht1
-        if(placeAt.ofSameType(ht1)){ // hex-tiles can't be placed on tiles of different type
-            if(placeAt.getNorth().ofSameType(ht2)){
-                if(placeAt.getNorthEast().ofSameType(ht3)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorth().getBoardSpace(),placeAt.getNorthEast().getBoardSpace(), ht1, ht2, ht3);
+        if(placeAt.terrainType() == TerrainType.VOLCANO){ //bombs away
+            BoardSpace mine = placeAt.getBoardSpace();// law of demeter violation
+            BoardSpace north = mine.getNorth();
+            BoardSpace northEast = mine.getNorthEast();
+            BoardSpace northWest = mine.getNorthWest();
+            BoardSpace south = mine.getSouth();
+            BoardSpace southEast = mine.getSouthEast();
+            BoardSpace southWest = mine.getSouthWest();
 
-                }
+
+            if(north.getLevel() == mine.getLevel()){ //me, north, northeast
+                if(northEast.getLevel() == mine.getLevel())
+                    returnMe.add(new Placement(mine, north,northEast, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
             }
-            if(placeAt.getNorthEast().ofSameType(ht2)){
-                if(placeAt.getSouthEast().ofSameType(ht3)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorthEast().getBoardSpace(),placeAt.getSouthEast().getBoardSpace(), ht1, ht2, ht3);
-
-                }
+            if(northEast.getLevel() == mine.getLevel()){
+                if(southEast.getLevel() == mine.getLevel())
+                    returnMe.add(new Placement(mine, northEast,southEast, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
             }
-            if(placeAt.getSouthEast().ofSameType(ht2)){
-                if(placeAt.getSouth().ofSameType(ht3)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouthEast().getBoardSpace(),placeAt.getSouth().getBoardSpace(), ht1, ht2, ht3);
-
-                }
+            if(southEast.getLevel() == mine.getLevel()){
+                if(south.getLevel() == mine.getLevel())
+                    returnMe.add(new Placement(mine, southEast,south, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
             }
-            if(placeAt.getSouth().ofSameType(ht2)){
-                if(placeAt.getSouthWest().ofSameType(ht3)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouth().getBoardSpace(),placeAt.getSouthWest().getBoardSpace(), ht1, ht2, ht3);
-
-                }
+            if(south.getLevel() == mine.getLevel()){
+                if(southWest.getLevel() == mine.getLevel())
+                    returnMe.add(new Placement(mine, south,southWest, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
             }
-            if(placeAt.getSouthWest().ofSameType(ht2)){
-                if(placeAt.getNorthWest().ofSameType(ht3)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouthWest().getBoardSpace(),placeAt.getNorthWest().getBoardSpace(), ht1, ht2, ht3);
-
-                }
+            if(southWest.getLevel() == mine.getLevel()){
+                if(northWest.getLevel() == mine.getLevel())
+                    returnMe.add(new Placement(mine, southWest,northWest, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
             }
-            if(placeAt.getNorthWest().ofSameType(ht2)){
-                if(placeAt.getNorth().ofSameType(ht3)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorthWest().getBoardSpace(),placeAt.getNorth().getBoardSpace(), ht1, ht2, ht3);
-
-                }
-            }
-        }
-        if(placeAt.ofSameType(ht2)){
-            if(placeAt.getNorth().ofSameType(ht3)){
-                if(placeAt.getNorthEast().ofSameType(ht1)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorth().getBoardSpace(),placeAt.getNorthEast().getBoardSpace(), ht2, ht3, ht1);
-
-                }
-            }
-            if(placeAt.getNorthEast().ofSameType(ht3)){
-                if(placeAt.getSouthEast().ofSameType(ht1)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorthEast().getBoardSpace(),placeAt.getSouthEast().getBoardSpace(), ht2, ht3, ht1);
-
-                }
-            }
-            if(placeAt.getSouthEast().ofSameType(ht3)){
-                if(placeAt.getSouth().ofSameType(ht1)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouthEast().getBoardSpace(),placeAt.getSouth().getBoardSpace(), ht2, ht3, ht1);
-
-                }
-            }
-            if(placeAt.getSouth().ofSameType(ht3)){
-                if(placeAt.getSouthWest().ofSameType(ht1)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouth().getBoardSpace(),placeAt.getSouthWest().getBoardSpace(), ht2, ht3, ht1);
-
-                }
-            }
-            if(placeAt.getSouthWest().ofSameType(ht3)){
-                if(placeAt.getNorthWest().ofSameType(ht1)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouthWest().getBoardSpace(),placeAt.getNorthWest().getBoardSpace(), ht2, ht3, ht1);
-
-                }
-            }
-            if(placeAt.getNorthWest().ofSameType(ht3)){
-                if(placeAt.getNorth().ofSameType(ht1)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorthWest().getBoardSpace(),placeAt.getNorth().getBoardSpace(), ht2, ht3, ht1);
-
-                }
+            if(northWest.getLevel() == mine.getLevel()){
+                if(north.getLevel() == mine.getLevel())
+                    returnMe.add(new Placement(mine, northWest,north, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
             }
 
         }
-        if(placeAt.ofSameType(ht3)){
-            if(placeAt.getNorth().ofSameType(ht1)){
-                if(placeAt.getNorthEast().ofSameType(ht2)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorth().getBoardSpace(),placeAt.getNorthEast().getBoardSpace(), ht3,ht1,ht2);
-
-                }
-            }
-            if(placeAt.getNorthEast().ofSameType(ht1)){
-                if(placeAt.getSouthEast().ofSameType(ht2)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorthEast().getBoardSpace(),placeAt.getSouthEast().getBoardSpace(), ht3,ht1,ht2);
-
-                }
-            }
-            if(placeAt.getSouthEast().ofSameType(ht1)){
-                if(placeAt.getSouth().ofSameType(ht2)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouthEast().getBoardSpace(),placeAt.getSouth().getBoardSpace(), ht3,ht1,ht2);
-
-                }
-            }
-            if(placeAt.getSouth().ofSameType(ht1)){
-                if(placeAt.getSouthWest().ofSameType(ht2)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouth().getBoardSpace(),placeAt.getSouthWest().getBoardSpace(), ht3,ht1,ht2);
-
-                }
-            }
-            if(placeAt.getSouthWest().ofSameType(ht1)){
-                if(placeAt.getNorthWest().ofSameType(ht2)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getSouthWest().getBoardSpace(),placeAt.getNorthWest().getBoardSpace(), ht3,ht1,ht2);
-
-                }
-            }
-            if(placeAt.getNorthWest().ofSameType(ht1)){
-                if(placeAt.getNorth().ofSameType(ht2)){
-                    //law of demeter violation
-                    Placement p = new Placement(placeAt.getBoardSpace(), placeAt.getNorthWest().getBoardSpace(),placeAt.getNorth().getBoardSpace(), ht3,ht1,ht2);
-
-                }
-            }
+        else{ //only allow volcano tile placements on top of of other tiles
+            return null;
         }
+
         return null;
     }
 

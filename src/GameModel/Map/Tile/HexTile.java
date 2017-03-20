@@ -14,6 +14,8 @@ import GameView.Map.TileView;
 public abstract class HexTile extends Tile {
     private HexCoordinate location; //axial coordinates TODO add more coordinate system support
 
+    public TerrainType myType;
+
     private HexTile north, northEast, southEast, south, southWest, northWest;
 
     private HexTileView myView = new HexTileView(); //todo check that you can initialize objects outside of constructor
@@ -48,6 +50,14 @@ public abstract class HexTile extends Tile {
         return hasTotoro;
     }
 
+
+    public TerrainType terrainType(){
+        return myType;
+    }
+
+    public boolean ofSameType(HexTile hexTile){
+        return myType == hexTile.terrainType();
+    }
 
     //not really exposing externals because it's an upward reference to a compositor class imo - Jason
     public TriHexTile getTriHexTile(){
@@ -85,18 +95,13 @@ public abstract class HexTile extends Tile {
     public Player getOwner() {
         return owner;
     }
-    //TODO this needs to be tested
-    public abstract boolean ofSameType(VolcanoTile vt);
-    public abstract boolean ofSameType(TerrainTile tt);
-
-    public abstract boolean ofSameType(HexTile ht);
-    //end TODO
 
     @Override
     public String toString(){
         String returnMe = "HexTile";
         return returnMe;
     }
+
 
     public HexTile getNorth(){
         return north;

@@ -22,4 +22,21 @@ public enum Direction {
         }
         return null; // this shouldn't happen but whatever
     }
+    public static Direction getConverse(Direction d){
+        switch(d){
+            case NORTH:
+                return SOUTH;
+            case NORTHEAST:
+                return SOUTHWEST;
+            case SOUTHEAST:
+                return NORTHWEST;
+            case SOUTH:
+                return NORTH;
+            case SOUTHWEST:
+                return NORTHEAST;
+            case NORTHWEST:
+                return SOUTHEAST;
+        }
+        return null; // this shouldn't happen but whatever
+    }
 }

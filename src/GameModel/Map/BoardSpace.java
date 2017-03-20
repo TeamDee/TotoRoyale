@@ -52,7 +52,8 @@ public class BoardSpace extends Tile {
     public boolean isActive(){
         return isActive;
     }
-    public void activate(){
+    public void activate(BoardSpace callingBS, Direction callingBSDirection){
+        callingBSDirection.
         isActive = true;
     }
 

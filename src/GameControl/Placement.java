@@ -40,9 +40,9 @@ public class Placement {
     }
 
     public boolean tilesAreOfProperType(){
-        if(newA.ofSameType(oldA.topTile()) && newB.ofSameType(oldB.topTile()) && newC.ofSameType(oldC.topTile())){
-            return true;
-        }
+//        if(newA.ofSameType(oldA.topTile()) && newB.ofSameType(oldB.topTile()) && newC.ofSameType(oldC.topTile())){
+//            return true;
+//        }
         return false;
     }
 

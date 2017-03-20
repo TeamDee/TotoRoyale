@@ -5,6 +5,11 @@ package GameModel.Map.Tile;
  */
 public class Grass extends TerrainTile {
 
+    public Grass(){
+        myType = TerrainType.GRASS;
+    }
+
+
     @Override
     public boolean isGrass(){
         return true;
@@ -15,24 +20,7 @@ public class Grass extends TerrainTile {
         return "Grass";
     }
 
-    @Override
-    public boolean ofSameType(HexTile ht){
-        return ht.ofSameType(this);
-    }
 
-    public boolean ofSameType(Grass gt){
-        return true;
-    }
-    public boolean ofSameType(Rock gt){
-        return false;
-    }
-    public boolean ofSameType(Lake gt){
-        return false;
-    }
-    public boolean ofSameType(Jungle gt){
-        return false;
-    }
-    public boolean ofSameType(VolcanoTile volcanoTile){
-        return false;
-    }
+
+
 }

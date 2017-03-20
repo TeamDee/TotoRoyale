@@ -3,11 +3,14 @@ import GameControl.Player.Player;
 import GameModel.Map.TriHexTile;
 
 /**
+ * Terrain tiles can hold meeples and totoros.
  * Created by jowens on 3/8/17.
  */
+
+
 public abstract class TerrainTile extends HexTile {
 
-    private TerrainType myType;
+
 
     public TerrainTile(TriHexTile compositor){
         this.triHexTile = compositor;
@@ -32,9 +35,12 @@ public abstract class TerrainTile extends HexTile {
     public boolean ofSameType(VolcanoTile vt){
         return false;
     }
-
     public boolean ofSameType(TerrainTile tt){
-        return true;
+        return myType == tt.getTerrain();
+    }
+
+    public TerrainType getTerrain(){
+        return myType;
     }
 
     //this is the OOPy way of determining terrain type, imo
@@ -52,6 +58,3 @@ public abstract class TerrainTile extends HexTile {
     }
 }
 
-enum TerrainType{
-    GRASS, ROCK, JUNGLE, LAKE;
-}
