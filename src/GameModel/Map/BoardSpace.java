@@ -10,7 +10,7 @@ import GameModel.Map.Tile.*;
 /**
  * Created by jowens on 3/10/17.
  */
-public class BoardSpace extends Tile {
+public class BoardSpace {
     private boolean hasTile = false;
     private ArrayList<HexTile> tiles;
     private boolean isActive; //Whether you can add hextiles to this boardspace yet
@@ -24,6 +24,9 @@ public class BoardSpace extends Tile {
         tiles = new ArrayList<HexTile>();
     }
 
+    public int getLevel(){
+        return topTile().getLevel();
+    }
 
     public HexTile topTile(){
         if(tiles.size()>0)
@@ -55,16 +58,6 @@ public class BoardSpace extends Tile {
     public void activate(BoardSpace callingBS, Direction callingBSDirection){
         Direction.getConverse(callingBSDirection);
         isActive = true;
-    }
-
-    //lets map know that all tiles adjacent to this one are active/playable
-    private void activateAdjacentBoardSpaces(){
-        north.activate();
-        northeast.activate();
-        northwest.activate();
-        south.activate();
-        southeast.activate();
-        southwest.activate();
     }
 
     public AxialCoordinate getLocation(){
