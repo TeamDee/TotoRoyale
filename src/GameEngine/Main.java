@@ -23,8 +23,6 @@ public class Main {
 
         map.placeFirstTile(tht);
         map.printInfoAboutMap();
-
-
     }
 
     public void RunGame() {

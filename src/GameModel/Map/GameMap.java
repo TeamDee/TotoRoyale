@@ -264,7 +264,8 @@ public class GameMap {
         for(BoardSpace bs: gameBoard2.values()){
             HexTile thisTile = bs.topTile();
             if(thisTile != null){
-                returnMe.addAll(getLegalPlacementsAtHexTile(tht, thisTile));
+                if(thisTile.terrainType() == TerrainType.VOLCANO)
+                    returnMe.addAll(getLegalPlacementsAtHexTile(tht, thisTile));
             }
         }
         return returnMe;
