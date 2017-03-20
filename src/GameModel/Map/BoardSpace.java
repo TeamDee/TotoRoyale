@@ -43,7 +43,7 @@ public class BoardSpace {
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
         if(!hasTile){
-            activateAdjacentBoardSpaces();
+            //activateAdjacentBoardSpaces(); TODO
         }
         hasTile = true;
         if(tiles == null){

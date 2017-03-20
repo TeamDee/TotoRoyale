@@ -91,10 +91,10 @@ public class GameMap {
         BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
         addAdjacentBoardSpaces(firstBS.getLocation());
 
-        gameBoard2.get(firstBS.getLocation()).addTile(first.a);
-        gameBoard2.get(firstBS.getNorth().getLocation()).addTile(first.b);
+        gameBoard2.get(firstBS.getLocation()).addTile(first.getTileOne());
+        gameBoard2.get(firstBS.getNorth().getLocation()).addTile(first.getTileTwo());
         addAdjacentBoardSpaces(firstBS.getNorth().getLocation());
-        gameBoard2.get(firstBS.getNorthEast().getLocation()).addTile(first.c);
+        gameBoard2.get(firstBS.getNorthEast().getLocation()).addTile(first.getTileThree());
         addAdjacentBoardSpaces(firstBS.getNorthEast().getLocation());
 
         numberOfTriHextiles++;
@@ -257,6 +257,19 @@ public class GameMap {
     }
 
     /*
+     * All legal plaaements > 0
+     */
+    public ArrayList<Placement> getLegalMapPlacements(TriHexTile tht){
+        ArrayList<Placement> returnMe = new ArrayList<Placement>();
+        for(BoardSpace bs: gameBoard2.values()){
+            HexTile thisTile = bs.topTile();
+            if(thisTile != null){
+                returnMe.addAll(getLegalPlacementsAtHexTile(tht, thisTile));
+            }
+        }
+        return returnMe;
+    }
+    /*
      * returns all triplets of adjacent tiles that aren't all in the same tri-hex tile
      * TODO this would be useful for ignoring illegal placements
      */
@@ -264,6 +277,13 @@ public class GameMap {
 //        List<HexTile> returnMe;
 //        for
 //    }
+
+    public ArrayList<Placement> getAllLegalPlacements(TriHexTile tht){
+        ArrayList<Placement> returnMe = new ArrayList<Placement>();
+        returnMe.addAll(getLegalMapPlacements(tht));
+        returnMe.addAll(getLegalTablePlacements(tht));
+        return returnMe;
+    }
 
     /*
         takes a placement object and implements it's effects on the board
@@ -308,6 +328,6 @@ public class GameMap {
         given a hextile, do a BFS or DFS for all contiguos, connected tiles of the same type and return them as a list
      */
     public ArrayList<HexTile> getContiguousTerrainFromTile(TerrainTile tt){
-
+        return null; //TODO
     }
 }

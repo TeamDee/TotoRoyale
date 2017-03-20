@@ -31,7 +31,8 @@ public class Player {
 
     //TODO add AI logic
     public void takeTurn(GameMap gameMap, TriHexTile tile){
-        ArrayList<Placement> placements = gameMap.getLegalPlacements(tile);
+        ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
+        //placements.add(gameMap.getLegalPlacementsAtHexTile());
         Placement stupidPlacement = placements.get(0);
         gameMap.implementPlacement(stupidPlacement);
     }

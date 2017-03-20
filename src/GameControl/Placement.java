@@ -51,6 +51,7 @@ public class Placement {
         return !(oldA.getLevel() != oldB.getLevel() || oldB.getLevel() != oldC.getLevel());
     }
 
+
     public int numberOfEnemyMeeplesKilled(HexTile oldHex1,HexTile oldHex2,HexTile oldHex3){
         return oldHex1.getMeepleCount() + oldHex2.getMeepleCount() + oldHex3.getMeepleCount();
     }

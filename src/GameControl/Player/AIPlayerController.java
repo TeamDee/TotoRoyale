@@ -19,7 +19,7 @@ public class AIPlayerController extends PlayerController{
     }
 
     public void placeTile(TriHexTile tileToPlace) {
-        List<Placement> legalPlacements = visibleGameMap.getLegalPlacements(tileToPlace);
+        List<Placement> legalPlacements = visibleGameMap.getAllLegalPlacements(tileToPlace);
         int currentPlacementScore;
         int maxPlacementScore = -1;
         Placement placementWithMaxScore = null;

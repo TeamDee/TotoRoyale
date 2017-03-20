@@ -1,10 +1,9 @@
 package GameModel.Map.Tile;
 
 import GameModel.Map.TriHexTile;
-import GameModel.Map.Tile.*;
 import java.util.Stack;
 /**
- * stores the rest of the cards
+ * stores the cards being used in a particular game
  * Created by jowens on 3/13/17.
  */
 public class Deck {
