@@ -1,5 +1,8 @@
 package GameModel.Map.Coordinates;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by jowens on 3/8/17.
  */
@@ -29,6 +32,11 @@ public class AxialCoordinate {
     public AxialCoordinate getNorthWest(){
         return new AxialCoordinate(x-1,y-1);
     }
+
+    public static boolean areAdjacent(AxialCoordinate ac1, AxialCoordinate ac2) {
+        return Math.abs(ac1.x - ac2.x + ac1.y - ac2.y) == 2;
+    }
+
     @Override
     public boolean equals(Object ac){
         return this.hashCode() == ac.hashCode(); //will give false positives in very edge cases, maybe
