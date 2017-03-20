@@ -1,3 +1,5 @@
+package StepDefs;
+
 import GameModel.Map.GameMap;
 import GameModel.Map.TriHexTile;
 import GameModel.Map.Tile.*;

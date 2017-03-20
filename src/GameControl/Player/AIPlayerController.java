@@ -15,10 +15,12 @@ public class AIPlayerController extends PlayerController{
     }
 
     public void takeTurn(TriHexTile tileToPlace) {
-        placeTile(tileToPlace);
+        takePlaceTileAction(tileToPlace);
+        takeBuildAction();
     }
 
-    public void placeTile(TriHexTile tileToPlace) {
+
+    public void takePlaceTileAction(TriHexTile tileToPlace) {
         List<Placement> legalPlacements = visibleGameMap.getAllLegalPlacements(tileToPlace);
         int currentPlacementScore;
         int maxPlacementScore = -1;
@@ -30,7 +32,7 @@ public class AIPlayerController extends PlayerController{
                 placementWithMaxScore = currentPlacement;
             }
         }
-        placeTile(tileToPlace, placementWithMaxScore);
+        super.placeTile(tileToPlace, placementWithMaxScore);
     }
 
     public int scoreTilePlacement(Placement placement) {

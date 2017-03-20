@@ -10,8 +10,6 @@ import GameModel.Map.TriHexTile;
 
 public abstract class TerrainTile extends HexTile {
 
-
-
     public TerrainTile(TriHexTile compositor){
         this.triHexTile = compositor;
     }
@@ -30,7 +28,6 @@ public abstract class TerrainTile extends HexTile {
         }
         return true;
     }
-
 
     public boolean ofSameType(VolcanoTile vt){
         return false;

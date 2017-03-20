@@ -3,6 +3,9 @@ package GameControl.Player;
 import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
+import GameModel.Map.Tile.HexTile;
+import GameModel.Map.Tile.TerrainType;
+import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
@@ -34,9 +37,26 @@ public class Player {
         ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
         //placements.add(gameMap.getLegalPlacementsAtHexTile());
         Placement stupidPlacement = placements.get(0);
-        gameMap.implementPlacement(stupidPlacement);
+        placeTile(gameMap, stupidPlacement);
     }
 
+    public void placeTile(GameMap gameMap, Placement placement) {
+        gameMap.implementPlacement(placement);
+    }
+
+    public void placeMeeples(HexTile hexTile) {
+        hexTile.placeMeeples(this);
+        removeMeeples(hexTile.getLevel() + 1);
+
+    }
+
+    public void buildSettlement(HexTile hexTile) {
+
+    }
+
+    public void expandSettlement(List<HexTile> settlement) {
+
+    }
 
     public boolean removeTotoro(int amount){
         if(amount > totoroCount)
