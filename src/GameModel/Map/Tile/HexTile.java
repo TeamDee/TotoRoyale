@@ -40,7 +40,7 @@ public abstract class HexTile extends Tile {
 
     public void placeMeeples(Player player) {
         owner = player;
-        meepleCount = (level + 1) * (level + 1);
+        meepleCount = level + 1;
     }
 
     public int numMeeplesOnTile(){

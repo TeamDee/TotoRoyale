@@ -11,7 +11,6 @@ public class Tile {
     }
 
     public int getLevel(){
-
         return level;
     }
 }
