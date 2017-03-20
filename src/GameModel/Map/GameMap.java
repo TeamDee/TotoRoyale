@@ -16,7 +16,7 @@ import java.util.List;
 public class GameMap {
 
     //todo decide between these two
-    private BoardSpace[][] gameBoard;
+    //private BoardSpace[][] gameBoard;
     private HashMap<AxialCoordinate, BoardSpace> gameBoard2;
     private int numberOfTriHextiles;
 

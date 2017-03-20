@@ -30,6 +30,7 @@ public class Deck {
     public void newRandomDeck(){
         //todo populate 48 tiles with 16(types)x3(of each)
     }
+
     public static Deck newExampleDeck(){
         TriHexTile[] newDeck = new TriHexTile[47];
         newDeck[0] = new TriHexTile(new Grass(), new Grass(), new VolcanoTile());

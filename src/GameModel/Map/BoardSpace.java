@@ -53,7 +53,7 @@ public class BoardSpace extends Tile {
         return isActive;
     }
     public void activate(BoardSpace callingBS, Direction callingBSDirection){
-        callingBSDirection.
+        Direction.getConverse(callingBSDirection);
         isActive = true;
     }
 
