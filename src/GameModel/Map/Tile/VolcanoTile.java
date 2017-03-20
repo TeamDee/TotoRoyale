@@ -3,14 +3,17 @@ package GameModel.Map.Tile;
 /**
  * Created by jowens on 3/13/17.
  */
-public class Lake extends TerrainTile{
-    @Override
-    public boolean isLake(){
+public class VolcanoTile extends HexTile {
+    //TODO test this
+    public boolean ofSameType(VolcanoTile vt){
         return true;
+    }
+    public boolean ofSameType(TerrainTile tt){
+        return false;
     }
     @Override
     public String toString(){
-        return "Lake";
+        return "Volcano";
     }
 
     @Override
@@ -25,12 +28,11 @@ public class Lake extends TerrainTile{
         return false;
     }
     public boolean ofSameType(Lake gt){
-        return true;
+        return false;
     }
     public boolean ofSameType(Jungle gt){
         return false;
     }
-    public boolean ofSameType(VolcanoTile volcanoTile){
-        return false;
-    }
+
+
 }

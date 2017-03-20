@@ -1,9 +1,12 @@
 package GameControl.Player;
 
+import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
+import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +28,14 @@ public class Player {
         meepleCount = Constants.MEEPLES_PER_PLAYER;
         score = 0;
     }
+
+    //TODO add AI logic
+    public void takeTurn(GameMap gameMap, TriHexTile tile){
+        ArrayList<Placement> placements = gameMap.getLegalPlacements(tile);
+        Placement stupidPlacement = placements.get(0);
+        gameMap.implementPlacement(stupidPlacement);
+    }
+
 
     public boolean removeTotoro(int amount){
         if(amount > totoroCount)

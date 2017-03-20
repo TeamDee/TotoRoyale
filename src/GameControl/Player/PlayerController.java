@@ -7,7 +7,7 @@ import GameControl.Placement;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.TriHexTile;
-import GameModel.Map.VolcanoTile;
+import GameModel.Map.Tile.VolcanoTile;
 import GameView.Viewports.ActiveGameViewport;
 import GameView.Viewports.Viewport;
 import GameModel.Map.Tile.Tile;
@@ -57,7 +57,7 @@ public class PlayerController extends Controller{
     }
 
     public void buildSettlement(HexTile hexTile) {
-        if (hexTile.getLevel() == 0 && canPlaceMeeples()) {
+        if (hexTile.getLevel() == 0 && canPlaceMeeples(hexTile)) {
             placeMeeples(hexTile);
         }
         else {
@@ -80,9 +80,13 @@ public class PlayerController extends Controller{
     }
 
     public void expandSettlement(List<HexTile> settlement, TerrainTile terrainType) {
-        if (canExpandSettlement(settlement, terrainType))
+        if (canExpandSettlement(settlement, terrainType)) {
             //TODO expand settlement
-        else
+
+        }
+        else{
+
+        }
             //TODO this player has attempted an illegal action, make them lose and end the game
     }
 

@@ -18,7 +18,7 @@ public class MapView extends View{
 
     @Override
     public void paint(Graphics g) {
-        List<HexTile> tiles = myMap.getGameBoard();
+        List<HexTile> tiles = myMap.getVisible();
 
         drawMap(g, tiles);
         //draw meeples left

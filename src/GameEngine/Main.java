@@ -1,16 +1,17 @@
 package GameEngine;
 
 import GameModel.Map.GameMap;
-import GameModel.Map.Tile.HexTile;
 import GameModel.Map.TriHexTile;
 
 import javax.swing.SwingUtilities;
 
 import GameModel.Map.Tile.*;
-import GameModel.Map.VolcanoTile;
+import GameModel.Map.Tile.VolcanoTile;
 
 public class Main {
     public static void main(String[] args) {
+
+        /*
         //Main game = new Main();
         //game.RunGame();
         GameMap map = new GameMap();
@@ -21,6 +22,15 @@ public class Main {
 
         map.placeFirstTile(tht);
         map.printInfoAboutMap();
+        */
+        Jungle jungle = new Jungle();
+        Jungle jungle2 = new Jungle();
+        Grass grass = new Grass();
+        Grass grass2 = new Grass();
+        System.out.println(jungle.ofSameType(jungle2));
+        System.out.println(jungle2.ofSameType(jungle));
+        System.out.println(jungle.ofSameType(grass));
+        System.out.println(grass.ofSameType(jungle));
     }
 
     public void RunGame() {

@@ -1,8 +1,12 @@
 package GameEngine;
 
+import GameControl.Player.BlackPlayer;
+import GameControl.Player.WhitePlayer;
 import GameModel.Map.GameMap;
 import GameControl.Player.Player;
 import GameModel.Map.Tile.Deck;
+
+import java.util.ArrayList;
 
 /**
  * Created by jowens on 3/8/17.
@@ -13,6 +17,9 @@ public class GameLogicDirector implements Runnable{
 
     private boolean newGame = true;
     Player p1,p2;
+    ArrayList<Player> players;
+
+
     public Deck deck;
 
     GameController gc;
@@ -39,7 +46,14 @@ public class GameLogicDirector implements Runnable{
         }
         else{
             //game logic
-            //updateView();
+            if(deck.cardsLeft() >0 ) {
+                for (Player p : players) {
+                    p.takeTurn(myMap, deck.draw());
+                }
+            }
+            else{ //game over
+                myMap.printInfoAboutMap();
+            }
         }
     }
 
@@ -48,9 +62,15 @@ public class GameLogicDirector implements Runnable{
     }
 
     private void initializeNewGame() {
-        p1 = new Player();
-        p2 = new Player();
-        newGame=false;
+        p1 = new WhitePlayer();
+        p2 = new BlackPlayer();
+        players = new ArrayList<Player>();
+        players.add(p1);
+        players.add(p2);
+
+        deck = new Deck();
+
+        newGame=false; //what's this for?
         gc = new GameController();
     }
 

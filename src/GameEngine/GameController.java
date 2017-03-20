@@ -8,7 +8,7 @@ import GameControl.Controller;
 import GameModel.Map.GameMap;
 import GameView.Viewports.Viewport;
 import GameControl.Player.PlayerController;
-
+import GameControl.Player.*;
 public class GameController {
 
     private Stack<Controller> stack;
@@ -19,13 +19,7 @@ public class GameController {
     public static GameController gameController = new GameController();
 
     public GameController() {
-        this.frame = new JFrame();
-        this.frame.setExtendedState(this.frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.activeController = new PlayerController();
-        this.activeViewport = this.activeController.getViewport();
-        this.frame.add(this.activeViewport);
-        this.frame.setVisible(true);
+
         stack = new Stack<Controller>();
     }
 
@@ -40,6 +34,16 @@ public class GameController {
         activeViewport = v;
         activeController = c;
         this.frame.add(activeViewport);
+        this.frame.setVisible(true);
+    }
+
+    public void initViewControllerInteractions(Player player){
+        this.frame = new JFrame();
+        this.frame.setExtendedState(this.frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.activeController = new PlayerController(player);
+        this.activeViewport = this.activeController.getViewport();
+        this.frame.add(this.activeViewport);
         this.frame.setVisible(true);
     }
 

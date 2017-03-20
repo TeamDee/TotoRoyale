@@ -4,7 +4,6 @@ import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.*;
 import GameModel.Map.TriHexTile;
-import GameModel.Map.VolcanoTile;
 import GameView.Map.HexTileView;
 import GameView.Map.TileView;
 
@@ -90,9 +89,7 @@ public abstract class HexTile extends Tile {
     public abstract boolean ofSameType(VolcanoTile vt);
     public abstract boolean ofSameType(TerrainTile tt);
 
-    public boolean ofSameType(HexTile ht){
-        return ht.ofSameType(this);
-    }
+    public abstract boolean ofSameType(HexTile ht);
     //end TODO
 
     @Override

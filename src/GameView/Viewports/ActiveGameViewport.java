@@ -78,7 +78,7 @@ public class ActiveGameViewport extends Viewport {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        List<HexTile> tiles = GameLogicDirector.getInstance().getMap().getGameBoard();
+        List<HexTile> tiles = GameLogicDirector.getInstance().getMap().getVisible();
 
         drawMap(g, tiles);
     }

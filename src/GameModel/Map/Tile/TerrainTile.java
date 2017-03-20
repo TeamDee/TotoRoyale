@@ -1,7 +1,6 @@
 package GameModel.Map.Tile;
 import GameControl.Player.Player;
 import GameModel.Map.TriHexTile;
-import GameModel.Map.VolcanoTile;
 
 /**
  * Created by jowens on 3/8/17.

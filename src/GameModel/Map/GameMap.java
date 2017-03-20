@@ -31,7 +31,7 @@ public class GameMap {
     public void initializeBoard() {
 
         gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
-        BoardSpace first = new BoardSpace(new ArrayList<BoardSpace>());
+        BoardSpace first = new BoardSpace();
         first.setLocation(new AxialCoordinate(0,0));
         gameBoard2.put(first.getLocation(), first);
         numberOfTriHextiles = 0;
@@ -107,8 +107,8 @@ public class GameMap {
     }
 
     //TODO this currently doesn't work
-    public List<Placement> getLegalPlacements(TriHexTile tht) {
-        List<Placement> returnMe = new ArrayList<Placement>();
+    public ArrayList<Placement> getLegalPlacements(TriHexTile tht) {
+        ArrayList<Placement> returnMe = new ArrayList<Placement>();
         HexTile ht1,ht2,ht3;
 
         //hextiles contained in tri-hex to be placed
