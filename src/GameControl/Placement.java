@@ -1,5 +1,7 @@
 package GameControl;
 import GameModel.Map.BoardSpace;
+import GameModel.Map.Tile.TerrainType;
+import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
 import GameModel.Map.Tile.HexTile;
 
@@ -39,6 +41,10 @@ public class Placement {
         }
     }
 
+    public boolean isOverlapping(){
+        return (oldA.topTile().getTriHexTile() == oldB.topTile().getTriHexTile() && oldA.topTile().getTriHexTile() == oldC.topTile().getTriHexTile());
+    }
+
     public boolean tilesAreOfProperType(){
 //        if(newA.ofSameType(oldA.topTile()) && newB.ofSameType(oldB.topTile()) && newC.ofSameType(oldC.topTile())){
 //            return true;
@@ -46,11 +52,21 @@ public class Placement {
         return false;
     }
 
+    public boolean volcanoMatch(){
+        if(oldA.topTile().terrainType() == TerrainType.VOLCANO)
+            return newA.terrainType() == TerrainType.VOLCANO;
+        else if (oldB.topTile().terrainType() == TerrainType.VOLCANO)
+            return newB.terrainType() == TerrainType.VOLCANO;
+        else
+            return newC.terrainType() == TerrainType.VOLCANO; // works if there's at least one volcano
+    }
+
     //returns true iff each of the three boardspaces are currently on the same level
     public boolean isLevelPlacement(){
         return !(oldA.getLevel() != oldB.getLevel() || oldB.getLevel() != oldC.getLevel());
     }
 
+    // TODO current method returns total meeples killed: enemy and allied pieces.
     public int numberOfEnemyMeeplesKilled(HexTile oldHex1,HexTile oldHex2,HexTile oldHex3){
         return oldHex1.getMeepleCount() + oldHex2.getMeepleCount() + oldHex3.getMeepleCount();
     }
@@ -58,7 +74,7 @@ public class Placement {
     //returns true iff the THT can be legally placed
     public boolean isLegal(){
         if(oldA.isActive() || oldB.isActive() || oldC.isActive())
-            return isLevelPlacement(); // TODO currently ignores boardspace legality
+            return (isLevelPlacement() && !isOverlapping() && volcanoMatch()); // TODO currently ignores boardspace legality
         else
             return false;
     }
