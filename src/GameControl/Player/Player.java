@@ -1,7 +1,10 @@
 package GameControl.Player;
 
+import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
 import GameView.Map.Constants;
+
+import java.util.List;
 
 /**
  * Created by jowens on 3/8/17.
@@ -10,6 +13,9 @@ public class Player {
     //units
     private int totoroCount;
     private int meepleCount;
+    private List<AxialCoordinate> meeplePlacements;
+    private List<AxialCoordinate> totoroPlacements;
+    private List<List<AxialCoordinate>> settlemments;
 
     //scoring
     private int score;
@@ -27,6 +33,7 @@ public class Player {
         checkGameOver();
         return true;
     }
+
     public boolean removeMeeples(int amount){
         if(amount > meepleCount)
             return false;
@@ -36,13 +43,20 @@ public class Player {
     }
 
     private void checkGameOver(){
-        //TODO end game if player runs out of meeples and totoros
+        if (meepleCount == 0 && totoroCount == 0) {
+            //TODO end the game
+        }
     }
 
     public void awardPoints(int amount){
         score += amount;
     }
-    public void takeTurn(GameMap gameMap){
 
+    int getMeepleCount() {
+        return meepleCount;
+    }
+
+    int getTotoroCount() {
+        return totoroCount;
     }
 }

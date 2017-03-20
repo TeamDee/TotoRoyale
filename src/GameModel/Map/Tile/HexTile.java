@@ -1,5 +1,6 @@
 package GameModel.Map.Tile;
 
+import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.*;
 import GameModel.Map.TriHexTile;
@@ -24,7 +25,8 @@ public abstract class HexTile extends Tile {
 
     //private TerrainTile terrainTile = null; //null implies this is an empty board space
 
-    private int meepleCount;//TODO fix these two to include player
+    private Player owner = null;
+    private int meepleCount;
     private boolean hasTotoro;
 
     public HexTile(){
@@ -33,6 +35,11 @@ public abstract class HexTile extends Tile {
 
     public HexTile(TriHexTile compositor){
         triHexTile = compositor;
+    }
+
+    public void placeMeeples(Player player) {
+        owner = player;
+        meepleCount = (level + 1) * (level + 1);
     }
 
     public int numMeeplesOnTile(){
@@ -76,6 +83,9 @@ public abstract class HexTile extends Tile {
         return meepleCount;
     }
 
+    public Player getOwner() {
+        return owner;
+    }
     //TODO this needs to be tested
     public abstract boolean ofSameType(VolcanoTile vt);
     public abstract boolean ofSameType(TerrainTile tt);
