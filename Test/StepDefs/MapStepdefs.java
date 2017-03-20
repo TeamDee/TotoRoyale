@@ -1,13 +1,14 @@
+package StepDefs;
+
 import GameModel.Map.GameMap;
-import GameModel.Map.Tile.Grass;
-import GameModel.Map.Tile.Rock;
 import GameModel.Map.TriHexTile;
-import GameModel.Map.Tile.VolcanoTile;
+import GameModel.Map.Tile.*;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+
 
 /**
  * Created by jowens on 3/16/17.

@@ -1,9 +1,9 @@
 package GameEngine;
 
 import GameControl.Player.BlackPlayer;
+import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
 import GameModel.Map.GameMap;
-import GameControl.Player.Player;
 import GameModel.Map.Tile.Deck;
 
 import java.util.ArrayList;

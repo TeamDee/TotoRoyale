@@ -22,8 +22,6 @@ public class HexCoordinate {
         //cc = new CubicCoordinate();
     }
 
-
-
     public AxialCoordinate getAxialCoordinate(){
         return ac;
     }
