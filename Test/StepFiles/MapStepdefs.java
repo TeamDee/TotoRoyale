@@ -1,3 +1,5 @@
+package StepFiles;
+
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Grass;
 import GameModel.Map.Tile.Rock;
