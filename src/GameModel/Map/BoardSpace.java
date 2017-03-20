@@ -4,6 +4,7 @@ import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.Tile;
 
 import java.util.ArrayList;
+
 import GameModel.Map.Tile.*;
 
 /**
@@ -12,20 +13,13 @@ import GameModel.Map.Tile.*;
 public class BoardSpace extends Tile {
     private boolean hasTile = false;
     private ArrayList<HexTile> tiles;
-    private ArrayList<BoardSpace> adjacentSpaces;
-    private boolean isActive; //Whether the boardspace is playable yet
+    private boolean isActive; //Whether you can add hextiles to this boardspace yet
 
     private AxialCoordinate location;
 
     private BoardSpace north, northeast, southeast, south, southwest, northwest;
 
-    public BoardSpace(ArrayList<BoardSpace> adjacentBoardSpaces){
-        this.hasTile = false;
-        tiles = new ArrayList<HexTile>();
-       //make sure you call setAdjacentSpaces from somewhere. Currently being done in GameMap as of 3/10/17
-    }
     public BoardSpace(){
-
         this.hasTile = false;
         tiles = new ArrayList<HexTile>();
     }
@@ -46,7 +40,7 @@ public class BoardSpace extends Tile {
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
         if(!hasTile){
-//            activateAdjacentBoardSpaces();
+            activateAdjacentBoardSpaces();
         }
         hasTile = true;
         if(tiles == null){
@@ -58,15 +52,18 @@ public class BoardSpace extends Tile {
     public boolean isActive(){
         return isActive;
     }
-    public void setActive(){
+    public void activate(){
         isActive = true;
     }
 
     //lets map know that all tiles adjacent to this one are active/playable
     private void activateAdjacentBoardSpaces(){
-        for(BoardSpace b: adjacentSpaces){
-            b.setActive();
-        }
+        north.activate();
+        northeast.activate();
+        northwest.activate();
+        south.activate();
+        southeast.activate();
+        southwest.activate();
     }
 
     public AxialCoordinate getLocation(){

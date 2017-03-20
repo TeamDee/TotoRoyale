@@ -55,4 +55,22 @@ public class Placement {
         return oldHex1.getMeepleCount() + oldHex2.getMeepleCount() + oldHex3.getMeepleCount();
     }
 
+    //returns true iff the THT can be legally placed
+    public boolean isLegal(){
+        if(oldA.isActive() || oldB.isActive() || oldC.isActive())
+            return isLevelPlacement(); // TODO currently ignores boardspace legality
+        else
+            return false;
+    }
+
+    /*
+     * executes the placement onto the gameBoard, does not check to see if the placement is legal
+     */
+    //TODO do individual hextiles need to reference each other? Or is getBoardSpace().getNorth.getTopTile() sufficient?
+    public void place(){
+        oldA.addTile(newA);
+        oldB.addTile(newB);
+        oldC.addTile(newC);
+    }
+
 }

@@ -5,6 +5,7 @@ import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,35 +30,14 @@ public class GameMap {
     //using axial coordinate system, initialize the board to prepare it for play
     public void initializeBoard() {
 
-        //gameBoard = new BoardSpace[boardWidth][boardLength]; //TODO minimize this size to the max possible number of tiles
         gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
-
-        /*
-        //assign each board space its adjacent boardspaces OLD WAY
-        for(int x=0;x!=boardWidth; ++x){
-            for(int y=0;y!=boardLength; ++y){
-                AxialCoordinate current = new AxialCoordinate(x,y);
-                ArrayList bsAdjacentBoardSpaces = new ArrayList<BoardSpace>();
-
-                //populating adjacencies for each of the board-spaces
-                gameBoard[x][y].setNorth(gameBoard[current.getNorth().x][current.getNorth().y]);
-                gameBoard[x][y].setNorthEast(gameBoard[current.getNorthEast().x][current.getNorthEast().y]);
-                gameBoard[x][y].setNorthWest(gameBoard[current.getNorthWest().x][current.getNorthWest().y]);
-                gameBoard[x][y].setSouth(gameBoard[current.getSouth().x][current.getSouth().y]);
-                gameBoard[x][y].setSouthEast(gameBoard[current.getSouthEast().x][current.getSouthEast().y]);
-                gameBoard[x][y].setSouthWest(gameBoard[current.getSouthWest().x][current.getSouthWest().y]);
-            }
-        }
-        gameBoard[boardWidth/2][boardLength/2].setActive(); //first tile is in the middle of the board to maximize distance to edge
-        //gameBoard2.forEach();
-        */
-
-        //adding first board space
         BoardSpace first = new BoardSpace(new ArrayList<BoardSpace>());
         first.setLocation(new AxialCoordinate(0,0));
         gameBoard2.put(first.getLocation(), first);
         numberOfTriHextiles = 0;
     }
+
+    //LIST PUBLIC API HERE
 
     public void placeTriHexTile(BoardSpace whereAWillGo, Direction whereWillBGo, TriHexTile toPlace){
         //whereAWillGo.addTile();
@@ -114,9 +94,6 @@ public class GameMap {
 
     public void placeFirstTile(TriHexTile first) {
         //TODO we'll probably have to deal with orienting "north" when the opposing player starts.
-//        gameBoard[boardWidth / 2][boardLength / 2].addTile(first.getTileOne()); //origin
-//        gameBoard[boardWidth / 2][boardLength / 2 - 1].addTile(first.getTileTwo()); //northwest TODO allow user to rotate initial input
-//        gameBoard[boardWidth / 2 + 1][boardLength / 2 - 1].addTile(first.getTileThree()); //northeast
         BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
         addAdjacentBoardSpaces(firstBS.getLocation());
 
@@ -125,7 +102,6 @@ public class GameMap {
         addAdjacentBoardSpaces(firstBS.getNorth().getLocation());
         gameBoard2.get(firstBS.getNorthEast().getLocation()).addTile(first.c);
         addAdjacentBoardSpaces(firstBS.getNorthEast().getLocation());
-
 
         numberOfTriHextiles++;
     }
@@ -303,12 +279,19 @@ public class GameMap {
 
     /*
      * returns all triplets of adjacent tiles that aren't all in the same tri-hex tile
+     * TODO this would be useful for ignoring illegal placements
      */
 //    public List<TriHexTile> sameLevelAdjacentHexesOfDifferentTriHexes() {
 //        List<HexTile> returnMe;
 //        for
 //    }
 
+    /*
+        takes a placement object and implements it's effects on the board
+     */
+    public void implementPlacement(Placement p){
+        p.place();
+    }
 
     public boolean isLegalPlacement(Placement p) {
         if(p.isLevelPlacement() && p.tilesAreOfProperType()){
@@ -321,16 +304,14 @@ public class GameMap {
     /*
         returns a list of all non-null, top-level hextiles on the board (i.e. tiles that have been placed)
      */
-    public List<HexTile> getGameBoard() {
-        ArrayList<HexTile> list = new ArrayList<HexTile>();
-        for (BoardSpace[] ht : gameBoard) {
-            for (BoardSpace ht2 : ht) {
-                if (!ht2.isEmpty()) {
-                    list.add(ht2.topTile());
-                }
-            }
+    public ArrayList<HexTile> getVisible() {
+        ArrayList<HexTile> visible =new ArrayList<HexTile>();
+        Collection<BoardSpace> bs = gameBoard2.values();
+        for(BoardSpace b: bs){
+            if(!b.isEmpty())
+                visible.add(b.topTile());
         }
-        return list;
+        return visible;
     }
 
     public void printInfoAboutMap(){

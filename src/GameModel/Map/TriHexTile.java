@@ -93,8 +93,6 @@ public class TriHexTile extends Tile {
     public Direction directionOfBRelativeToA = Direction.NORTH; //default value
 
     public boolean isLegalPlacement(HexTile oldA, HexTile oldB, HexTile oldC){
-//        if(oldA.getTriHexTile().areSameTriHexTileAsMe(oldA, oldB, oldC))
-//            return false;
         if(oldA.getLevel() == oldB.getLevel() && oldB.getLevel() == oldC.getLevel()) { //all on same level
             //TODO validate volcano placement
             return true;
@@ -102,8 +100,9 @@ public class TriHexTile extends Tile {
         return false;
     }
 
+    //TODO I don't think this currently supports tile rotation (i.e. a rotated THT won't appear to be the same as the unrotated one)
     //tests to see if three Hexes are in this TriHexTile
-    public boolean areSameTriHexTileAsMe(TriHexTile tile, HexTile first, HexTile second, HexTile third){
+    public static boolean areSameTriHexTileAsMe(TriHexTile tile, HexTile first, HexTile second, HexTile third){
         if(first == tile.tileOne || first == tile.tileTwo || first == tile.tileThree){
             if(second == tile.tileOne || second == tile.tileTwo || second == tile.tileThree){
                 if(third == tile.tileOne || third == tile.tileTwo || third == tile.tileThree){
