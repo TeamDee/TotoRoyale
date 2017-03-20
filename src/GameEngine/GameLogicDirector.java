@@ -16,20 +16,20 @@ public class GameLogicDirector implements Runnable{
     private static GameLogicDirector me;
 
     private boolean newGame = true;
+
+
+    //Game specific objects
     Player p1,p2;
     ArrayList<Player> players;
-
-
     public Deck deck;
-
     GameController gc;
-
     private GameMap myMap;
+
     public GameLogicDirector(){
         myMap = new GameMap();
         deck = new Deck();
-
     }
+
     public static GameLogicDirector getInstance(){
         if(me == null)
             me= new GameLogicDirector();
@@ -38,8 +38,12 @@ public class GameLogicDirector implements Runnable{
 
     public void start(){
         Thread gameThread = new Thread(this);
+        gameThread.start();
     }
 
+    /*
+      NEVER CALL THIS - DAVE
+     */
     public void run(){
         if(newGame){
             initializeNewGame();
@@ -68,7 +72,7 @@ public class GameLogicDirector implements Runnable{
         players.add(p1);
         players.add(p2);
 
-        deck = new Deck();
+        deck = Deck.newExampleDeck();
 
         newGame=false; //what's this for?
         gc = new GameController();
