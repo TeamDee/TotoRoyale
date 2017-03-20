@@ -9,6 +9,6 @@ public class ContiguousWhiteTiles {
 
     @Override
     public void isContiguous(HexTile tile) {
-        
+
     }
 }
