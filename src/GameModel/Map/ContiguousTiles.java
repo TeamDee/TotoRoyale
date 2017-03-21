@@ -10,28 +10,28 @@ import java.util.List;
  * Created by conor on 3/20/2017.
  */
 public abstract class ContiguousTiles {
-    List<HexTile> tiles;
+    List<HexTile> contiguousTiles;
 
     public ContiguousTiles(HexTile startTile) {
-        tiles.add(startTile);
-        fill(startTile);
+        contiguousTiles = new ArrayList<HexTile>();
+        contiguousTiles.add(startTile);
+        fillFromHexTile(startTile);
     }
 
     public boolean isContiguous(HexTile tile) {
-        for (HexTile contiguousTile : tiles) {
+        for (HexTile contiguousTile : contiguousTiles) {
             if (AxialCoordinate.areAdjacent(contiguousTile.getLocation().getAxialCoordinate(), tile.getLocation().getAxialCoordinate()))
                 return true;
         }
         return false;
     }
 
-
-    void fill(HexTile hexTile) {
+    void fillFromHexTile(HexTile hexTile) {
         ArrayList<HexTile> adjacentHexTiles = getAdjacentHexTiles(hexTile);
         for (HexTile adjacentHexTile : adjacentHexTiles) {
-            if (!tiles.contains(adjacentHexTile) && isContiguous(adjacentHexTile)) {
-                tiles.add(adjacentHexTile);
-                fill(adjacentHexTile);
+            if (!contiguousTiles.contains(adjacentHexTile) && isContiguous(adjacentHexTile)) {
+                contiguousTiles.add(adjacentHexTile);
+                fillFromHexTile(adjacentHexTile);
             }
         }
     }
@@ -51,5 +51,9 @@ public abstract class ContiguousTiles {
         if (hexTile.getNorthWest() != null)
             adjacentHexTiles.add(hexTile.getSouth());
         return adjacentHexTiles;
+    }
+
+    List<HexTile> getTiles() {
+        return contiguousTiles;
     }
 }

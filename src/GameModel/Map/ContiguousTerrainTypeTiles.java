@@ -9,9 +9,10 @@ import GameModel.Map.Tile.TerrainType;
 public class ContiguousTerrainTypeTiles extends ContiguousTiles {
     TerrainType terrainType;
 
-    public ContiguousTerrainTypeTiles(HexTile startTile, TerrainType terrainType) {
+    public ContiguousTerrainTypeTiles(HexTile startTile) {
         super(startTile);
-        this.terrainType = terrainType;
+        this.terrainType = startTile.terrainType();
+        fillFromHexTile(startTile);
     }
 
     @Override

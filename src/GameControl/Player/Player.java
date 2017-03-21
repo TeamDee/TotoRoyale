@@ -47,7 +47,6 @@ public class Player {
     public void placeMeeples(HexTile hexTile) {
         hexTile.placeMeeples(this);
         removeMeeples(hexTile.getLevel() + 1);
-
     }
 
     public void buildSettlement(HexTile hexTile) {
