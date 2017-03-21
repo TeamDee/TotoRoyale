@@ -32,7 +32,7 @@ public class PlayerController extends Controller{
     }
 
     public void placeTile(TriHexTile tht, Placement placement) {
-        List<Placement> legalPlacements = visibleGameMap.getLegalPlacements(tht);
+        List<Placement> legalPlacements = visibleGameMap.getAllLegalPlacements(tht);
         if (legalPlacements.contains(placement)) {
             //TODO actually place the tile
         }

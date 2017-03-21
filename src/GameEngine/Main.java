@@ -17,13 +17,12 @@ public class Main {
         GameMap map = new GameMap();
         TriHexTile tht = new TriHexTile();
         tht.setTileOne(new Grass());
-        tht.setTileTwo(new VolcanoTile());
-        tht.setTileThree(new Rock());
+        tht.setTileTwo(new Rock());
+        tht.setTileThree(new VolcanoTile());
+
 
         map.placeFirstTile(tht);
         map.printInfoAboutMap();
-
-
     }
 
     public void RunGame() {

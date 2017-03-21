@@ -10,7 +10,10 @@ public class ThreadDemo {
             public void run() {
                 for(int i = 0; i<10; ++i){
                     step();
-                    Thread.sleep(1000);
+                    try{Thread.sleep(1000);}
+                    catch(InterruptedException ie){
+
+                    }
                 }
             }
             private void step(){
