@@ -64,6 +64,8 @@ public abstract class HexTile extends Tile {
         return triHexTile;
     }
 
+    public void setTriHexTile(TriHexTile tht) { this.triHexTile = tht; }
+
     //places this hexTile above a previously existing HexTile and takes all of its neigbors and assigns itself as a neighbor to them
     public void placeOnHexTile(HexTile old){
         //taking references from replaced tile and
@@ -104,7 +106,6 @@ public abstract class HexTile extends Tile {
         String returnMe = "HexTile";
         return returnMe;
     }
-
 
     public HexTile getNorth(){
         return north;

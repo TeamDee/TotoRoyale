@@ -7,9 +7,9 @@ import GameModel.Map.Tile.*;
  */
 
 public class TriHexTile extends Tile {
-    HexTile tileOne;
-    HexTile tileTwo;
-    VolcanoTile tileThree; //generally the volcano
+    private HexTile tileOne;
+    private HexTile tileTwo;
+    private VolcanoTile tileThree; //generally the volcano
 
     //TODO validate that a, b, and c are properly referencing each other
 
@@ -17,10 +17,14 @@ public class TriHexTile extends Tile {
     public TriHexTile(){
 
     }
+
     public TriHexTile(HexTile a, HexTile b, VolcanoTile c){
         tileOne = a;
         tileTwo = b;
         tileThree = c;
+        tileOne.setTriHexTile(this);
+        tileTwo.setTriHexTile(this);
+        tileThree.setTriHexTile(this);
     }
 
     public Direction directionOfBRelativeToA = Direction.NORTH; //default value
