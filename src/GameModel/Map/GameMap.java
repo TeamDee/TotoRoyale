@@ -417,6 +417,10 @@ public class GameMap {
         return visible;
     }
 
+    public HexTile getVisibleAtAxialCoordinate(AxialCoordinate axialCoordinate) {
+        return gameBoard2.get(axialCoordinate).topTile();
+    }
+
     public void printInfoAboutMap(){
         for(BoardSpace bs: gameBoard2.values()){
             if(bs.topTile() != null)
@@ -431,8 +435,8 @@ public class GameMap {
     /*
         given a hextile, do a BFS or DFS for all contiguos, connected tiles of the same type and return them as a list
      */
-    public ArrayList<HexTile> getContiguousTerrainFromTile(TerrainTile tt){
-        return null; //TODO
+    public ContiguousTerrainTypeTiles getContiguousTerrainFromTile(HexTile ht){
+        return new ContiguousTerrainTypeTiles(ht);
     }
 }
 

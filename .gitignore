@@ -15,7 +15,7 @@ hs_err_pid*
 
 #ignore the intelliJ configuration files
 .idea
-TotoRoyale.iml
+*.iml
 
 # Build files
 target

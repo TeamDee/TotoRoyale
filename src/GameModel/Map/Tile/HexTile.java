@@ -27,7 +27,7 @@ public abstract class HexTile extends Tile {
     //private TerrainTile terrainTile = null; //null implies this is an empty board space
 
     private Player owner = null;
-    private int meepleCount;
+    private int meepleCount = 0;
     private boolean hasTotoro;
 
     public HexTile(){
@@ -88,6 +88,9 @@ public abstract class HexTile extends Tile {
         this.level = old.level + 1;
     }
 
+    public boolean isOccupied() {
+        return meepleCount == 0 && !hasTotoro;
+    }
     public int getMeepleCount(){
         return meepleCount;
     }
