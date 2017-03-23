@@ -14,15 +14,17 @@ public class Main {
 
         //Main game = new Main();
         //game.RunGame();
-        GameMap map = new GameMap();
-        TriHexTile tht = new TriHexTile();
-        tht.setTileOne(new Grass());
-        tht.setTileTwo(new Rock());
-        tht.setTileThree(new VolcanoTile());
+//        GameMap map = new GameMap();
+//        TriHexTile tht = new TriHexTile();
+//        tht.setTileOne(new Grass());
+//        tht.setTileTwo(new Rock());
+//        tht.setTileThree(new VolcanoTile());
 
 
-        map.placeFirstTile(tht);
-        map.printInfoAboutMap();
+//        map.placeFirstTile(tht);
+//        map.printInfoAboutMap();
+
+        GameLogicDirector.getInstance().begin();
     }
 
     public void RunGame() {

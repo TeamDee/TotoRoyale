@@ -28,6 +28,7 @@ public class Placement {
         newB = new2;
         newC = new3;
 
+        /*
         if(oldBS1.hasTile()) {
             value += numberOfEnemyMeeplesKilled(oldBS1.topTile(), oldBS2.topTile(), oldBS3.topTile());
         /*
@@ -35,8 +36,9 @@ public class Placement {
                 breaking 5+meeple chain so we can place another totoro
                 increase value based on level (but only if we can expand into it)
                 allows us to place totoro
-         */
+
         }
+        */
     }
 
     public boolean tilesAreOfProperType(){

@@ -1,5 +1,7 @@
 package GameModel.Map.Coordinates;
 
+import GameModel.Map.Direction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,24 @@ public class AxialCoordinate {
     }
 
 
+    public AxialCoordinate getByDirection(Direction directionRelativeToMe){
+        switch(directionRelativeToMe){
+            case NORTH:
+                return getNorth();
+            case NORTHEAST:
+                return getNorthEast();
+            case NORTHWEST:
+                return getNorthWest();
+            case SOUTH:
+                return getSouth();
+            case SOUTHEAST:
+                return getSouthEast();
+            case SOUTHWEST:
+                return getSouthWest();
+        }
+        System.out.println("getByDirection in AxialCoordinate fed a non-Direction, somehow ERROR ERROR ERROR ");
+        return null;
+    }
     public AxialCoordinate getNorth(){
         return new AxialCoordinate(x,y-2);
     }

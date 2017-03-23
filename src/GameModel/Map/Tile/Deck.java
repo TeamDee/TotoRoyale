@@ -31,7 +31,7 @@ public class Deck {
     }
 
     public static Deck newExampleDeck(){
-        TriHexTile[] newDeck = new TriHexTile[47];
+        TriHexTile[] newDeck = new TriHexTile[48];
         newDeck[0] = new TriHexTile(new Grass(), new Grass(), new VolcanoTile());
         newDeck[1] = new TriHexTile(new Grass(), new Jungle(), new VolcanoTile());
         newDeck[2] = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());

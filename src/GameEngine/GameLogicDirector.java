@@ -36,7 +36,7 @@ public class GameLogicDirector implements Runnable{
         return me;
     }
 
-    public void start(){
+    public void begin(){
         Thread gameThread = new Thread(this);
         gameThread.start();
     }
@@ -45,21 +45,33 @@ public class GameLogicDirector implements Runnable{
       NEVER CALL THIS - DAVE
      */
     public void run(){
-        if(newGame){
-            initializeNewGame();
-        }
-        else{
-            //game logic
-            if(deck.cardsLeft() >0 ) {
-                for (Player p : players) {
-                    p.takeTurn(myMap, deck.draw());
+        while(true) {
+            if (newGame) {
+                System.out.println("Initializing new game.");
+                initializeNewGame();
+            } else {
+                //game logic
+                System.out.println("cards left" + deck.cardsLeft());
+                if (deck.cardsLeft() > 0) {
+                    for (Player p : players) {
+                        System.out.println("Round " + (48 - deck.cardsLeft()));
+                        p.takeTurn(myMap, deck.draw());
+                        getMap().printInfoAboutMap();
+                    }
+                } else { //game over
+                    myMap.printInfoAboutMap();
                 }
             }
-            else{ //game over
-                myMap.printInfoAboutMap();
+
+            try {
+                Thread.sleep(000);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
             }
         }
     }
+
+
 
     public GameMap getMap(){
         return myMap;
@@ -73,9 +85,11 @@ public class GameLogicDirector implements Runnable{
         players.add(p2);
 
         deck = Deck.newExampleDeck();
+        System.out.println(deck.cardsLeft());
 
-        newGame=false; //what's this for?
+        newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();
+        myMap.placeFirstTile(deck.draw());
     }
 
 }

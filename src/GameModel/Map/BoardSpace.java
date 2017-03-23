@@ -19,12 +19,15 @@ public class BoardSpace {
 
     private BoardSpace north, northeast, southeast, south, southwest, northwest;
 
-    public BoardSpace(){
+    public BoardSpace(AxialCoordinate location){
         this.hasTile = false;
         tiles = new ArrayList<HexTile>();
+        this.location = location;
     }
 
     public int getLevel(){
+        if(topTile()==null)
+            return 0;
         return topTile().getLevel();
     }
 
@@ -50,6 +53,15 @@ public class BoardSpace {
             tiles = new ArrayList<HexTile>();
         }
         tiles.add(ht);
+        //activateAdjacentBoardSpaces(); todo ensure this is being done in gameMap
+    }
+    public void activateAdjacentBoardSpaces(){
+        north.activate(this,Direction.SOUTH);
+        northeast.activate(this,Direction.SOUTHWEST);
+        northwest.activate(this,Direction.SOUTHEAST);
+        south.activate(this,Direction.NORTH);
+        southeast.activate(this,Direction.NORTHWEST);
+        southwest.activate(this,Direction.NORTHEAST);
     }
 
     public boolean isActive(){
@@ -57,6 +69,20 @@ public class BoardSpace {
     }
     public void activate(BoardSpace callingBS, Direction callingBSDirection){
         Direction.getConverse(callingBSDirection);
+        switch(callingBSDirection){
+            case NORTH:
+                north = callingBS;
+            case NORTHEAST:
+                northeast = callingBS;
+            case NORTHWEST:
+                northwest = callingBS;
+            case SOUTH:
+                south = callingBS;
+            case SOUTHEAST:
+                southeast = callingBS;
+            case SOUTHWEST:
+                southwest = callingBS;
+        }
         isActive = true;
     }
 
@@ -67,20 +93,56 @@ public class BoardSpace {
         this.location = ac;
     }
 
+    public BoardSpace getBoardSpaceAtDirection(Direction d){
+        switch(d){
+            case NORTH:
+                return north;
+            case NORTHEAST:
+                return northeast;
+            case NORTHWEST:
+                return northwest;
+            case SOUTH:
+                return south;
+            case SOUTHEAST:
+                return southeast;
+            case SOUTHWEST:
+                return southwest;
+        }
+        return null;
+    }
     public BoardSpace getNorth(){
+        if(north == null){
+            System.out.println("Warning: returning a null reference to a boardspace");
+        }
         return north;
     }
     public BoardSpace getNorthEast(){
+        if(northeast == null){
+            System.out.println("Warning: returning a null reference to a boardspace");
+        }
         return northeast;
     }
     public BoardSpace getNorthWest(){
+        if(northwest == null){
+            System.out.println("Warning: returning a null reference to a boardspace");
+        }
         return northwest;
     }
-    public BoardSpace getSouth(){return south;}
+    public BoardSpace getSouth(){
+        if(south == null){
+            System.out.println("Warning: returning a null reference to a boardspace");
+        }
+        return south;}
     public BoardSpace getSouthEast(){
+        if(southeast == null){
+            System.out.println("Warning: returning a null reference to a boardspace");
+        }
         return southeast;
     }
     public BoardSpace getSouthWest(){
+        if(southwest == null){
+            System.out.println("Warning: returning a null reference to a boardspace");
+        }
         return southwest;
     }
 
