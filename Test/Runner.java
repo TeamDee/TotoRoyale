@@ -5,7 +5,7 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = {"Test/Features/"}
+    features = {"Test/Features/BoardSpace.Feature"}
 )
 
 public class Runner{
