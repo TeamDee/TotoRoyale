@@ -13,7 +13,7 @@ public class Deck {
 
     public Deck() {
         deck = new Stack<TriHexTile>();
-        newRandomDeck();
+        //newRandomDeck();
     }
 
     public TriHexTile draw() {
