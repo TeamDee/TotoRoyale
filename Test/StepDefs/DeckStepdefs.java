@@ -1,3 +1,5 @@
+package StepDefs;
+
 import GameModel.Map.Tile.Deck;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -20,6 +22,6 @@ public class DeckStepdefs {
 
     @Then("^I get a shuffled deck.$")
     public void getShuffledDeck(){
-        
+
     }
 }
