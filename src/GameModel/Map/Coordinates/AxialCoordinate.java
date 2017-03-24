@@ -2,9 +2,6 @@ package GameModel.Map.Coordinates;
 
 import GameModel.Map.Direction;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by jowens on 3/8/17.
  */
@@ -73,5 +70,13 @@ public class AxialCoordinate {
         s += " ";
         s += "y: " + y;
         return s;
+    }
+
+    public boolean compare(AxialCoordinate other){
+        boolean result = false;
+        if(other.x == this.x && other.y == this.y){
+            result = true;
+        }
+        return result;
     }
 }

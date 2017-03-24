@@ -1,11 +1,9 @@
 package GameModel.Map;
 
 import GameModel.Map.Coordinates.AxialCoordinate;
-import GameModel.Map.Tile.Tile;
+import GameModel.Map.Tile.HexTile;
 
 import java.util.ArrayList;
-
-import GameModel.Map.Tile.*;
 
 /**
  * Created by jowens on 3/10/17.
@@ -21,6 +19,7 @@ public class BoardSpace {
 
     public BoardSpace(AxialCoordinate location){
         this.hasTile = false;
+        isActive = false;
         tiles = new ArrayList<HexTile>();
         this.location = location;
     }

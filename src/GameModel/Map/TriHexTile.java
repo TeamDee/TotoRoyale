@@ -31,8 +31,8 @@ public class TriHexTile extends Tile {
 
     public boolean isLegalPlacement(HexTile oldA, HexTile oldB, HexTile oldC){
         if(oldA.getLevel() == oldB.getLevel() && oldB.getLevel() == oldC.getLevel()) { //all on same level
-            //TODO validate volcano placement
-            return true;
+            if(oldC.toString().compareTo(tileThree.toString())==0)
+                return true;
         }
         return false;
     }

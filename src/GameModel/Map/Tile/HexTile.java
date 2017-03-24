@@ -148,6 +148,7 @@ public abstract class HexTile extends Tile {
     public BoardSpace getBoardSpace(){
         return myBoardSpace;
     }
+    public void setBoardSpace(BoardSpace boardSpace) { this.myBoardSpace = boardSpace; }
 
     public HexCoordinate getLocation(){
         return location;
