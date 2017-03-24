@@ -4,16 +4,9 @@ import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
+import GameModel.Map.Tile.VolcanoTile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import GameModel.Map.Tile.*;
-
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by jowens on 3/8/17.
@@ -112,9 +105,14 @@ public class GameMap {
         BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
         addRadialBoardSpaces(2, firstBS);
 
-        gameBoard2.get(firstBS.getLocation()).addTile(first.getTileOne());
-        gameBoard2.get(firstBS.getLocation().getNorth()).addTile(first.getTileTwo());
-        gameBoard2.get(firstBS.getLocation().getNorthEast()).addTile(first.getTileThree());
+        BoardSpace current = gameBoard2.get(firstBS.getLocation());
+        current.addTile(first.getTileOne());
+        first.getTileOne().setBoardSpace(current);
+        current = gameBoard2.get(firstBS.getLocation().getNorth());
+        current.addTile(first.getTileTwo());
+        first.getTileTwo().setBoardSpace(current);
+        current = gameBoard2.get(firstBS.getLocation().getNorthEast());
+        current.addTile(first.getTileThree());
 
         //TODO does this work?
         addRadialBoardSpaces(2, firstBS);

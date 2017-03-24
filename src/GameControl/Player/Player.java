@@ -25,6 +25,7 @@ public class Player {
 
     //scoring
     private int score;
+    public boolean placeTileCheck = false; //added for testing
 
     public Player(){
         totoroCount = Constants.TOTORO_PER_PLAYER;
@@ -42,8 +43,13 @@ public class Player {
 
     public void placeTile(GameMap gameMap, Placement placement) {
         gameMap.implementPlacement(placement);
+        placeTileCheck = true; //added for testing
     }
-
+    // Added for testing
+    public boolean placementCheck () {
+        return placeTileCheck;
+    }
+    //end testing
     public void placeMeeples(HexTile hexTile) {
         hexTile.placeMeeples(this);
         removeMeeples(hexTile.getLevel() + 1);
