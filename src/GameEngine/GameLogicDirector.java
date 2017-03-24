@@ -49,6 +49,8 @@ public class GameLogicDirector implements Runnable{
             if (newGame) {
                 System.out.println("Initializing new game.");
                 initializeNewGame();
+                gc = GameController.getInstance();
+                gc.initViewControllerInteractions(p1);
             } else {
                 //game logic
                 System.out.println("cards left" + deck.cardsLeft());
@@ -57,8 +59,11 @@ public class GameLogicDirector implements Runnable{
                         System.out.println("Round " + (48 - deck.cardsLeft()));
                         p.takeTurn(myMap, deck.draw());
                         getMap().printInfoAboutMap();
+                        System.out.println();
+                        gc.paint();
                     }
                 } else { //game over
+                    System.out.println();
                     myMap.printInfoAboutMap();
                 }
             }
@@ -84,12 +89,15 @@ public class GameLogicDirector implements Runnable{
         players.add(p1);
         players.add(p2);
 
+        GameController gameController = new GameController();
+        gameController.initViewControllerInteractions(p1);
         deck = Deck.newExampleDeck();
         System.out.println(deck.cardsLeft());
 
         newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();
         myMap.placeFirstTile(deck.draw());
+
     }
 
 }

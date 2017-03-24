@@ -1,11 +1,14 @@
 package GameModel.Map.Tile;
 
+import GameView.Map.GrassTerrainView;
+
 /**
  * Created by jowens on 3/8/17.
  */
 public class Grass extends TerrainTile {
 
     public Grass(){
+        myView = new GrassTerrainView();
         myType = TerrainType.GRASS;
     }
 

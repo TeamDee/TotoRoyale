@@ -6,6 +6,9 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
+
+import GameModel.Map.Coordinates.HexCoordinate;
+import GameModel.Map.Coordinates.PixelCoordinate;
 import GameModel.Map.Tile.*;
 
 import GameControl.Player.BlackPlayer;
@@ -80,20 +83,22 @@ public class ActiveGameViewport extends Viewport {
         super.paint(g);
         List<HexTile> tiles = GameLogicDirector.getInstance().getMap().getVisible();
 
-        drawMap(g, tiles);
+        if(tiles!=null)
+            if(tiles.size()> 0)
+                drawMap(g, tiles);
     }
     // ----------------
 
     public void drawMap(Graphics g, List<HexTile> tiles) {
         HexTile start = tiles.get(0);
-        Point pixels = start.getLocation().getPixelCoordinate().getPoint();//law of demeter violation
+        //Point pixels = start.getLocation().getPixelCoordinate().getPoint();//law of demeter violation
 
-        int dx = this.getWidth() / 2 - pixels.x;
-        int dy = this.getHeight() / 2 - pixels.y;
+        int dx = 0;//this.getWidth() / 2 - pixels.x;
+        int dy = 0;//this.getHeight() / 2 - pixels.y;
 
         Point p;
         for (HexTile t : tiles) {
-            p = t.getLocation().getPixelCoordinate().getPoint(); //law of demeter violation
+            p = new HexCoordinate(t.getLocation()).getPixelCoordinate().getPoint(); //law of demeter violation
             TileView tileView = t.getTileView();
             if(tileView.hasBeenSeen()){
                 g.drawImage(tileView.getImage(), p.x + dx, p.y + dy,

@@ -53,6 +53,7 @@ public class BoardSpace {
             tiles = new ArrayList<HexTile>();
         }
         tiles.add(ht);
+        ht.setMyBoardSpace(this);
         //activateAdjacentBoardSpaces(); todo ensure this is being done in gameMap
     }
     public void activateAdjacentBoardSpaces(){

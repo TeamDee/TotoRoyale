@@ -19,7 +19,6 @@ public class GameController {
     public static GameController gameController = new GameController();
 
     public GameController() {
-
         stack = new Stack<Controller>();
     }
 
@@ -45,6 +44,10 @@ public class GameController {
         this.activeViewport = this.activeController.getViewport();
         this.frame.add(this.activeViewport);
         this.frame.setVisible(true);
+    }
+
+    public void paint(){
+        this.activeController.getViewport().paint(this.activeController.getViewport().getGraphics());
     }
 
     public void addToStack(Controller controller) {

@@ -20,7 +20,7 @@ public abstract class ContiguousTiles {
 
     public boolean isContiguous(HexTile tile) {
         for (HexTile contiguousTile : contiguousTiles) {
-            if (AxialCoordinate.areAdjacent(contiguousTile.getLocation().getAxialCoordinate(), tile.getLocation().getAxialCoordinate()))
+            if (AxialCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }
         return false;

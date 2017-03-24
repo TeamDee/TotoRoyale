@@ -12,6 +12,7 @@ import GameView.Viewports.ActiveGameViewport;
 import GameView.Viewports.Viewport;
 import GameModel.Map.Tile.Tile;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -99,6 +100,9 @@ public class PlayerController extends Controller{
 
     }
 
+    public void paint(){
+        viewport.paint(viewport.getGraphics());
+    }
     public Viewport getViewport(){
         return viewport;
     }

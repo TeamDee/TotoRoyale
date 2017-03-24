@@ -10,6 +10,7 @@ public class Tile {
         //default constructor
     }
 
+
     public int getLevel(){
         return level;
     }

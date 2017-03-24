@@ -1,5 +1,5 @@
 package GameModel.Map.Tile;
-
+import GameView.Map.JungleTerrainView;
 /**
  * Created by jowens on 3/13/17.
  */
@@ -7,6 +7,7 @@ package GameModel.Map.Tile;
 public class Jungle extends TerrainTile{
     public Jungle(){
         myType = TerrainType.JUNGLE;
+        this.myView = new JungleTerrainView();
     }
 
     @Override

@@ -17,20 +17,20 @@ public class HexTileView extends TileView{
         // paint both images, preserving the alpha channels
         Graphics g = combined.getGraphics();
 
-        /*
-        g.drawImage(TerrainView.getImage());
 
-        TileableView tv2[] = new TileableView[tileableViews.size()];
-        tileableViews.toArray( tv2);
+        //g.drawImage(TerrainView.getImage());
+
+//        TileableView tv2[] = new TileableView[tileableViews.size()];
+//        tileableViews.toArray( tv2);
 
 
-        for(TileableView tv: tv2){
-            g.drawImage(tv.getImage(), 0, 0,
-                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+//        for(TileableView tv: tv2){
+//            g.drawImage(tv.getImage(), 0, 0,
+//                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+//
+//            //g.drawImage(tv.getImage(),0,0,null);
+//        }
 
-            //g.drawImage(tv.getImage(),0,0,null);
-        }
-        */
 
         myImage = combined;
     }

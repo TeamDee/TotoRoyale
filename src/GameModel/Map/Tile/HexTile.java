@@ -18,7 +18,7 @@ public abstract class HexTile extends Tile {
 
     private HexTile north, northEast, southEast, south, southWest, northWest;
 
-    private HexTileView myView = new HexTileView(); //todo check that you can initialize objects outside of constructor
+    protected HexTileView myView = new HexTileView(); //todo check that you can initialize objects outside of constructor
 
     protected TriHexTile triHexTile;
 
@@ -144,12 +144,15 @@ public abstract class HexTile extends Tile {
         this.northWest = newNorthWest;
     }
 
+    public void setMyBoardSpace(BoardSpace bs){myBoardSpace =bs;}
     public BoardSpace getBoardSpace(){
         return myBoardSpace;
     }
 
-    public HexCoordinate getLocation(){
-        return location;
+    public AxialCoordinate getLocation(){
+        if(myBoardSpace != null)
+            return myBoardSpace.getLocation();
+        return new AxialCoordinate(0,0);
     }
     public TileView getTileView(){
         return myView;
