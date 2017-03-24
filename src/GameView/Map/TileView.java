@@ -13,6 +13,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
+import java.io.File;
+import java.io.IOException;
+import GameView.ImagePaths;
 
 public class TileView{
     private int age;
@@ -42,23 +48,37 @@ public class TileView{
     }
 
 
-    private void makeNewImage(){
-        BufferedImage combined = new BufferedImage(Constants.TILE_HEIGHT, Constants.TILE_WIDTH, BufferedImage.TYPE_INT_ARGB);
+    protected void makeNewImage(){
+        BufferedImage combined = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
         // paint both images, preserving the alpha channels
         Graphics g = combined.getGraphics();
 
-        TileableView tv2[] = new TileableView[tileableViews.size()];
-        tileableViews.toArray( tv2);
+//        TileableView tv2[] = new TileableView[tileableViews.size()];
+//        tileableViews.toArray( tv2);
+//
+//
+//        for(TileableView tv: tv2){
+//            g.drawImage(tv.getImage(), 0, 0,
+//                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+//        }
+//old way
+//        try {
+//            g.drawImage(ImageIO.read(new File(ImagePaths.GRASS_TERRAIN)));
+//
+//        }
+//        catch (IOException ioe){
+//            System.out.println("derp");
+//        }
+//        myImage = combined;
 
-
-        for(TileableView tv: tv2){
-            g.drawImage(tv.getImage(), 0, 0,
-                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+        try {
+            myImage = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
+        }
+        catch (IOException ioe){
+            System.out.println("derp2");
         }
 
-
-        myImage = combined;
     }
 
     public boolean hasBeenSeen(){
@@ -87,6 +107,10 @@ public class TileView{
     }
 
     public BufferedImage getImage(){
+        if(myImage == null){
+            System.out.println("null image");
+            this.makeNewImage();
+        }
         return myImage;
     }
     public int getAge(){

@@ -10,12 +10,12 @@ import java.io.IOException;
 /**
  * Created by jowens on 3/23/17.
  */
-public class JungleTerrainView extends HexTileView{
+public class RockTerrainView extends HexTileView{
     BufferedImage image;
 
-    public JungleTerrainView() {
+    public RockTerrainView() {
         try {
-            myImage = ImageIO.read(new File(ImagePaths.JUNGLE_TERRAIN));
+            myImage = ImageIO.read(new File(ImagePaths.ROCK_TERRAIN));
         }
         catch (IOException e) {
             System.out.println("Jungle File not found");
@@ -24,7 +24,7 @@ public class JungleTerrainView extends HexTileView{
     @Override
     protected void makeNewImage(){
         try {
-            myImage = ImageIO.read(new File(ImagePaths.JUNGLE_TERRAIN));
+            myImage = ImageIO.read(new File(ImagePaths.ROCK_TERRAIN));
 
         }
         catch (IOException ioe){

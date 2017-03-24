@@ -36,18 +36,20 @@ public class GameController {
         this.frame.setVisible(true);
     }
 
-    public void initViewControllerInteractions(Player player){
-        this.frame = new JFrame();
+    public void initViewControllerInteractions(Player player, PlayerController pc){
+        if(frame == null)
+            this.frame = new JFrame();
         this.frame.setExtendedState(this.frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.activeController = new PlayerController(player);
+        this.activeController = pc;
         this.activeViewport = this.activeController.getViewport();
         this.frame.add(this.activeViewport);
         this.frame.setVisible(true);
     }
 
     public void paint(){
-        this.activeController.getViewport().paint(this.activeController.getViewport().getGraphics());
+        activeViewport.paint(activeViewport.getGraphics());
+        //this.activeController.getViewport().paint(this.activeController.getViewport().getGraphics());
     }
 
     public void addToStack(Controller controller) {

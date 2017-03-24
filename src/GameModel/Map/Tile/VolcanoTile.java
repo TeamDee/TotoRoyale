@@ -1,5 +1,7 @@
 package GameModel.Map.Tile;
 
+import GameView.Map.VolcanoView;
+
 /**
  * Volcano tiles can only be placed on other volcano tiles
  * Created by jowens on 3/13/17.
@@ -7,6 +9,7 @@ package GameModel.Map.Tile;
 public class VolcanoTile extends HexTile {
     public VolcanoTile(){
         myType = TerrainType.VOLCANO;
+        myView = new VolcanoView();
     }
 
     //TODO test this

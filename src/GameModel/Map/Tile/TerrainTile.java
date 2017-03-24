@@ -14,7 +14,8 @@ public abstract class TerrainTile extends HexTile {
         this.triHexTile = compositor;
     }
     public TerrainTile(){
-        System.out.println("warning: building a terrainTile without supplying a compositor");
+
+        //System.out.println("warning: building a terrainTile without supplying a compositor");
     }
 
     public boolean placeMeeple(Player p){

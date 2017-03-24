@@ -2,6 +2,7 @@ package GameEngine;
 
 import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
+import GameControl.Player.PlayerController;
 import GameControl.Player.WhitePlayer;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Deck;
@@ -20,6 +21,8 @@ public class GameLogicDirector implements Runnable{
 
     //Game specific objects
     Player p1,p2;
+    PlayerController activePlayer;
+
     ArrayList<Player> players;
     public Deck deck;
     GameController gc;
@@ -50,7 +53,7 @@ public class GameLogicDirector implements Runnable{
                 System.out.println("Initializing new game.");
                 initializeNewGame();
                 gc = GameController.getInstance();
-                gc.initViewControllerInteractions(p1);
+                gc.initViewControllerInteractions(p1, activePlayer );
             } else {
                 //game logic
                 System.out.println("cards left" + deck.cardsLeft());
@@ -61,6 +64,11 @@ public class GameLogicDirector implements Runnable{
                         getMap().printInfoAboutMap();
                         System.out.println();
                         gc.paint();
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException ie) {
+                            System.out.println(ie.getStackTrace());
+                        }
                     }
                 } else { //game over
                     System.out.println();
@@ -68,11 +76,7 @@ public class GameLogicDirector implements Runnable{
                 }
             }
 
-            try {
-                Thread.sleep(000);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
+
         }
     }
 
@@ -85,18 +89,20 @@ public class GameLogicDirector implements Runnable{
     private void initializeNewGame() {
         p1 = new WhitePlayer();
         p2 = new BlackPlayer();
+
         players = new ArrayList<Player>();
         players.add(p1);
         players.add(p2);
+        activePlayer = new PlayerController(p1);
 
         GameController gameController = new GameController();
-        gameController.initViewControllerInteractions(p1);
+        gameController.initViewControllerInteractions(p1, activePlayer);
         deck = Deck.newExampleDeck();
         System.out.println(deck.cardsLeft());
 
         newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();
-        myMap.placeFirstTile(deck.draw());
+        //myMap.placeFirstTile(deck.draw());
 
     }
 

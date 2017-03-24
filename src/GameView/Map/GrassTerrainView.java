@@ -15,7 +15,7 @@ public class GrassTerrainView extends TerrainView {
 
     public GrassTerrainView() {
         try {
-            image = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
+            myImage = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
         }
         catch (IOException e) {
             System.out.println("File not found");
@@ -23,5 +23,16 @@ public class GrassTerrainView extends TerrainView {
     }
 
     @Override
-    public BufferedImage getImage() { return image; }
+    protected void makeNewImage(){
+        try {
+            myImage = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
+
+        }
+        catch (IOException ioe){
+            System.out.println("derp2");
+        }
+    }
+    @Override
+    public BufferedImage getImage() {
+        return myImage; }
 }

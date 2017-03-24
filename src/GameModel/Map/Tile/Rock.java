@@ -1,11 +1,14 @@
 package GameModel.Map.Tile;
 
+import GameView.Map.RockTerrainView;
+
 /**
  * Created by jowens on 3/13/17.
  */
 public class Rock extends TerrainTile{
     public Rock(){
         myType = TerrainType.ROCK;
+        myView = new RockTerrainView();
     }
 
     @Override

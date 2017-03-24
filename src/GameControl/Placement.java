@@ -5,6 +5,8 @@ import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
 import GameModel.Map.Tile.HexTile;
 
+import java.util.ArrayList;
+
 /**
  * A "Placement" denotes a placement of a TriHexTile and is useful in calculating how useful a move is. Placements aren't always legal.
  */
@@ -72,14 +74,6 @@ public class Placement {
         return oldHex1.getMeepleCount() + oldHex2.getMeepleCount() + oldHex3.getMeepleCount();
     }
 
-    //returns true iff the THT can be legally placed
-    public boolean isLegal(){
-        if(oldA.isActive() || oldB.isActive() || oldC.isActive())
-            return (isLevelPlacement() && !isOverlapping() && volcanoMatch()); // TODO currently ignores boardspace legality
-        else
-            return false;
-    }
-
     /*
      * executes the placement onto the gameBoard, does not check to see if the placement is legal
      */
@@ -90,4 +84,11 @@ public class Placement {
         oldC.addTile(newC);
     }
 
+    public ArrayList<BoardSpace> getBoardSpaces(){
+        ArrayList<BoardSpace> list = new ArrayList<BoardSpace>();
+        list.add(oldA);
+        list.add(oldB);
+        list.add(oldC);
+        return list;
+    }
 }

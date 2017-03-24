@@ -11,7 +11,7 @@ public class ImagePaths {
     public static final String WATER_TERRAIN = IMG_DIR + "water.png";
     public static final String ROCK_TERRAIN = IMG_DIR + "quarry.png";
     public static final String VOLCANO_TERRAIN = IMG_DIR + "volcano.png";
-    public static final String JUNGLE_TERRAIN = IMG_DIR + "jungle.png";
+    public static final String JUNGLE_TERRAIN = IMG_DIR + "Jungle.png";
 
     //random
     public static final String MAGIC_CAT = IMG_DIR + "magicCat.png";

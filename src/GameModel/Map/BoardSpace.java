@@ -67,6 +67,10 @@ public class BoardSpace {
     public boolean isActive(){
         return isActive;
     }
+
+    public void activate(){
+        isActive = true;
+    }
     public void activate(BoardSpace callingBS, Direction callingBSDirection){
         Direction.getConverse(callingBSDirection);
         switch(callingBSDirection){

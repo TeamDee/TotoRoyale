@@ -15,7 +15,7 @@ public class TriHexTile extends Tile {
 
     // public HexTile a, b, c; note that order is important a->b->c->a is clockwise
     public TriHexTile(){
-
+        System.out.println("Warning: using incorrect TriHexTile constructor");
     }
 
     public TriHexTile(HexTile a, HexTile b, VolcanoTile c){

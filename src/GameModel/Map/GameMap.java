@@ -29,7 +29,11 @@ public class GameMap {
     //using axial coordinate system, initialize the board to prepare it for play
     public void initializeBoard() {
         gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
-        this.addBoardSpace(new AxialCoordinate(0,0));
+        AxialCoordinate origin = new AxialCoordinate(0,0);
+        this.addBoardSpace(origin);
+        this.addRadialBoardSpaces(2,gameBoard2.get(origin));
+        this.activateAdjacentBoardSpaces(gameBoard2.get(origin));
+        gameBoard2.get(origin).activate();
         numberOfTriHextiles = 0;
     }
 
@@ -158,7 +162,6 @@ public class GameMap {
             if (current.getDistance() >= radius || visited.contains(current)) //if we've reached the radius or we've already visited, skip
                 continue;
 
-            System.out.println("Searching queue");
             // iterate through all of the current Tile's neighbors
             for (Direction direction : Direction.values()) {
                 BoardSpace neighbor = gameBoard2.get(current.getBoardSpace().getLocation().getByDirection(direction));
@@ -193,6 +196,7 @@ public class GameMap {
             connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getSouthEast()), Direction.SOUTHEAST);
         if(gameBoard2.get(ac.getSouthWest())!=null)
             connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getSouthWest()), Direction.SOUTHWEST);
+        //this.addRadialBoardSpaces(2,newBS);
     }
     //TODO this currently doesn't work
     /*
@@ -392,6 +396,11 @@ public class GameMap {
      */
     public void implementPlacement(Placement p){
         p.place();
+        for(BoardSpace b: p.getBoardSpaces()){
+            addRadialBoardSpaces(2,b);
+            this.activateAdjacentBoardSpaces(b);
+        }
+
     }
 
     public boolean isLegalPlacement(Placement p) {
@@ -437,6 +446,8 @@ public class GameMap {
         return new ContiguousTerrainTypeTiles(ht);
     }
 }
+
+
 
  class Distance{
     private BoardSpace mine;
