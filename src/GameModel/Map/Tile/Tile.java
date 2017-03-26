@@ -10,6 +10,9 @@ public class Tile {
         //default constructor
     }
 
+    public void setLevel(int level) {
+        this. level = level;
+    }
 
     public int getLevel(){
         return level;

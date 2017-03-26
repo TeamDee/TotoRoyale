@@ -25,43 +25,60 @@ public class BoardSpace {
     }
 
     public int getLevel(){
-        if(topTile()==null)
+        if(hasTile)
+            return tiles.size() - 1;
+        else
             return 0;
-        return topTile().getLevel();
     }
 
     public HexTile topTile(){
-        if(tiles.size()>0)
+        if(hasTile)
             return tiles.get(tiles.size()-1);
         else
             return null;
     }
+
     public boolean hasTile(){
         return hasTile;
     }
+
     public boolean isEmpty(){
         return !hasTile;
     }
+
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
         if(!hasTile){
-            //activateAdjacentBoardSpaces(); TODO
-        }
-        hasTile = true;
-        if(tiles == null){
             tiles = new ArrayList<HexTile>();
+            hasTile = true;
         }
         tiles.add(ht);
         ht.setMyBoardSpace(this);
-        //activateAdjacentBoardSpaces(); todo ensure this is being done in gameMap
-    }
-    public void activateAdjacentBoardSpaces(){
-        north.activate(this,Direction.SOUTH);
-        northeast.activate(this,Direction.SOUTHWEST);
-        northwest.activate(this,Direction.SOUTHEAST);
-        south.activate(this,Direction.NORTH);
-        southeast.activate(this,Direction.NORTHWEST);
-        southwest.activate(this,Direction.NORTHEAST);
+        ht.setLevel(tiles.size() - 1);
+        if (north.hasTile()) {
+            ht.setNorth(north.topTile());
+            north.topTile().setSouth(ht);
+        }
+        if (northeast.hasTile()) {
+            ht.setNorthEast(northeast.topTile());
+            northeast.topTile().setSouthWest(ht);
+        }
+        if (southeast.hasTile()) {
+            ht.setSouthEast(southeast.topTile());
+            southeast.topTile().setNorthWest(ht);
+        }
+        if (south.hasTile()) {
+            ht.setSouth(south.topTile());
+            south.topTile().setNorth(ht);
+        }
+        if (southwest.hasTile()) {
+            ht.setSouthWest(southwest.topTile());
+            southwest.topTile().setNorthEast(ht);
+        }
+        if (northwest.hasTile()) {
+            ht.setNorthWest(northwest.topTile());
+            northwest.topTile().setSouthEast(ht);
+        }
     }
 
     public boolean isActive(){

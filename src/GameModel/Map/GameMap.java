@@ -1,6 +1,7 @@
 package GameModel.Map;
 
 import GameControl.Placement;
+import GameControl.Player.WhitePlayer;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
@@ -355,15 +356,15 @@ public class GameMap {
             BoardSpace southWest = mine.getSouthWest();
             BoardSpace northWest = mine.getNorthWest();
 
-            if(north.topTile() != null && northEast.topTile() != null) {
+            if(north.hasTile() && northEast.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, north.topTile(), northEast.topTile()))
                         returnMe.add(new Placement(mine, north, northEast, ht1, ht2, ht3));
             }
-            if(northEast.topTile() != null && southEast.topTile() != null) {
+            if(northEast.hasTile() && southEast.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, northEast.topTile(), southEast.topTile()))
                     returnMe.add(new Placement(mine, northEast, southEast, ht1, ht2, ht3));
             }
-            if(southEast.topTile() != null && south.topTile() != null) {
+            if(southEast.hasTile() && south.topTile() != null) {
                 if(canPlaceOnHexTiles(placeAt, southEast.topTile(), south.topTile()))
                     returnMe.add(new Placement(mine, southEast, south, ht1, ht2, ht3));
             }
@@ -391,8 +392,43 @@ public class GameMap {
         boolean areSameLevel = ht1.getLevel() == ht2.getLevel() && ht2.getLevel() == ht3.getLevel();
         boolean areNotInSameTriHexTile = !(ht1.getTriHexTile() == ht2.getTriHexTile() && ht2.getTriHexTile() == ht3.getTriHexTile());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && ! ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
-        boolean doNotContainSize1Settlements = true;
+        boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
         return areSameLevel && areNotInSameTriHexTile && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
+    }
+
+    public boolean containsSize1Settlement(HexTile ht) {
+        if (!ht.isOccupied()) {
+            return false;
+        }
+        else {
+            BoardSpace myBoardSpace = ht.getBoardSpace();
+            BoardSpace[] neighborBoardSpaces = new BoardSpace[6];
+            neighborBoardSpaces[0] = myBoardSpace.getNorth();
+            neighborBoardSpaces[1] = myBoardSpace.getNorthEast();
+            neighborBoardSpaces[2] = myBoardSpace.getSouthEast();
+            neighborBoardSpaces[3] = myBoardSpace.getSouth();
+            neighborBoardSpaces[4] = myBoardSpace.getSouthWest();
+            neighborBoardSpaces[5] = myBoardSpace.getNorthWest();
+            if (ht.isOwnedByWhite()) {
+                for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
+                    if (neighborBoardSpace.hasTile()) {
+                        HexTile neighborHexTile = neighborBoardSpace.topTile();
+                        if (neighborHexTile.isOwnedByWhite())
+                            return false;
+                    }
+                }
+            }
+            else {
+                for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
+                    if (neighborBoardSpace.hasTile()) {
+                        HexTile neighborHexTile = neighborBoardSpace.topTile();
+                        if (neighborHexTile.isOwnedByBlack())
+                            return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 
     /*

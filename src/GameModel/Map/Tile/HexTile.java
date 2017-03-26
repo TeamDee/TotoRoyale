@@ -1,6 +1,8 @@
 package GameModel.Map.Tile;
 
+import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
+import GameControl.Player.WhitePlayer;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.*;
 import GameModel.Map.TriHexTile;
@@ -69,39 +71,30 @@ public abstract class HexTile extends Tile {
 
     public void setTriHexTile(TriHexTile tht) { this.triHexTile = tht; }
 
-    //places this hexTile above a previously existing HexTile and takes all of its neigbors and assigns itself as a neighbor to them
-    public void placeOnHexTile(HexTile old){
-        //taking references from replaced tile and
-        this.north = old.north;
-        north.setSouth(this);
-
-        this.northEast = old.northEast;
-        northEast.setSouthWest(this);
-
-        this.southEast = old.southEast;
-        southEast.setNorthWest(this);
-
-        this.south = old.south;
-        south.setNorth(this);
-
-        this.southWest = old.southWest;
-        southWest.setNorthEast(this);
-
-        this.northWest = old.northWest;
-        northWest.setSouthEast(this);
-
-        this.level = old.level + 1;
-    }
-
     public boolean isOccupied() {
         return meepleCount == 0 && !hasTotoro && !hasTiger;
     }
+
     public int getMeepleCount(){
         return meepleCount;
     }
 
-    public Player getOwner() {
-        return owner;
+    public boolean isOwnedByWhite() {
+        if (!isOccupied()) {
+            return false;
+        }
+        else {
+            return owner instanceof WhitePlayer;
+        }
+    }
+
+    public boolean isOwnedByBlack() {
+        if (!isOccupied()) {
+            return false;
+        }
+        else {
+            return owner instanceof BlackPlayer;
+        }
     }
 
     @Override

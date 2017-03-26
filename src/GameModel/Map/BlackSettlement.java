@@ -14,6 +14,6 @@ public class BlackSettlement extends Settlement {
 
     @Override
     public boolean isContiguous(HexTile hexTile) {
-        return super.isContiguous(hexTile) && hexTile.getOwner() instanceof BlackPlayer;
+        return super.isContiguous(hexTile) && hexTile.isOwnedByWhite();
     }
 }

@@ -14,6 +14,6 @@ public class WhiteSettlement extends Settlement{
 
     @Override
     public boolean isContiguous(HexTile hexTile) {
-        return super.isContiguous(hexTile) && hexTile.getOwner() instanceof WhitePlayer;
+        return super.isContiguous(hexTile) && hexTile.isOwnedByWhite();
     }
 }
