@@ -280,6 +280,7 @@ public class GameMap {
                 //END NORTH AND NORTHEAST
             }
         }
+
         return returnMe;
     }
 
@@ -305,6 +306,8 @@ public class GameMap {
             return false;
         }
     }
+
+
     /*  TODO
         for each of the three hextiles in the tri-hex, attempt to place them at the placeAt tile, and then check each rotation with that tile
         as center to see if such rotations are legal.
@@ -319,46 +322,52 @@ public class GameMap {
         ht3 = toBePlaced.getTileThree();
 
         if(placeAt.terrainType() == TerrainType.VOLCANO){ //bombs away
-            BoardSpace mine = placeAt.getBoardSpace();// law of demeter violation
+            BoardSpace mine = placeAt.getBoardSpace();
             BoardSpace north = mine.getNorth();
             BoardSpace northEast = mine.getNorthEast();
-            BoardSpace northWest = mine.getNorthWest();
-            BoardSpace south = mine.getSouth();
             BoardSpace southEast = mine.getSouthEast();
+            BoardSpace south = mine.getSouth();
             BoardSpace southWest = mine.getSouthWest();
+            BoardSpace northWest = mine.getNorthWest();
 
-
-            if(north.getLevel() == mine.getLevel()){ //me, north, northeast
-                if(northEast.getLevel() == mine.getLevel())
-                    returnMe.add(new Placement(mine, north,northEast, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
+            if(north.topTile() != null && northEast.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, north.topTile(), northEast.topTile()))
+                        returnMe.add(new Placement(mine, north, northEast, ht1, ht2, ht3));
             }
-            if(northEast.getLevel() == mine.getLevel()){
-                if(southEast.getLevel() == mine.getLevel())
-                    returnMe.add(new Placement(mine, northEast,southEast, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
+            if(northEast.topTile() != null && southEast.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, northEast.topTile(), southEast.topTile()))
+                    returnMe.add(new Placement(mine, northEast, southEast, ht1, ht2, ht3));
             }
-            if(southEast.getLevel() == mine.getLevel()){
-                if(south.getLevel() == mine.getLevel())
-                    returnMe.add(new Placement(mine, southEast,south, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
+            if(southEast.topTile() != null && south.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, southEast.topTile(), south.topTile()))
+                    returnMe.add(new Placement(mine, southEast, south, ht1, ht2, ht3));
             }
-            if(south.getLevel() == mine.getLevel()){
-                if(southWest.getLevel() == mine.getLevel())
-                    returnMe.add(new Placement(mine, south,southWest, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
+            if(south.topTile() != null && southWest.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, south.topTile(), southWest.topTile()))
+                    returnMe.add(new Placement(mine, south, southWest, ht1, ht2, ht3));
             }
-            if(southWest.getLevel() == mine.getLevel()){
-                if(northWest.getLevel() == mine.getLevel())
-                    returnMe.add(new Placement(mine, southWest,northWest, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
+            if(southWest.topTile() != null && northWest.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, southEast.topTile(), northWest.topTile()))
+                    returnMe.add(new Placement(mine, southEast, southWest, ht1, ht2, ht3));
             }
-            if(northWest.getLevel() == mine.getLevel()){
-                if(north.getLevel() == mine.getLevel())
-                    returnMe.add(new Placement(mine, northWest,north, toBePlaced.getTileOne(), toBePlaced.getTileTwo(), toBePlaced.getTileThree()));
+            if(northWest.topTile() != null && north.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, northWest.topTile(), north.topTile()))
+                    returnMe.add(new Placement(mine, northWest, north, ht1, ht2, ht3));
             }
-
         }
         else{ //only allow volcano tile placements on top of of other tiles
             return null;
         }
 
-        return null;
+        return returnMe;
+    }
+
+    public boolean canPlaceOnHexTiles(HexTile ht1, HexTile ht2, HexTile ht3) {
+        boolean areSameLevel = ht1.getLevel() == ht2.getLevel() && ht2.getLevel() == ht3.getLevel();
+        boolean areNotInSameTriHexTile = !(ht1.getTriHexTile() == ht2.getTriHexTile() && ht2.getTriHexTile() == ht3.getTriHexTile());
+        boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && ! ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
+        boolean doNotContainSize1Settlements = true;
+        return areSameLevel && areNotInSameTriHexTile && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
     }
 
     /*
@@ -379,7 +388,9 @@ public class GameMap {
      * returns all triplets of adjacent tiles that aren't all in the same tri-hex tile
      * TODO this would be useful for ignoring illegal placements
      */
-//    public List<TriHexTile> sameLevelAdjacentHexesOfDifferentTriHexes() {
+
+
+//    public List<HexTile> sameLevelAdjacentHexesOfDifferentTriHexes() {
 //        List<HexTile> returnMe;
 //        for
 //    }

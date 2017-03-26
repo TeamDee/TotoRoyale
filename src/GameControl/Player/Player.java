@@ -45,6 +45,7 @@ public class Player {
         gameMap.implementPlacement(placement);
         placeTileCheck = true; //added for testing
     }
+
     // Added for testing
     public boolean placementCheck () {
         return placeTileCheck;
