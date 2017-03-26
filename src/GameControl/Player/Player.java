@@ -37,15 +37,22 @@ public class Player {
     public void takeTurn(GameMap gameMap, TriHexTile tile){
         ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
         //placements.add(gameMap.getLegalPlacementsAtHexTile());
+        //ArrayList<Placement> nukePlacement = gameMap.getLegalPlacementsAtHexTile(tile,tile.getTileThree());
         Placement stupidPlacement = placements.get(0);
+        /*if(nukePlacement.size() > 3) {
+            stupidPlacement = nukePlacement.get(0);
+        }
+        else {
+            stupidPlacement = placements.get(0);
+        }*/
         placeTile(gameMap, stupidPlacement);
+        buildSettlement(tile.getTileOne());
     }
 
     public void placeTile(GameMap gameMap, Placement placement) {
         gameMap.implementPlacement(placement);
         placeTileCheck = true; //added for testing
     }
-
     // Added for testing
     public boolean placementCheck () {
         return placeTileCheck;
@@ -57,11 +64,46 @@ public class Player {
     }
 
     public void buildSettlement(HexTile hexTile) {
-
+        if(hexTile.numMeeplesOnTile() == 0) {
+            placeMeeples(hexTile);
+        }
+        awardPoints(1);
+    }
+    /*
+        Calls settlement and contiguousUnoccupoedTerrainTyesTiles and plaes meeples on legal tiles of same terrain
+     */
+    public void expandSettlement(List<HexTile> settlement) {
+        /*for(HexTile expand: settlement)
+        {
+            if(expand.numMeeplesOnTile() == 0)
+            {
+                awardPoints(expand.getLevel()^2);
+            }
+        }*/
     }
 
-    public void expandSettlement(List<HexTile> settlement) {
+    public void placeTotoro(List<HexTile> settlement)
+    {
+        if(settlement.size() >= 5)
+        {
+            //public ArrayList getLegalTotoroPlacements(List<HexTile> settlement)
+            //gets legal place of totoro adjacent to HexTiles in settlement
+            //calls something to adjacent tile
+            /*
+                if(tile.hasTotoro = =false)
+                {
+                    tile.placeTotoro(); set hasTotoro to true
+                    awardPoints(200);
+                }
 
+             */
+
+        }
+    }
+
+    public int getScore()
+    {
+        return score;
     }
 
     public boolean removeTotoro(int amount){
