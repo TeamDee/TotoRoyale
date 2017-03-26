@@ -29,6 +29,7 @@ public abstract class HexTile extends Tile {
     private Player owner = null;
     private int meepleCount = 0;
     private boolean hasTotoro;
+    private boolean hasTiger;
 
     public HexTile(){
         //you shouldn't be calling this in the context of this game, since you need a TriHexTile compositor
@@ -49,7 +50,9 @@ public abstract class HexTile extends Tile {
     public boolean hasTotoro() {
         return hasTotoro;
     }
-
+    public boolean hasTiger() {
+        return hasTiger;
+    }
 
     public TerrainType terrainType(){
         return myType;
@@ -91,7 +94,7 @@ public abstract class HexTile extends Tile {
     }
 
     public boolean isOccupied() {
-        return meepleCount == 0 && !hasTotoro;
+        return meepleCount == 0 && !hasTotoro && !hasTiger;
     }
     public int getMeepleCount(){
         return meepleCount;
