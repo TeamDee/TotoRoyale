@@ -23,4 +23,8 @@ public class Settlement extends ContiguousTiles{
     public ArrayList<HexTile> getExpansionTiles(TerrainType terrainType) {
         return null; //TODO implement this
     }
+    
+    public int getSize() {
+        return contiguousTiles.size();
+    }
 }

@@ -1,6 +1,8 @@
 package GameModel.Map.Tile;
 
+import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
+import GameControl.Player.WhitePlayer;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.*;
 import GameModel.Map.TriHexTile;
@@ -102,6 +104,23 @@ public abstract class HexTile extends Tile {
 
     public Player getOwner() {
         return owner;
+    }
+    public boolean isOwnedByWhite() {
+        if (!isOccupied()) {
+            return false;
+        }
+        else {
+            return owner instanceof WhitePlayer;
+        }
+    }
+
+    public boolean isOwnedByBlack() {
+        if (!isOccupied()) {
+            return false;
+        }
+        else {
+            return owner instanceof BlackPlayer;
+        }
     }
 
     @Override
