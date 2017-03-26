@@ -367,11 +367,11 @@ public class GameMap {
         boolean areSameLevel = ht1.getLevel() == ht2.getLevel() && ht2.getLevel() == ht3.getLevel();
         boolean areNotInSameTriHexTile = !(ht1.getTriHexTile() == ht2.getTriHexTile() && ht2.getTriHexTile() == ht3.getTriHexTile());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && ! ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
-        boolean doNotContainSize1Settlements = !containSize1Settlement(ht1) && !containSize1Settlement(ht2) && !containSize1Settlement(ht3);
+        boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
         return areSameLevel && areNotInSameTriHexTile && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
     }
 
-    public boolean containSize1Settlement(HexTile ht) {
+    public boolean containsSize1Settlement(HexTile ht) {
         if (!ht.isOccupied()) {
             return false;
         }

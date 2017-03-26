@@ -31,7 +31,7 @@ public class BoardSpace {
     }
 
     public HexTile topTile(){
-        if(tiles.size()>0)
+        if(hasTile)
             return tiles.get(tiles.size()-1);
         else
             return null;
@@ -45,16 +45,38 @@ public class BoardSpace {
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
         if(!hasTile){
-            //activateAdjacentBoardSpaces(); TODO
-        }
-        hasTile = true;
-        if(tiles == null){
             tiles = new ArrayList<HexTile>();
+            hasTile = true;
         }
         tiles.add(ht);
         ht.setMyBoardSpace(this);
+        if (north.hasTile()) {
+            ht.setNorth(north.topTile());
+            north.topTile().setSouth(ht);
+        }
+        if (northeast.hasTile()) {
+            ht.setNorthEast(northeast.topTile());
+            northeast.topTile().setSouthWest(ht);
+        }
+        if (southeast.hasTile()) {
+            ht.setSouthEast(southeast.topTile());
+            southeast.topTile().setNorthWest(ht);
+        }
+        if (south.hasTile()) {
+            ht.setSouth(south.topTile());
+            south.topTile().setNorth(ht);
+        }
+        if (southwest.hasTile()) {
+            ht.setSouthWest(southwest.topTile());
+            southwest.topTile().setNorthEast(ht);
+        }
+        if (northwest.hasTile()) {
+            ht.setNorthWest(northwest.topTile());
+            northwest.topTile().setSouthEast(ht);
+        }
         //activateAdjacentBoardSpaces(); todo ensure this is being done in gameMap
     }
+
     public void activateAdjacentBoardSpaces(){
         north.activate(this,Direction.SOUTH);
         northeast.activate(this,Direction.SOUTHWEST);

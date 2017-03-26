@@ -82,9 +82,6 @@ public class Placement {
         oldA.addTile(newA);
         oldB.addTile(newB);
         oldC.addTile(newC);
-        newA.setBoardSpace(oldA);
-        newB.setBoardSpace(oldB);
-        newC.setBoardSpace(oldC);
     }
 
     public ArrayList<BoardSpace> getBoardSpaces(){

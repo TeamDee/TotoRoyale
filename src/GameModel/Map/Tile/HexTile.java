@@ -102,9 +102,6 @@ public abstract class HexTile extends Tile {
         return meepleCount;
     }
 
-    public Player getOwner() {
-        return owner;
-    }
     public boolean isOwnedByWhite() {
         if (!isOccupied()) {
             return false;
