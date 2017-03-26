@@ -60,7 +60,7 @@ public class AxialCoordinate {
     }
     @Override
     public int hashCode(){
-        return y*1000 + x; //TODO this is a temporary hashing function that will fail for (ridiculously) large x or y
+        return y*10000 + 10*x+1; //TODO this is a temporary hashing function that will fail for (ridiculously) large x or y
     }
 
     @Override

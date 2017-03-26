@@ -41,7 +41,7 @@ public class Player {
         ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
         //placements.add(gameMap.getLegalPlacementsAtHexTile());
         //ArrayList<Placement> nukePlacement = gameMap.getLegalPlacementsAtHexTile(tile,tile.getTileThree());
-        Placement stupidPlacement = placements.get(random.nextInt(placements.size()));
+        Placement stupidPlacement = placements.get(0);//random.nextInt(placements.size()));
         /*if(nukePlacement.size() > 3) {
             stupidPlacement = nukePlacement.get(0);
         }

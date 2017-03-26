@@ -4,7 +4,7 @@ package GameView;
  */
 public class ImagePaths {
     //initial directory
-    public static final String IMG_DIR = "/Users/conor/IdeaProjects/TotoRoyale/src/res/images/";
+    public static final String IMG_DIR = "/Users/jowens/IdeaProjects/TotoRoyale/src/res/images/";
 
     //terrain sprites
     public static final String GRASS_TERRAIN = IMG_DIR + "grass.png";

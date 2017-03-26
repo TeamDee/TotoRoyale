@@ -32,12 +32,29 @@ public class GameMap {
     //using axial coordinate system, initialize the board to prepare it for play
     public void initializeBoard() {
         gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
-        AxialCoordinate origin = new AxialCoordinate(0,0);
-        this.addBoardSpace(origin);
-        this.addRadialBoardSpaces(2,gameBoard2.get(origin));
-        this.activateAdjacentBoardSpaces(gameBoard2.get(origin));
-        gameBoard2.get(origin).activate();
+        AxialCoordinate originLocation = new AxialCoordinate(0,0);
+        gameBoard2.put(originLocation,new BoardSpace(originLocation));
+        BoardSpace originBS = gameBoard2.get(originLocation);
+
+        this.addBoardSpace(originLocation);
+        this.addRadialBoardSpaces(2,originBS);
+        this.connectAdjacentBoardSpaces(originBS);
+        this.activateAdjacentBoardSpaces(originBS);
+
+
+        this.connectAdjacentBoardSpaces(originBS.getNorth());
+        this.connectAdjacentBoardSpaces(originBS.getNorthEast());
+        this.connectAdjacentBoardSpaces(originBS.getNorthWest());
+        this.connectAdjacentBoardSpaces(originBS.getSouth());
+        this.connectAdjacentBoardSpaces(originBS.getSouthWest());
+        this.connectAdjacentBoardSpaces(originBS.getSouthEast());
+
+        originBS.activate();
         numberOfTriHextiles = 0;
+
+        for(BoardSpace bs:gameBoard2.values()){
+            connectAdjacentBoardSpaces(bs);
+        }
     }
 
     //call this whenever you place a hextile on an empty boardspace.
@@ -77,6 +94,7 @@ public class GameMap {
         initialBS.setSouthWest(gameBoard2.get(initial.getSouthWest()));
     }
 
+
     private void connectTwoBoardSpaces(BoardSpace bs1, BoardSpace bs2, Direction bs1TObs2){
         switch (bs1TObs2){
             case NORTH:
@@ -106,40 +124,78 @@ public class GameMap {
         }
     }
 
-    public void placeFirstTile(TriHexTile first) {
-        System.out.println("placing first tile");
-        //TODO we'll probably have to deal with orienting "north" when the opposing player starts.
-        BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
-        addRadialBoardSpaces(2, firstBS);
+    private void connectAdjacentBoardSpaces(BoardSpace initial){
+        AxialCoordinate initialLocation = initial.getLocation();
 
-        BoardSpace current = gameBoard2.get(firstBS.getLocation());
-        current.addTile(first.getTileOne());
-        first.getTileOne().setBoardSpace(current);
-        current = gameBoard2.get(firstBS.getLocation().getNorth());
-        current.addTile(first.getTileTwo());
-        first.getTileTwo().setBoardSpace(current);
-        current = gameBoard2.get(firstBS.getLocation().getNorthEast());
-        current.addTile(first.getTileThree());
+        BoardSpace north = gameBoard2.get(initialLocation.getNorth());
+        BoardSpace northEast = gameBoard2.get(initialLocation.getNorthEast());
+        BoardSpace northWest = gameBoard2.get(initialLocation.getNorthWest());
+        BoardSpace south = gameBoard2.get(initialLocation.getSouth());
+        BoardSpace southEast = gameBoard2.get(initialLocation.getSouthEast());
+        BoardSpace southWest = gameBoard2.get(initialLocation.getSouthWest());
 
-        //TODO does this work?
-        addRadialBoardSpaces(2, firstBS);
-        addRadialBoardSpaces(2, gameBoard2.get(firstBS.getLocation().getNorth()));
-        addRadialBoardSpaces(2, gameBoard2.get(firstBS.getLocation().getNorthEast()));
-
-        activateAdjacentBoardSpaces(gameBoard2.get(firstBS.getLocation()));
-        activateAdjacentBoardSpaces(gameBoard2.get(firstBS.getLocation().getNorth()));
-        activateAdjacentBoardSpaces(gameBoard2.get(firstBS.getLocation().getNorthEast()));
-
-        numberOfTriHextiles++;
+        if(north!=null)
+            connectTwoBoardSpaces(initial, north, Direction.NORTH);
+        if(northEast!=null)
+            connectTwoBoardSpaces(initial, northEast, Direction.NORTHEAST);
+        if(northWest!=null)
+            connectTwoBoardSpaces(initial, northWest, Direction.NORTHWEST);
+        if(south!=null)
+            connectTwoBoardSpaces(initial, south, Direction.SOUTH);
+        if(southEast!=null)
+            connectTwoBoardSpaces(initial, southEast, Direction.SOUTHEAST);
+        if(southWest!=null)
+            connectTwoBoardSpaces(initial, southWest, Direction.SOUTHWEST);
     }
 
+//    public void placeFirstTile(TriHexTile first) {
+//        System.out.println("placing first tile");
+//        //TODO we'll probably have to deal with orienting "north" when the opposing player starts.
+//        BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
+//        addRadialBoardSpaces(2, firstBS);
+//
+//        BoardSpace current = gameBoard2.get(firstBS.getLocation());
+//        current.addTile(first.getTileOne());
+//        first.getTileOne().setBoardSpace(current);
+//        current = gameBoard2.get(firstBS.getLocation().getNorth());
+//        current.addTile(first.getTileTwo());
+//        first.getTileTwo().setBoardSpace(current);
+//        current = gameBoard2.get(firstBS.getLocation().getNorthEast());
+//        current.addTile(first.getTileThree());
+//
+//        //TODO does this work?
+//        addRadialBoardSpaces(2, firstBS);
+//        addRadialBoardSpaces(2, gameBoard2.get(firstBS.getLocation().getNorth()));
+//        addRadialBoardSpaces(2, gameBoard2.get(firstBS.getLocation().getNorthEast()));
+//
+//        activateAdjacentBoardSpaces(gameBoard2.get(firstBS.getLocation()));
+//        activateAdjacentBoardSpaces(gameBoard2.get(firstBS.getLocation().getNorth()));
+//        activateAdjacentBoardSpaces(gameBoard2.get(firstBS.getLocation().getNorthEast()));
+//
+//        numberOfTriHextiles++;
+//    }
+
     private void activateAdjacentBoardSpaces(BoardSpace center){
-        gameBoard2.get( center.getLocation().getSouthWest()).activate(center, Direction.NORTHEAST);
-        gameBoard2.get( center.getLocation().getSouthEast()).activate(center, Direction.NORTHWEST);
-        gameBoard2.get( center.getLocation().getSouth()).activate(center, Direction.NORTH);
-        gameBoard2.get( center.getLocation().getNorthWest()).activate(center, Direction.SOUTHEAST);
-        gameBoard2.get( center.getLocation().getNorthEast()).activate(center, Direction.SOUTHWEST);
-        gameBoard2.get( center.getLocation().getNorth()).activate(center, Direction.SOUTH);
+        BoardSpace north = gameBoard2.get( center.getLocation().getNorth());
+        BoardSpace northEast = gameBoard2.get( center.getLocation().getNorthEast());
+        BoardSpace northWest = gameBoard2.get( center.getLocation().getNorthWest());
+        BoardSpace south = gameBoard2.get( center.getLocation().getSouth());
+        BoardSpace southEast = gameBoard2.get( center.getLocation().getSouthEast());
+        BoardSpace southWest = gameBoard2.get( center.getLocation().getSouthWest());
+
+        southWest.activate(center, Direction.NORTHEAST);
+        southEast.activate(center, Direction.NORTHWEST);
+        south.activate(center, Direction.NORTH);
+        northWest.activate(center, Direction.SOUTHEAST);
+        northEast.activate(center, Direction.SOUTHWEST);
+        north.activate(center, Direction.SOUTH);
+
+//        connectAdjacentBoardSpaces(north);
+//        connectAdjacentBoardSpaces(northEast);
+//        connectAdjacentBoardSpaces(northWest);
+//        connectAdjacentBoardSpaces(south);
+//        connectAdjacentBoardSpaces(southWest);
+//        connectAdjacentBoardSpaces(southEast);
     }
 
     public void addRadialBoardSpaces(int radius, BoardSpace origin){
@@ -167,14 +223,17 @@ public class GameMap {
 
             // iterate through all of the current Tile's neighbors
             for (Direction direction : Direction.values()) {
-                BoardSpace neighbor = gameBoard2.get(current.getBoardSpace().getLocation().getByDirection(direction));
+                BoardSpace bs = current.getBoardSpace();
+                AxialCoordinate location = bs.getLocation();
+                AxialCoordinate neighborLocation = location.getByDirection(direction);
+                BoardSpace neighbor = gameBoard2.get(neighborLocation);
                 // if the Tile is on the map and we haven't visited it already
                 if(neighbor == null){
-                    neighbor = new BoardSpace(current.getBoardSpace().getLocation().getByDirection(direction));
-                    this.addBoardSpace(neighbor.getLocation());
-                    this.connectTwoBoardSpaces(neighbor,current.getBoardSpace(), direction);
+                    neighbor = new BoardSpace(neighborLocation);
+                    gameBoard2.put(neighborLocation,neighbor);
                 }
 
+                connectAdjacentBoardSpaces(neighbor);
                 queue.add(new Distance(current.getDistance()+1,neighbor));
             }
             visited.add(current);
@@ -187,19 +246,6 @@ public class GameMap {
     public void addBoardSpace(AxialCoordinate ac){
         BoardSpace newBS = new BoardSpace(ac);
         gameBoard2.put(ac, newBS);
-        if(gameBoard2.get(ac.getNorth())!=null)
-            connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getNorth()), Direction.NORTH);
-        if(gameBoard2.get(ac.getNorthEast())!=null)
-            connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getNorthEast()), Direction.NORTHEAST);
-        if(gameBoard2.get(ac.getNorthWest())!=null)
-            connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getNorthWest()), Direction.NORTHWEST);
-        if(gameBoard2.get(ac.getSouth())!=null)
-            connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getSouth()), Direction.SOUTH);
-        if(gameBoard2.get(ac.getSouthEast())!=null)
-            connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getSouthEast()), Direction.SOUTHEAST);
-        if(gameBoard2.get(ac.getSouthWest())!=null)
-            connectTwoBoardSpaces(newBS, gameBoard2.get(ac.getSouthWest()), Direction.SOUTHWEST);
-        //this.addRadialBoardSpaces(2,newBS);
     }
     //TODO this currently doesn't work
     /*
@@ -463,11 +509,14 @@ public class GameMap {
         return returnMe;
     }
 
+
+
     /*
         takes a placement object and implements it's effects on the board
      */
     public void implementPlacement(Placement p){
         p.place();
+        //System.out.println(p.isLegalPlacement(p));
         for(BoardSpace b: p.getBoardSpaces()){
             addRadialBoardSpaces(2,b);
             this.activateAdjacentBoardSpaces(b);
@@ -543,5 +592,10 @@ public class GameMap {
     }
     public int getDistance(){
         return distance;
+    }
+
+    @Override
+     public int hashCode(){
+        return mine.getLocation().hashCode();
     }
 }

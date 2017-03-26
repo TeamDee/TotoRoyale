@@ -55,6 +55,7 @@ public class BoardSpace {
         tiles.add(ht);
         ht.setMyBoardSpace(this);
         ht.setLevel(tiles.size() - 1);
+
         if (north.hasTile()) {
             ht.setNorth(north.topTile());
             north.topTile().setSouth(ht);
