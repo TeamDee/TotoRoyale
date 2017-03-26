@@ -18,17 +18,7 @@ public class WaterTerrainView extends HexTileView{
             myImage = ImageIO.read(new File(ImagePaths.WATER_TERRAIN));
         }
         catch (IOException e) {
-            System.out.println("Jungle File not found");
-        }
-    }
-    @Override
-    protected void makeNewImage(){
-        try {
-            myImage = ImageIO.read(new File(ImagePaths.WATER_TERRAIN));
-
-        }
-        catch (IOException ioe){
-            System.out.println("derp2");
+            System.out.println("Lake File not found");
         }
     }
 

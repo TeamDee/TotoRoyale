@@ -13,6 +13,10 @@ public class ImagePaths {
     public static final String VOLCANO_TERRAIN = IMG_DIR + "volcano.png";
     public static final String JUNGLE_TERRAIN = IMG_DIR + "Jungle.png";
 
+    //Meeple sprites
+    public static final String MEEPLE_WHITE = IMG_DIR + "Meeple_white.png";
+    public static final String MEEPLE_BLACK = IMG_DIR + "Meeple_Black.png";
+
     //random
     public static final String MAGIC_CAT = IMG_DIR + "magicCat.png";
 }

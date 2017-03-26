@@ -11,6 +11,7 @@ import GameView.Map.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by jowens on 3/8/17.
@@ -27,6 +28,8 @@ public class Player {
     private int score;
     public boolean placeTileCheck = false; //added for testing
 
+    //random
+    Random random = new Random();
     public Player(){
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
@@ -38,7 +41,7 @@ public class Player {
         ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
         //placements.add(gameMap.getLegalPlacementsAtHexTile());
         //ArrayList<Placement> nukePlacement = gameMap.getLegalPlacementsAtHexTile(tile,tile.getTileThree());
-        Placement stupidPlacement = placements.get(0);
+        Placement stupidPlacement = placements.get(random.nextInt(placements.size()));
         /*if(nukePlacement.size() > 3) {
             stupidPlacement = nukePlacement.get(0);
         }

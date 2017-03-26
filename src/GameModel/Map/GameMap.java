@@ -16,7 +16,9 @@ public class GameMap {
     //todo decide between these two
     //private BoardSpace[][] gameBoard;
     private HashMap<AxialCoordinate, BoardSpace> gameBoard2;
+    private ArrayList<TriHexTile> playedTriHexTiles = new ArrayList<TriHexTile>();
     private int numberOfTriHextiles;
+    private boolean firstTurn = true;
 
     private static int boardLength = 20, boardWidth = 20;
 
@@ -209,11 +211,31 @@ public class GameMap {
         HexTile ht1,ht2;
         VolcanoTile ht3;
 
+
+
         //hextiles contained in tri-hex to be placed
         ht1 = tht.getTileOne();
         ht2 = tht.getTileTwo();
         ht3 = tht.getTileThree();
 
+        if(isFirstTurn()){
+            firstTurn = false;
+            BoardSpace bs = gameBoard2.get(new AxialCoordinate(0,0));
+
+            AxialCoordinate location =  bs.getLocation();
+            BoardSpace north = gameBoard2.get(location.getNorth());
+            BoardSpace northeast = gameBoard2.get(location.getNorthEast());
+            BoardSpace northwest = gameBoard2.get(location.getNorthWest());
+            BoardSpace south = gameBoard2.get(location.getSouth());
+            BoardSpace southeast = gameBoard2.get(location.getSouthEast());
+            BoardSpace southwest = gameBoard2.get(location.getSouthWest());
+            returnMe.add(new Placement(bs, north, northeast, ht1, ht2, ht3));
+            returnMe.add(new Placement(bs, northeast, southeast, ht1, ht2, ht3));
+            returnMe.add(new Placement(bs, southeast, south, ht1, ht2, ht3));
+            returnMe.add(new Placement(bs, south, southwest, ht1, ht2, ht3));
+            returnMe.add(new Placement(bs, southwest, northwest, ht1, ht2, ht3));
+            returnMe.add(new Placement(bs, northwest, north, ht1, ht2, ht3));
+        }
         for(BoardSpace bs: gameBoard2.values()){ //for each active board space (i.e. above a played tile, or adjacent to one)
             if(bs.isEmpty() && bs.isActive()){
                 //get all placements that are possible given adjacent empty boardspaces
@@ -284,6 +306,9 @@ public class GameMap {
         return returnMe;
     }
 
+    protected boolean isFirstTurn(){
+        return firstTurn;
+    }
 
     /*
      * tests that
@@ -312,7 +337,7 @@ public class GameMap {
         for each of the three hextiles in the tri-hex, attempt to place them at the placeAt tile, and then check each rotation with that tile
         as center to see if such rotations are legal.
      */
-    public ArrayList<Placement> getLegalPlacementsAtHexTile(TriHexTile toBePlaced, HexTile placeAt){
+    private ArrayList<Placement> getLegalPlacementsAtHexTile(TriHexTile toBePlaced, HexTile placeAt){
         ArrayList<Placement> returnMe = new ArrayList<Placement>();
 
         HexTile ht1,ht2,ht3;
@@ -411,6 +436,7 @@ public class GameMap {
             addRadialBoardSpaces(2,b);
             this.activateAdjacentBoardSpaces(b);
         }
+        this.playedTriHexTiles.add(p.getBoardSpaces().get(0).topTile().getTriHexTile());
 
     }
 
@@ -429,7 +455,7 @@ public class GameMap {
         ArrayList<HexTile> visible =new ArrayList<HexTile>();
         Collection<BoardSpace> bs = gameBoard2.values();
         for(BoardSpace b: bs){
-            if(!b.isEmpty())
+            if(b.hasTile())
                 visible.add(b.topTile());
         }
         return visible;
@@ -440,9 +466,19 @@ public class GameMap {
     }
 
     public void printInfoAboutMap(){
-        for(BoardSpace bs: gameBoard2.values()){
-            if(bs.topTile() != null)
-                System.out.println(bs.topTile() + " " + bs.getLocation());
+//        for(BoardSpace bs: gameBoard2.values()){
+//            if(bs.hasTile())
+//                    System.out.println(bs.topTile() + "\n\t Location: " + bs.getLocation() + "\n\t MeepleCount: " + bs.topTile().getMeepleCount());
+//        }
+        for(TriHexTile tht: this.playedTriHexTiles)
+        {
+            HexTile curr;
+            curr = tht.getTileOne();
+            System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount());
+            curr = tht.getTileTwo();
+            System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount());
+            curr = tht.getTileThree();
+            System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount());
         }
     }
 

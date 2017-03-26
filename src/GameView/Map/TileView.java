@@ -20,19 +20,19 @@ import java.io.File;
 import java.io.IOException;
 import GameView.ImagePaths;
 
-public class TileView{
+public abstract class TileView{
     private int age;
     private boolean hasBeenSeen;
-    private ArrayList<TileableView> tileableViews;
-
+    protected ArrayList<TileableView> tileableViews;
 
 
     BufferedImage myImage;
+    BufferedImage drawMe;
 
     public TileView() {
         age = 0;
         hasBeenSeen = false;
-        //tileableViews = new ArrayList<>();
+        tileableViews = new ArrayList<TileableView>();
     }
 
     public List<TileableView> getList() {
@@ -48,37 +48,34 @@ public class TileView{
     }
 
 
-    protected void makeNewImage(){
+    protected BufferedImage makeNewImage(){
         BufferedImage combined = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
         // paint both images, preserving the alpha channels
         Graphics g = combined.getGraphics();
 
-//        TileableView tv2[] = new TileableView[tileableViews.size()];
-//        tileableViews.toArray( tv2);
-//
-//
-//        for(TileableView tv: tv2){
-//            g.drawImage(tv.getImage(), 0, 0,
-//                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
-//        }
-//old way
-//        try {
-//            g.drawImage(ImageIO.read(new File(ImagePaths.GRASS_TERRAIN)));
-//
-//        }
-//        catch (IOException ioe){
-//            System.out.println("derp");
-//        }
-//        myImage = combined;
+        //terrain
+        g.drawImage(getImage(), 0,0, Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
 
-        try {
-            myImage = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
+        //tileables
+        for(TileableView tv: tileableViews){
+            g.drawImage(tv.getImage(), 0, 0,
+                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
         }
-        catch (IOException ioe){
-            System.out.println("derp2");
-        }
+        drawMe = combined;
+        return drawMe;
+    }
 
+    public void makeOriginalImage(){
+        BufferedImage combined = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+
+        // paint both images, preserving the alpha channels
+        Graphics g = combined.getGraphics();
+
+        //terrain
+        g.drawImage(getImage(), 0,0, Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+
+        drawMe = combined;
     }
 
     public boolean hasBeenSeen(){
@@ -106,13 +103,8 @@ public class TileView{
         tileableViews.add(current);
     }
 
-    public BufferedImage getImage(){
-        if(myImage == null){
-            System.out.println("null image");
-            this.makeNewImage();
-        }
-        return myImage;
-    }
+    public abstract BufferedImage getImage();
+
     public int getAge(){
         return age;
     }
@@ -122,6 +114,10 @@ public class TileView{
         myImage = op.filter(myImage, myImage);
     }
 
-
+    protected void addTileableView(TileableView tv){
+        if(tileableViews ==null)
+            tileableViews = new ArrayList<TileableView>();
+        tileableViews.add(tv);
+    }
 
 }
