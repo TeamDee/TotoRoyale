@@ -60,6 +60,7 @@ public class GameLogicDirector implements Runnable{
                 if (deck.cardsLeft() > 0) {
                     for (Player p : players) {
                         System.out.println("Round " + (48 - deck.cardsLeft()));
+                        System.out.println("Score " + p.getScore());
                         p.takeTurn(myMap, deck.draw());
                         getMap().printInfoAboutMap();
                         System.out.println();
