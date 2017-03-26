@@ -4,8 +4,6 @@ import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.HexTile;
-import GameModel.Map.Tile.TerrainType;
-import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
@@ -78,13 +76,12 @@ public class Player {
         Calls settlement and contiguousUnoccupoedTerrainTyesTiles and plaes meeples on legal tiles of same terrain
      */
     public void expandSettlement(List<HexTile> settlement) {
-        /*for(HexTile expand: settlement)
-        {
-            if(expand.numMeeplesOnTile() == 0)
-            {
+        for(HexTile expand: settlement) {
+            if(expand.numMeeplesOnTile() == 0) {
+                placeMeeples(expand);
                 awardPoints(expand.getLevel()^2);
             }
-        }*/
+        }
     }
 
     public void placeTotoro(List<HexTile> settlement)

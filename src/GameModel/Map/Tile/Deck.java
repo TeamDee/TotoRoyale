@@ -13,7 +13,6 @@ public class Deck {
 
     public Deck() {
         deck = new Stack<TriHexTile>();
-        //newRandomDeck();
     }
 
     public TriHexTile draw() {
@@ -32,6 +31,8 @@ public class Deck {
     }
 
     public void newRandomDeck() {
+        if(deck.size()!=0)
+            deck = new Stack<TriHexTile>();
         TriHexTile[] exampleDeck = exampleFullDeck();
         exampleDeck = shuffleDeck(exampleDeck);
         prepareDeckStack(exampleDeck);

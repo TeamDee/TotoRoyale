@@ -26,14 +26,12 @@ public abstract class HexTile extends Tile {
 
     private BoardSpace myBoardSpace;
 
-    //private TerrainTile terrainTile = null; //null implies this is an empty board space
-
     private Player owner = null;
     private int meepleCount = 0;
-    private boolean hasTotoro;
-    private boolean hasTiger;
+    private boolean hasTotoro = false;
+    private boolean hasTiger = false;
 
-    public HexTile(){
+    public HexTile() {
         //you shouldn't be calling this in the context of this game, since you need a TriHexTile compositor
     }
 
@@ -41,9 +39,37 @@ public abstract class HexTile extends Tile {
         triHexTile = compositor;
     }
 
-    public void placeMeeples(Player player) {
-        owner = player;
-        meepleCount = level + 1;
+    public boolean placeMeeples(Player owner) {
+        if (isOccupied()) {
+            return false;
+        }
+        else {
+            this.owner = owner;
+            meepleCount = level + 1;
+            return true;
+        }
+    }
+
+    public boolean placeTotoro(Player owner) {
+        if (isOccupied()) {
+            return false;
+        }
+        else {
+            this.owner = owner;
+            hasTotoro = true;
+            return true;
+        }
+    }
+
+    public boolean placeTiger(Player owner) {
+        if (isOccupied()) {
+            return false;
+        }
+        else {
+            this.owner = owner;
+            hasTiger = true;
+            return true;
+        }
     }
 
     public int numMeeplesOnTile(){

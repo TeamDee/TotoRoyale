@@ -1,7 +1,6 @@
 package GameModel.Map;
 
 import GameControl.Placement;
-import GameControl.Player.WhitePlayer;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
@@ -14,14 +13,10 @@ import java.util.*;
  */
 public class GameMap {
 
-    //todo decide between these two
-    //private BoardSpace[][] gameBoard;
     private HashMap<AxialCoordinate, BoardSpace> gameBoard2;
     private ArrayList<TriHexTile> playedTriHexTiles = new ArrayList<TriHexTile>();
     private int numberOfTriHextiles;
     private boolean firstTurn = true;
-
-    private static int boardLength = 20, boardWidth = 20;
 
     private List<BoardSpace> activeSpaces;
 
@@ -575,6 +570,10 @@ public class GameMap {
      */
     public ContiguousTerrainTypeTiles getContiguousTerrainFromTile(HexTile ht){
         return new ContiguousTerrainTypeTiles(ht);
+    }
+
+    public int getNumberOfBoardSpaces(){
+        return gameBoard2.size();
     }
 }
 
