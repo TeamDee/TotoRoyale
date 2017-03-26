@@ -451,9 +451,8 @@ public class GameMap {
     }
 
     public boolean isLegalPlacement(Placement p) {
-        if(p.isLevelPlacement() && p.tilesAreOfProperType()){
+        if(p.isLevelPlacement() && p.isOverlapping() && !p.volcanoMatch())
             return true;
-        }
         else
             return false;
     }
