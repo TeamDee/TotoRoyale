@@ -1,7 +1,6 @@
 package GameModel.Map;
 
 import GameControl.Placement;
-import GameControl.Player.WhitePlayer;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
@@ -486,6 +485,10 @@ public class GameMap {
      */
     public ContiguousTerrainTypeTiles getContiguousTerrainFromTile(HexTile ht){
         return new ContiguousTerrainTypeTiles(ht);
+    }
+
+    public int getNumberOfBoardSpaces(){
+        return gameBoard2.size();
     }
 }
 
