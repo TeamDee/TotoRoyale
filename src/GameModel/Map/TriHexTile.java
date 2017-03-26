@@ -29,14 +29,6 @@ public class TriHexTile extends Tile {
 
     public Direction directionOfBRelativeToA = Direction.NORTH; //default value
 
-    public boolean isLegalPlacement(HexTile oldA, HexTile oldB, HexTile oldC){
-        if(oldA.getLevel() == oldB.getLevel() && oldB.getLevel() == oldC.getLevel()) { //all on same level
-            if(oldC.toString().compareTo(tileThree.toString())==0)
-                return true;
-        }
-        return false;
-    }
-
     //TODO I don't think this currently supports tile rotation (i.e. a rotated THT won't appear to be the same as the unrotated one)
     //tests to see if three Hexes are in this TriHexTile
     public static boolean areSameTriHexTileAsMe(TriHexTile tile, HexTile first, HexTile second, HexTile third){

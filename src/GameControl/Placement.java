@@ -56,6 +56,7 @@ public class Placement {
         return false;
     }
 
+    // return newA.terrainType() == TerrainType.VOLCANO || newB.terrainType() == TerrainType.VOLCANO || newC.terrainType() == TerrainType.VOLCANO
     public boolean volcanoMatch(){
         if(oldA.topTile().terrainType() == TerrainType.VOLCANO)
             return newA.terrainType() == TerrainType.VOLCANO;
@@ -65,7 +66,7 @@ public class Placement {
             return newC.terrainType() == TerrainType.VOLCANO; // works if there's at least one volcano
     }
 
-    //returns true iff each of the three boardspaces are currently on the same level
+    //returns true iff each of the three board spaces are currently on the same level
     public boolean isLevelPlacement(){
         return !(oldA.getLevel() != oldB.getLevel() || oldB.getLevel() != oldC.getLevel());
     }
@@ -77,6 +78,15 @@ public class Placement {
     /*
      * executes the placement onto the gameBoard, does not check to see if the placement is legal
      */
+    
+    // Added it here to test the legal check , same as code in GameMap: 417
+    public boolean isLegalPlacement(Placement p) {
+        if(p.isLevelPlacement() && p.isOverlapping() && !p.volcanoMatch())
+            return true;
+        else
+            return false;
+    }
+
     //TODO do individual hextiles need to reference each other? Or is getBoardSpace().getNorth.getTopTile() sufficient?
     public void place(){
         oldA.addTile(newA);
@@ -91,4 +101,6 @@ public class Placement {
         list.add(oldC);
         return list;
     }
+
+
 }

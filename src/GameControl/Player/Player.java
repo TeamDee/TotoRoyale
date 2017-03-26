@@ -69,9 +69,11 @@ public class Player {
     public void buildSettlement(HexTile hexTile) {
         if(hexTile.numMeeplesOnTile() == 0) {
             placeMeeples(hexTile);
+            awardPoints(1);
         }
-        awardPoints(1);
     }
+
+
     /*
         Calls settlement and contiguousUnoccupoedTerrainTyesTiles and plaes meeples on legal tiles of same terrain
      */
