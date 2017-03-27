@@ -39,6 +39,7 @@ public class Player {
 
     //TODO add AI logic
     public void takeTurn(GameMap gameMap, TriHexTile tile){
+
         ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
 
         if(placements.size() == 0) {   //todo OR the seen placements aren't good enough
@@ -52,17 +53,19 @@ public class Player {
 
         ArrayList<HexTile> tiles = gameMap.getVisible();
 
+        //choose the best available settlement
         //if we settle... currently the only option
         TerrainTile bestPlaceToSettle = null;
         int currentBest = 0;
         for(HexTile ht: tiles){
-
             if(ht.terrainType() != TerrainType.VOLCANO){
-                if(ht.getMeepleCount() != 0)
+                if(ht.isOccupied())
                     continue;
-                if(bestPlaceToSettle == null)
-                    bestPlaceToSettle = (TerrainTile)ht;
-                if(howGoodIsSettlement((TerrainTile)ht, this) >currentBest) {
+                else if(bestPlaceToSettle == null) {
+                    bestPlaceToSettle = (TerrainTile) ht;
+                    currentBest = howGoodIsSettlement((TerrainTile)ht, this);
+                }
+                else if(howGoodIsSettlement((TerrainTile)ht, this) >currentBest) {
                     currentBest = howGoodIsSettlement((TerrainTile)ht, this);
                     bestPlaceToSettle = (TerrainTile)ht;
                     break;
@@ -70,11 +73,13 @@ public class Player {
             }
         }
         buildSettlement(bestPlaceToSettle);
-        VolcanoTile vt = new VolcanoTile();
+
+        //VolcanoTile vt = new VolcanoTile();
 
         //buildSettlement((TerrainTile)tile.getTileOne());
     }
 
+    //TODO this
     private int howGoodIsSettlement(TerrainTile tt, Player p){
         return 1; //TODO either add logic here or find a better place to do AI stuff
         //ideas
@@ -98,9 +103,12 @@ public class Player {
     }
 
     public void buildSettlement(TerrainTile tt) {
-        if(tt.getMeepleCount() == 0) {
+        if(!tt.isOccupied()) {
             tt.placeMeeple(this);
             awardPoints(tt.getLevel());
+        }
+        else{
+            System.out.println("\n\n\n\n\n\n\nn\n\n\n\n\n\n\n\nFUCK FUCK FUCK FUCK CHECK BUILDSETTLEMENT() in Player.java \n\n\n\n\n\n\n\n\n\n\n\n\n");
         }
     }
 

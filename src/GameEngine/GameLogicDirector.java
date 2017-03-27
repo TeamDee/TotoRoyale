@@ -64,9 +64,9 @@ public class GameLogicDirector implements Runnable{
                         p.takeTurn(myMap, deck.draw());
                         getMap().printInfoAboutMap();
                         System.out.println("\n");
-                        //gc.paint();
+                        gc.paint();
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(1000);
                         } catch (InterruptedException ie) {
                             System.out.println(ie.getStackTrace());
                         }
@@ -82,6 +82,11 @@ public class GameLogicDirector implements Runnable{
                 } else { //game over
                     System.out.println();
                     myMap.printInfoAboutMap();
+                    try {
+                        Thread.sleep(1000000);
+                    } catch (InterruptedException ie) {
+                        System.out.println(ie.getStackTrace());
+                    }
                 }
             }
 

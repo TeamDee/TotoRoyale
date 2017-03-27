@@ -94,7 +94,8 @@ public class ActiveGameViewport extends Viewport {
     public void drawMap(Graphics g, List<HexTile> tiles) {
         g.clearRect(0,0,10000,10000);
         Random r = new Random();
-        g.setColor(Color.PINK);
+        Color c = new Color(255,0,0,0);
+        g.setColor(c);
         g.fillRect(0,0,10000,10000);
 
         HexTile start = tiles.get(0);

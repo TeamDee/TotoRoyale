@@ -20,6 +20,7 @@ public abstract class TerrainTile extends HexTile {
     protected TerrainTile me;
 
     public TerrainTile(TriHexTile compositor){
+
         this.triHexTile = compositor;
     }
     public TerrainTile(){

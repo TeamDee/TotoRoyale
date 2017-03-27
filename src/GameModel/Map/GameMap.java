@@ -3,6 +3,7 @@ package GameModel.Map;
 import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
+import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.Tile.VolcanoTile;
 
@@ -259,25 +260,8 @@ public class GameMap {
         ht2 = tht.getTileTwo();
         ht3 = tht.getTileThree();
 
-        if (isFirstTurn()) {
-            firstTurn = false;
-            BoardSpace bs = gameBoard2.get(new AxialCoordinate(0, 0));
-
-            AxialCoordinate location = bs.getLocation();
-            BoardSpace north = gameBoard2.get(location.getNorth());
-            BoardSpace northeast = gameBoard2.get(location.getNorthEast());
-            BoardSpace northwest = gameBoard2.get(location.getNorthWest());
-            BoardSpace south = gameBoard2.get(location.getSouth());
-            BoardSpace southeast = gameBoard2.get(location.getSouthEast());
-            BoardSpace southwest = gameBoard2.get(location.getSouthWest());
-            returnMe.add(new Placement(bs, north, northeast, ht1, ht2, ht3));
-            returnMe.add(new Placement(bs, northeast, southeast, ht1, ht2, ht3));
-            returnMe.add(new Placement(bs, southeast, south, ht1, ht2, ht3));
-            returnMe.add(new Placement(bs, south, southwest, ht1, ht2, ht3));
-            returnMe.add(new Placement(bs, southwest, northwest, ht1, ht2, ht3));
-            returnMe.add(new Placement(bs, northwest, north, ht1, ht2, ht3));
-            return returnMe;
-        }
+        firstTurn = false;
+//
         for (BoardSpace bs : gameBoard2.values()) { //for each active board space (i.e. above a played tile, or adjacent to one)
             AxialCoordinate location = bs.getLocation();
             BoardSpace north = gameBoard2.get(location.getNorth());
@@ -318,7 +302,7 @@ public class GameMap {
                     returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southwest, northwest, ht1, ht2, ht3));
                 }
                 if (northWestLegal && northLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northwest, northeast, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northwest, north, ht1, ht2, ht3));
                 }
             }
         }
@@ -348,7 +332,7 @@ public class GameMap {
      */
     private boolean legalLevel0(AxialCoordinate ac) {
         BoardSpace BStoTest = gameBoard2.get(ac);
-        return BStoTest.isEmpty();
+        return BStoTest.isEmpty() && BStoTest.getLevel() == 0;
     }
 
 
@@ -359,10 +343,9 @@ public class GameMap {
     private ArrayList<Placement> getLegalPlacementsAtHexTile(TriHexTile toBePlaced, HexTile placeAt) {
         ArrayList<Placement> returnMe = new ArrayList<Placement>();
 
-
         VolcanoTile volcanoTile = toBePlaced.getVolcanoTile();
-        HexTile clockwiseNonVolcanoTile = toBePlaced.getClockwiseNonVolcanoTile();
-        HexTile counterClockwiseNonVolcanoTile = toBePlaced.getCounterClockwiseNonVolcanoTile();
+        TerrainTile clockwiseNonVolcanoTile = toBePlaced.getClockwiseNonVolcanoTile();
+        TerrainTile counterClockwiseNonVolcanoTile = toBePlaced.getCounterClockwiseNonVolcanoTile();
         
         if(placeAt.terrainType() == TerrainType.VOLCANO){ //bombs away
             BoardSpace mine = placeAt.getBoardSpace();
@@ -386,18 +369,17 @@ public class GameMap {
                 if(canPlaceOnHexTiles(placeAt, southEast.topTile(), south.topTile()))
                     returnMe.add(new Placement(mine, southEast, south, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if(south.topTile() != null && southWest.topTile() != null) {
+            if(south.hasTile() && southWest.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, south.topTile(), southWest.topTile()))
                     returnMe.add(new Placement(mine, south, southWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if(southEast.topTile() != null && northWest.topTile() != null) {
-                if(canPlaceOnHexTiles(placeAt, southEast.topTile(), northWest.topTile()))
-                    returnMe.add(new Placement(mine, southEast, southWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+            if(southWest.hasTile() && northWest.hasTile()) {
+                if(canPlaceOnHexTiles(placeAt, southWest.topTile(), northWest.topTile()))
+                    returnMe.add(new Placement(mine, southWest, northWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if(northWest.topTile() != null && north.topTile() != null) {
+            if(northWest.hasTile() && north.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, northWest.topTile(), north.topTile()))
                     returnMe.add(new Placement(mine, northWest, north, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
-
             }
         } else { //only allow volcano tile placements on top of of other tiles
             return null;
@@ -409,9 +391,11 @@ public class GameMap {
     public boolean canPlaceOnHexTiles(HexTile ht1, HexTile ht2, HexTile ht3) {
         boolean areSameLevel = ht1.getLevel() == ht2.getLevel() && ht2.getLevel() == ht3.getLevel();
         boolean areNotInSameTriHexTile = !(ht1.getTriHexTile() == ht2.getTriHexTile() && ht2.getTriHexTile() == ht3.getTriHexTile());
+        boolean areAdjacent = AxialCoordinate.areAdjacent(ht1.getLocation(),ht2.getLocation()) && AxialCoordinate.areAdjacent(ht2.getLocation(),ht3.getLocation())
+                && AxialCoordinate.areAdjacent(ht1.getLocation(),ht3.getLocation());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && !ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
         boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
-        return areSameLevel && areNotInSameTriHexTile;//&& doNotContainSize1Settlements;// && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
+        return areSameLevel && areNotInSameTriHexTile && areAdjacent;//&& doNotContainSize1Settlements;// && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
     }
 
     public boolean containsSize1Settlement(HexTile ht) {
@@ -453,10 +437,11 @@ public class GameMap {
     public ArrayList<Placement> getLegalMapPlacements(TriHexTile tht) {
         ArrayList<Placement> returnMe = new ArrayList<Placement>();
         for (BoardSpace bs : gameBoard2.values()) {
-            HexTile thisTile = bs.topTile();
-            if (thisTile != null) {
+            if(bs.hasTile()) {
+                HexTile thisTile = bs.topTile();
                 if (thisTile.terrainType() == TerrainType.VOLCANO)
                     returnMe.addAll(getLegalPlacementsAtHexTile(tht, thisTile));
+
             }
         }
         return returnMe;
@@ -518,16 +503,50 @@ public class GameMap {
     }
 
     public void printInfoAboutMap() {
-        for (TriHexTile tht : this.playedTriHexTiles) {
-            HexTile curr;
-            curr = tht.getTileOne();
-            if (curr.getLevel() > 1) {
-                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
-                curr = tht.getTileTwo();
-                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
-                curr = tht.getTileThree();
-                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+//        for (TriHexTile tht : this.playedTriHexTiles) {
+//            HexTile curr;
+//            curr = tht.getTileOne();
+//            if (curr.getLevel() > 1) {
+//                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+//                curr = tht.getTileTwo();
+//                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+//                curr = tht.getTileThree();
+//                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+//            }
+//        }
+        int level1 = 0;
+        int level2 = 0;
+        int level3 = 0;
+        int level4 = 0;
+        for(HexTile ht: getVisible()){
+            switch (ht.getLevel()){
+                case 0:
+                    break;
+                case 1:
+                    level1++;
+                    break;
+                case 2:
+                    level2++;
+                    break;
+                case 3:
+                    level3++;
+                    break;
+                case 4:
+                    level4++;
+                    break;
             }
+        }
+        if(level1 %3 != 0){
+            System.out.println("LEVEL 1 UNEQUAL");
+        }
+        if(level2 %3 != 0){
+            System.out.println("LEVEL 2 UNEQUAL");
+        }
+        if(level3 %3 != 0){
+            System.out.println("LEVEL 3 UNEQUAL");
+        }
+        if(level4 %3 != 0){
+            System.out.println("LEVEL 4 UNEQUAL");
         }
     }
 

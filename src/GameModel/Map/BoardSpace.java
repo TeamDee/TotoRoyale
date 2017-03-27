@@ -46,13 +46,14 @@ public class BoardSpace {
 
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
+
         if(!hasTile){
             tiles = new ArrayList<HexTile>();
             hasTile = true;
         }
+
         tiles.add(ht);
         ht.setMyBoardSpace(this);
-
         ht.setLevel(tiles.size());
 
         if(north!=null)

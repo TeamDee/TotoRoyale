@@ -96,7 +96,7 @@ public abstract class HexTile extends Tile {
     }
 
     public boolean isOccupied() {
-        return meepleCount == 0 && !hasTotoro && !hasTiger;
+        return getMeepleCount()>0 || hasTotoro || hasTiger;
     }
 
     public int getMeepleCount(){
