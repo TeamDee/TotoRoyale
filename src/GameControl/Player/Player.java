@@ -42,12 +42,7 @@ public class Player {
         //placements.add(gameMap.getLegalPlacementsAtHexTile());
         //ArrayList<Placement> nukePlacement = gameMap.getLegalPlacementsAtHexTile(tile,tile.getTileThree());
         Placement stupidPlacement = placements.get(0);//random.nextInt(placements.size()));
-        /*if(nukePlacement.size() > 3) {
-            stupidPlacement = nukePlacement.get(0);
-        }
-        else {
-            stupidPlacement = placements.get(0);
-        }*/
+
         placeTile(gameMap, stupidPlacement);
         buildSettlement((TerrainTile)tile.getTileOne());
     }
