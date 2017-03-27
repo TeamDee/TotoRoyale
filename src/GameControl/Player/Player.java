@@ -59,7 +59,7 @@ public class Player {
         int currentBest = 0;
         for(HexTile ht: tiles){
             if(ht.terrainType() != TerrainType.VOLCANO){
-                if(ht.isOccupied())
+                if(ht.isOccupied() || ht.getLevel() != 1)
                     continue;
                 else if(bestPlaceToSettle == null) {
                     bestPlaceToSettle = (TerrainTile) ht;
@@ -103,7 +103,7 @@ public class Player {
     }
 
     public void buildSettlement(TerrainTile tt) {
-        if(!tt.isOccupied()) {
+        if(!tt.isOccupied() && tt.getLevel() == 1) {
             tt.placeMeeple(this);
             awardPoints(tt.getLevel());
         }
