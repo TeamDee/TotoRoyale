@@ -30,49 +30,63 @@ public class BoardSpaceStepDefs {
     private ArrayList<Placement>  placement;
 
 
-    /* @Given("^I have (\\d+) game map$")
-     public void I_am_on_the_Board(int gameMaps) throws Throwable{
-         map = new GameMap();
-     }
 
-     @When("^I place (\\d+) TriHexTile$")
-     public void place_TriHexTile(int triHexTiles) throws Throwable{
-         tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
-        tht.getLevel();
-     }
-
-     @And("^It is atop two or more (\\d+) TriHexTile$")
-
-     @And("^the <volcano> Volcano tile lies atop an exsisting <volcano>$")
-             public void check_Volcano(int VolcanoTile) throws Throwable{
-     }
- */
     @Given("^I have a game map game map initialized$")
-    public void Init_gamemap() throws Throwable{
+    public void init_gamemap() throws Throwable{
         map = new GameMap();
     }
 
     @And("^there are TriHexTiles already placed on the board$")
-    public void Exsisting_triHexTile(){
+    public void exsisting_triHexTile(){
         tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
-        map.placeFirstTile(tht);
+
 
     }
 
     @When("^I place a  TriHexTile adjacent to an exisiting TriHexTile$")
-    public void Place_Tile() {
+    public void place_Tile() {
         player = new Player();
-        placement = map.getLegalTablePlacements(tht);
+        placement = map.getAllLegalPlacements(tht);
         player.placeTile(map,placement.get(0));
 
     }
 
     @Then("^the user's placement is legal$")
-    public void Update_BoardSpace() {
+    public void update_BoardSpace() {
         Assert.assertTrue(player.placementCheck() );
 
 
     }
+
+
+
+    @Given("^I have a game map initialized$")
+    public void init_the_gamemap() throws Throwable{
+        map = new GameMap();
+    }
+
+    @And("^TriHexTiles are already placed on the board$")
+    public void there_are_Exsisting_triHexTile(){
+        tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
+
+
+    }
+
+    @When("^I do not place a TriHexTile adjacent to an exisiting TriHexTile$")
+    public void illegaly_place_Tile() {
+        player = new Player();
+        placement = map.getAllLegalPlacements(tht);
+
+
+    }
+
+    @Then("^the user's placement is illegal$")
+    public void cannot_update_BoardSpace() {
+        Assert.assertFalse(player.placementCheck() );
+
+
+    }
+
 
 }
 
