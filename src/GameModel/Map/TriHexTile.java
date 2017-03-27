@@ -54,11 +54,11 @@ public class TriHexTile extends Tile {
         return tileThree; //exposes internals but arguably necessary
     }
 
-    public HexTile getLeftNonVolcanoTile() {
+    public HexTile getClockwiseNonVolcanoTile() {
         return tileOne;
     }
 
-    public HexTile getRightNonVolcanoTile() {
+    public HexTile getCounterClockwiseNonVolcanoTile() {
         return tileTwo;
     }
 
