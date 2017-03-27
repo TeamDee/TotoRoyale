@@ -89,6 +89,18 @@ public class Placement {
 
     //TODO do individual hextiles need to reference each other? Or is getBoardSpace().getNorth.getTopTile() sufficient?
     public void place(){
+        if(oldA == oldB || oldB == oldC){
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
+
+        }
         oldA.addTile(newA);
         oldB.addTile(newB);
         oldC.addTile(newC);

@@ -58,18 +58,21 @@ public class Player {
         for(HexTile ht: tiles){
 
             if(ht.terrainType() != TerrainType.VOLCANO){
+                if(ht.getMeepleCount() != 0)
+                    continue;
                 if(bestPlaceToSettle == null)
                     bestPlaceToSettle = (TerrainTile)ht;
                 if(howGoodIsSettlement((TerrainTile)ht, this) >currentBest) {
                     currentBest = howGoodIsSettlement((TerrainTile)ht, this);
-                    buildSettlement((TerrainTile) ht);
+                    bestPlaceToSettle = (TerrainTile)ht;
                     break;
                 }
             }
         }
+        buildSettlement(bestPlaceToSettle);
         VolcanoTile vt = new VolcanoTile();
 
-        buildSettlement((TerrainTile)tile.getTileOne());
+        //buildSettlement((TerrainTile)tile.getTileOne());
     }
 
     private int howGoodIsSettlement(TerrainTile tt, Player p){
@@ -97,7 +100,7 @@ public class Player {
     public void buildSettlement(TerrainTile tt) {
         if(tt.getMeepleCount() == 0) {
             tt.placeMeeple(this);
-            awardPoints(1);
+            awardPoints(tt.getLevel());
         }
     }
 

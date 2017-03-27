@@ -64,6 +64,14 @@ public class GameLogicDirector implements Runnable{
                         p.takeTurn(myMap, deck.draw());
                         getMap().printInfoAboutMap();
                         System.out.println("\n");
+                        //gc.paint();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException ie) {
+                            System.out.println(ie.getStackTrace());
+                        }
+                    }
+                    if(deck.cardsLeft()%10 == 0){
                         gc.paint();
                         try {
                             Thread.sleep(1000);
