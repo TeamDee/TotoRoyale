@@ -8,6 +8,7 @@ public class Jungle extends TerrainTile{
     public Jungle(){
         myType = TerrainType.JUNGLE;
         this.myView = new JungleTerrainView();
+        me = this;
     }
 
     @Override
@@ -19,8 +20,6 @@ public class Jungle extends TerrainTile{
     public String toString(){
         return "Jungle";
     }
-
-
 }
 
 

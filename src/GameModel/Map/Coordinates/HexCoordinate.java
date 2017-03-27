@@ -25,7 +25,7 @@ public class HexCoordinate {
         int y1 = (int)y;
         //pc = new PixelCoordinate(x1, y1);
 
-        pc = new PixelCoordinate(ac.x* Constants.TILE_WIDTH * 3/4, ac.y * Constants.TILE_HEIGHT/2);
+        pc = new PixelCoordinate(ac.x* Constants.TILE_WIDTH*3/4, ac.y * Constants.TILE_HEIGHT/2);
         //cc = new CubicCoordinate();
     }
 

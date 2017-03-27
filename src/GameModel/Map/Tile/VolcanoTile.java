@@ -1,5 +1,6 @@
 package GameModel.Map.Tile;
 
+import GameView.Map.HexTileView;
 import GameView.Map.VolcanoView;
 
 /**
@@ -10,6 +11,7 @@ public class VolcanoTile extends HexTile {
     public VolcanoTile(){
         myType = TerrainType.VOLCANO;
         myView = new VolcanoView();
+
     }
 
     //TODO test this
@@ -24,7 +26,10 @@ public class VolcanoTile extends HexTile {
         return "Volcano";
     }
 
-
+    @Override
+    public HexTileView getTileView(){
+        return myView;
+    }
 
 
 }

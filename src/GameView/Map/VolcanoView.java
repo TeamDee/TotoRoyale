@@ -11,8 +11,6 @@ import java.io.IOException;
  * Created by jowens on 3/23/17.
  */
 public class VolcanoView extends HexTileView{
-    BufferedImage image;
-
     public VolcanoView() {
         try {
             myImage = ImageIO.read(new File(ImagePaths.VOLCANO_TERRAIN));
@@ -21,17 +19,5 @@ public class VolcanoView extends HexTileView{
             System.out.println("Volcano File not found");
         }
     }
-    @Override
-    protected void makeNewImage(){
-        try {
-            myImage = ImageIO.read(new File(ImagePaths.VOLCANO_TERRAIN));
 
-        }
-        catch (IOException ioe){
-            System.out.println("derp2");
-        }
-    }
-
-    @Override
-    public BufferedImage getImage() { return myImage; }
 }

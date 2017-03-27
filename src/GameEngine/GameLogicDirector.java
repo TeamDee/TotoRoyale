@@ -63,10 +63,10 @@ public class GameLogicDirector implements Runnable{
                         System.out.println("Score " + p.getScore());
                         p.takeTurn(myMap, deck.draw());
                         getMap().printInfoAboutMap();
-                        System.out.println();
+                        System.out.println("\n");
                         gc.paint();
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException ie) {
                             System.out.println(ie.getStackTrace());
                         }

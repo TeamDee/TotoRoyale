@@ -5,12 +5,13 @@ import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
-import GameModel.Map.Tile.VolcanoTile;
+import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by jowens on 3/8/17.
@@ -27,6 +28,8 @@ public class Player {
     private int score;
     public boolean placeTileCheck = false; //added for testing
 
+    //random
+    Random random = new Random();
     public Player(){
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
@@ -38,15 +41,10 @@ public class Player {
         ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
         //placements.add(gameMap.getLegalPlacementsAtHexTile());
         //ArrayList<Placement> nukePlacement = gameMap.getLegalPlacementsAtHexTile(tile,tile.getTileThree());
-        Placement stupidPlacement = placements.get(0);
-        /*if(nukePlacement.size() > 3) {
-            stupidPlacement = nukePlacement.get(0);
-        }
-        else {
-            stupidPlacement = placements.get(0);
-        }*/
+        Placement stupidPlacement = placements.get(0);//random.nextInt(placements.size()));
+
         placeTile(gameMap, stupidPlacement);
-        buildSettlement(tile.getTileOne());
+        buildSettlement((TerrainTile)tile.getTileOne());
     }
 
     public void placeTile(GameMap gameMap, Placement placement) {
@@ -58,14 +56,14 @@ public class Player {
         return placeTileCheck;
     }
     //end testing
-    public void placeMeeples(HexTile hexTile) {
-        hexTile.placeMeeples(this);
-        removeMeeples(hexTile.getLevel() + 1);
+    public void placeMeeples(TerrainTile tt) {
+        tt.placeMeeple(this);
+        removeMeeples(tt.getLevel() + 1);
     }
 
-    public void buildSettlement(HexTile hexTile) {
-        if(hexTile.numMeeplesOnTile() == 0) {
-            placeMeeples(hexTile);
+    public void buildSettlement(TerrainTile tt) {
+        if(tt.getMeepleCount() == 0) {
+            tt.placeMeeple(this);
             awardPoints(1);
         }
     }
@@ -74,14 +72,13 @@ public class Player {
     /*
         Calls settlement and contiguousUnoccupoedTerrainTyesTiles and plaes meeples on legal tiles of same terrain
      */
-    public void expandSettlement(List<HexTile> settlement) {
-        /*for(HexTile expand: settlement)
-        {
-            if(expand.numMeeplesOnTile() == 0)
-            {
+    public void expandSettlement(List<TerrainTile> settlement) {
+        for(TerrainTile expand: settlement) {
+            if(expand.getMeepleCount() == 0) {
+                placeMeeples(expand);
                 awardPoints(expand.getLevel()^2);
             }
-        }*/
+        }
     }
 
     public void placeTotoro(List<HexTile> settlement)
@@ -140,5 +137,9 @@ public class Player {
 
     int getTotoroCount() {
         return totoroCount;
+    }
+
+    public boolean isWhite(){
+        return false;
     }
 }

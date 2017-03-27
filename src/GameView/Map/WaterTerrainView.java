@@ -10,28 +10,14 @@ import java.io.IOException;
 /**
  * Created by jowens on 3/23/17.
  */
-public class WaterTerrainView extends HexTileView{
-    BufferedImage image;
-
+public class WaterTerrainView extends TerrainView{
     public WaterTerrainView() {
         try {
             myImage = ImageIO.read(new File(ImagePaths.WATER_TERRAIN));
         }
         catch (IOException e) {
-            System.out.println("Jungle File not found");
-        }
-    }
-    @Override
-    protected void makeNewImage(){
-        try {
-            myImage = ImageIO.read(new File(ImagePaths.WATER_TERRAIN));
-
-        }
-        catch (IOException ioe){
-            System.out.println("derp2");
+            System.out.println("Lake File not found");
         }
     }
 
-    @Override
-    public BufferedImage getImage() { return myImage; }
 }

@@ -17,11 +17,12 @@ public class BoardSpace {
 
     private BoardSpace north, northeast, southeast, south, southwest, northwest;
 
-    public BoardSpace(AxialCoordinate location){
+    public BoardSpace(AxialCoordinate location, GameMap containingMap){
         this.hasTile = false;
         isActive = false;
         tiles = new ArrayList<HexTile>();
         this.location = location;
+        containingMap.connectAdjacentBoardSpaces(this);
     }
 
     public int getLevel(){
@@ -54,31 +55,43 @@ public class BoardSpace {
         }
         tiles.add(ht);
         ht.setMyBoardSpace(this);
-        ht.setLevel(tiles.size() - 1);
-        if (north.hasTile()) {
-            ht.setNorth(north.topTile());
-            north.topTile().setSouth(ht);
-        }
-        if (northeast.hasTile()) {
-            ht.setNorthEast(northeast.topTile());
-            northeast.topTile().setSouthWest(ht);
-        }
-        if (southeast.hasTile()) {
-            ht.setSouthEast(southeast.topTile());
-            southeast.topTile().setNorthWest(ht);
-        }
-        if (south.hasTile()) {
-            ht.setSouth(south.topTile());
-            south.topTile().setNorth(ht);
-        }
-        if (southwest.hasTile()) {
-            ht.setSouthWest(southwest.topTile());
-            southwest.topTile().setNorthEast(ht);
-        }
-        if (northwest.hasTile()) {
-            ht.setNorthWest(northwest.topTile());
-            northwest.topTile().setSouthEast(ht);
-        }
+        ht.setLevel(tiles.size());
+
+        if(north!=null)
+            if (north.hasTile()) {
+                ht.setNorth(north.topTile());
+                north.topTile().setSouth(ht);
+            }
+
+        if(northeast != null)
+            if (northeast.hasTile()) {
+                ht.setNorthEast(northeast.topTile());
+                northeast.topTile().setSouthWest(ht);
+            }
+
+        if(southeast != null)
+            if (southeast.hasTile()) {
+                ht.setSouthEast(southeast.topTile());
+                southeast.topTile().setNorthWest(ht);
+            }
+
+        if(south != null)
+            if (south.hasTile()) {
+                ht.setSouth(south.topTile());
+                south.topTile().setNorth(ht);
+            }
+
+        if(southwest!=null)
+            if (southwest.hasTile()) {
+                ht.setSouthWest(southwest.topTile());
+                southwest.topTile().setNorthEast(ht);
+            }
+
+        if(northwest != null)
+            if (northwest.hasTile()) {
+                ht.setNorthWest(northwest.topTile());
+                northwest.topTile().setSouthEast(ht);
+            }
     }
 
     public boolean isActive(){

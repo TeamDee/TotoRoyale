@@ -42,13 +42,13 @@ public class PlayerController extends Controller{
         }
     }
 
-    public boolean canPlaceMeeples(HexTile hexTile) {
+    public boolean canPlaceMeeples(TerrainTile hexTile) {
         return hexTile.getMeepleCount() == 0 && myPlayer.getMeepleCount() >= hexTile.getLevel() + 1 && !hexTile.ofSameType(new VolcanoTile());
     }
 
-    public void placeMeeples(HexTile hexTile) {
+    public void placeMeeples(TerrainTile hexTile) {
         if (canPlaceMeeples(hexTile)) {
-            hexTile.placeMeeples(myPlayer);
+            hexTile.placeMeeple(myPlayer);
             myPlayer.removeMeeples(hexTile.getLevel() + 1);
             myPlayer.awardPoints((hexTile.getLevel() + 1) * (hexTile.getLevel() + 1));
         }
@@ -57,7 +57,7 @@ public class PlayerController extends Controller{
         }
     }
 
-    public void buildSettlement(HexTile hexTile) {
+    public void buildSettlement(TerrainTile hexTile) {
         if (hexTile.getLevel() == 0 && canPlaceMeeples(hexTile)) {
             placeMeeples(hexTile);
         }

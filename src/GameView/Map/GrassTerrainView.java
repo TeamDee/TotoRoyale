@@ -11,7 +11,6 @@ package GameView.Map;
         //import view.tools.ImagePaths;
 
 public class GrassTerrainView extends TerrainView {
-    BufferedImage image;
 
     public GrassTerrainView() {
         try {
@@ -22,17 +21,5 @@ public class GrassTerrainView extends TerrainView {
         }
     }
 
-    @Override
-    protected void makeNewImage(){
-        try {
-            myImage = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
 
-        }
-        catch (IOException ioe){
-            System.out.println("derp2");
-        }
-    }
-    @Override
-    public BufferedImage getImage() {
-        return myImage; }
 }
