@@ -26,10 +26,11 @@ public abstract class HexTile extends Tile {
 
     private BoardSpace myBoardSpace;
 
-    private Player owner = null;
-    private int meepleCount = 0;
-    private boolean hasTotoro = false;
-    private boolean hasTiger = false;
+    protected int meepleCount = 0;
+    protected Player owner = null;
+    protected boolean hasTotoro = false;
+    protected boolean hasTiger = false;
+
 
     public HexTile() {
         //you shouldn't be calling this in the context of this game, since you need a TriHexTile compositor
@@ -39,48 +40,20 @@ public abstract class HexTile extends Tile {
         triHexTile = compositor;
     }
 
-    public boolean placeMeeples(Player owner) {
-        if (isOccupied()) {
-            return false;
-        }
-        else {
-            this.owner = owner;
-            meepleCount = level + 1;
-            return true;
-        }
-    }
+//    public boolean placeMeeples(Player owner) {
+//        if (isOccupied()) {
+//            return false;
+//        }
+//        else {
+//            this.owner = owner;
+//            meepleCount = level + 1;
+//            return true;
+//        }
+//    }
 
-    public boolean placeTotoro(Player owner) {
-        if (isOccupied()) {
-            return false;
-        }
-        else {
-            this.owner = owner;
-            hasTotoro = true;
-            return true;
-        }
-    }
 
-    public boolean placeTiger(Player owner) {
-        if (isOccupied()) {
-            return false;
-        }
-        else {
-            this.owner = owner;
-            hasTiger = true;
-            return true;
-        }
-    }
 
-    public int numMeeplesOnTile(){
-        return meepleCount;
-    }
-    public boolean hasTotoro() {
-        return hasTotoro;
-    }
-    public boolean hasTiger() {
-        return hasTiger;
-    }
+
 
     public TerrainType terrainType(){
         return myType;
@@ -130,6 +103,9 @@ public abstract class HexTile extends Tile {
         return meepleCount;
     }
 
+
+
+
     public boolean isOwnedByWhite() {
         if (!isOccupied()) {
             return false;
@@ -146,6 +122,17 @@ public abstract class HexTile extends Tile {
         else {
             return owner instanceof BlackPlayer;
         }
+    }
+
+    public Player getOwner(){
+        return owner;
+    }
+
+    public boolean hasTotoro() {
+        return hasTotoro;
+    }
+    public boolean hasTiger() {
+        return hasTiger;
     }
 
     @Override
@@ -203,10 +190,5 @@ public abstract class HexTile extends Tile {
             return myBoardSpace.getLocation();
         return new AxialCoordinate(0,0);
     }
-    public void updateView(){
-        myView.visit(this);
-    }
-    public TileView getTileView(){
-        return myView;
-    }
+    public abstract TileView getTileView();
 }

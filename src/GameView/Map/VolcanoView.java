@@ -20,6 +20,4 @@ public class VolcanoView extends HexTileView{
         }
     }
 
-    @Override
-    public BufferedImage getImage() { return myImage; }
 }

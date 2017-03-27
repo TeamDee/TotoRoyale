@@ -28,8 +28,7 @@ public class GameMap {
     public void initializeBoard() {
         gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
         AxialCoordinate originLocation = new AxialCoordinate(0,0);
-        gameBoard2.put(originLocation,new BoardSpace(originLocation));
-        BoardSpace originBS = gameBoard2.get(originLocation);
+        BoardSpace originBS = this.addBoardSpace(originLocation);
 
         this.addBoardSpace(originLocation);
         this.addRadialBoardSpaces(2,originBS);
@@ -119,7 +118,7 @@ public class GameMap {
         }
     }
 
-    private void connectAdjacentBoardSpaces(BoardSpace initial){
+    public void connectAdjacentBoardSpaces(BoardSpace initial){
         AxialCoordinate initialLocation = initial.getLocation();
 
         BoardSpace north = gameBoard2.get(initialLocation.getNorth());
@@ -224,8 +223,7 @@ public class GameMap {
                 BoardSpace neighbor = gameBoard2.get(neighborLocation);
                 // if the Tile is on the map and we haven't visited it already
                 if(neighbor == null){
-                    neighbor = new BoardSpace(neighborLocation);
-                    gameBoard2.put(neighborLocation,neighbor);
+                    neighbor = addBoardSpace(neighborLocation);
                 }
 
                 connectAdjacentBoardSpaces(neighbor);
@@ -238,9 +236,10 @@ public class GameMap {
     /*
      CALL THIS INSTEAD OF DIRECTLY MODIFYING GAMEBOARD2
      */
-    public void addBoardSpace(AxialCoordinate ac){
-        BoardSpace newBS = new BoardSpace(ac);
+    public BoardSpace addBoardSpace(AxialCoordinate ac){
+        BoardSpace newBS = new BoardSpace(ac, this);
         gameBoard2.put(ac, newBS);
+        return newBS;
     }
     //TODO this currently doesn't work
     /*
@@ -277,74 +276,64 @@ public class GameMap {
             returnMe.add(new Placement(bs, south, southwest, ht1, ht2, ht3));
             returnMe.add(new Placement(bs, southwest, northwest, ht1, ht2, ht3));
             returnMe.add(new Placement(bs, northwest, north, ht1, ht2, ht3));
+            return returnMe;
         }
         for(BoardSpace bs: gameBoard2.values()){ //for each active board space (i.e. above a played tile, or adjacent to one)
-            if(bs.isEmpty() && bs.isActive()){
+            AxialCoordinate location =  bs.getLocation();
+            BoardSpace north = gameBoard2.get(location.getNorth());
+            BoardSpace northeast = gameBoard2.get(location.getNorthEast());
+            BoardSpace northwest = gameBoard2.get(location.getNorthWest());
+            BoardSpace south = gameBoard2.get(location.getSouth());
+            BoardSpace southeast = gameBoard2.get(location.getSouthEast());
+            BoardSpace southwest = gameBoard2.get(location.getSouthWest());
+
+            if(bs.isEmpty() && bs.isActive() ){
                 //get all placements that are possible given adjacent empty boardspaces
 
                 //NORTH AND NORTHEAST
                 boolean northLegal, northEastLegal, southEastLegal, southLegal, southWestLegal, northWestLegal;
 
 
-                northLegal = legalLevel0(bs.getLocation().getNorth());
-                northEastLegal = legalLevel0(bs.getLocation().getNorthEast());
-                northWestLegal = legalLevel0(bs.getLocation().getNorthWest());
-                southLegal = legalLevel0(bs.getLocation().getSouth());
-                southEastLegal = legalLevel0(bs.getLocation().getSouthEast());
-                southWestLegal = legalLevel0(bs.getLocation().getSouthWest());
+                northLegal = legalLevel0(north.getLocation());
+                northEastLegal = legalLevel0(northeast.getLocation());
+                northWestLegal = legalLevel0(northwest.getLocation());
+                southLegal = legalLevel0(south.getLocation());
+                southEastLegal = legalLevel0(southeast.getLocation());
+                southWestLegal = legalLevel0(southwest.getLocation());
+
 
                 if(northLegal && northEastLegal) {
-                    Placement p1 = new Placement(bs, bs.getNorth(), bs.getNorthEast(), ht1, ht2, ht3);
-                    Placement p2 = new Placement(gameBoard2.get(bs.getLocation().getNorthEast()), bs, gameBoard2.get(bs.getLocation().getNorth()), ht1, ht2, ht3);
-                    Placement p3 = new Placement(gameBoard2.get(bs.getLocation().getNorth()), gameBoard2.get(bs.getLocation().getNorthEast()), bs, ht1, ht2, ht3);
-                    returnMe.add(p1);
-                    returnMe.add(p2);
-                    returnMe.add(p3);
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, north, northeast, ht1,ht2,ht3));
                 }
                 if(northEastLegal && southEastLegal) {
-                    Placement p1 = new Placement(bs, bs.getNorthEast(), bs.getSouthEast(), ht1, ht2, ht3);
-                    Placement p2 = new Placement(bs.getSouthEast(), bs, bs.getNorthEast(), ht1, ht2, ht3);
-                    Placement p3 = new Placement(bs.getNorthEast(), bs.getSouthEast(), bs, ht1, ht2, ht3);
-                    returnMe.add(p1);
-                    returnMe.add(p2);
-                    returnMe.add(p3);
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northeast, southeast, ht1,ht2,ht3));
                 }
                 if(southEastLegal && southLegal) {
-                    Placement p1 = new Placement(bs, bs.getSouthEast(), bs.getSouth(), ht1, ht2, ht3);
-                    Placement p2 = new Placement(bs.getSouth(), bs, bs.getSouthEast(), ht1, ht2, ht3);
-                    Placement p3 = new Placement(bs.getSouthEast(), bs.getSouth(), bs, ht1, ht2, ht3);
-                    returnMe.add(p1);
-                    returnMe.add(p2);
-                    returnMe.add(p3);
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southeast, south, ht1, ht2, ht3));
                 }
                 if(southLegal && southWestLegal) {
-                    Placement p1 = new Placement(bs, bs.getSouth(), bs.getSouthWest(), ht1, ht2, ht3);
-                    Placement p2 = new Placement(bs.getSouthWest(), bs, bs.getSouth(), ht1, ht2, ht3);
-                    Placement p3 = new Placement(bs.getSouth(), bs.getSouthWest(), bs, ht1, ht2, ht3);
-                    returnMe.add(p1);
-                    returnMe.add(p2);
-                    returnMe.add(p3);
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, south, southwest, ht1,ht2,ht3));
                 }
                 if(southWestLegal && northWestLegal) {
-                    Placement p1 = new Placement(bs, bs.getSouthWest(), bs.getNorthWest(), ht1, ht2, ht3);
-                    Placement p2 = new Placement(bs.getNorthWest(), bs, bs.getSouthWest(), ht1, ht2, ht3);
-                    Placement p3 = new Placement(bs.getSouthWest(), bs.getNorthWest(), bs, ht1, ht2, ht3);
-                    returnMe.add(p1);
-                    returnMe.add(p2);
-                    returnMe.add(p3);
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southwest, northwest, ht1,ht2,ht3));
                 }
                 if(northWestLegal && northLegal) {
-                    Placement p1 = new Placement(bs, bs.getNorthWest(), bs.getNorth(), ht1, ht2, ht3);
-                    Placement p2 = new Placement(bs.getNorth(), bs, bs.getNorthWest(), ht1, ht2, ht3);
-                    Placement p3 = new Placement(bs.getNorthWest(), bs.getNorth(), bs, ht1, ht2, ht3);
-                    returnMe.add(p1);
-                    returnMe.add(p2);
-                    returnMe.add(p3);
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northwest, northeast, ht1,ht2,ht3));
                 }
-                //END NORTH AND NORTHEAST
             }
         }
 
+        return returnMe;
+    }
+
+    public ArrayList<Placement> getAllPlacementsAtThreeBoardSpaces(BoardSpace b1, BoardSpace b2, BoardSpace b3, HexTile ht1, HexTile ht2, HexTile ht3){
+        ArrayList<Placement> returnMe = new ArrayList<Placement>();
+        Placement p1 = new Placement(b1, b2, b3, ht1, ht2, ht3);
+        Placement p2 = new Placement(b3, b1, b2, ht1, ht2, ht3);
+        Placement p3 = new Placement(b2,b3, b1, ht1, ht2, ht3);
+        returnMe.add(p1);
+        returnMe.add(p2);
+        returnMe.add(p3);
         return returnMe;
     }
 
@@ -366,7 +355,7 @@ public class GameMap {
                 isBoardLevel = false;
             }
         }
-        if( BStoTest == null || isBoardLevel) { //tile is legal
+        if( isBoardLevel && bsExists) { //tile is legal
             return true;
         }
         else {

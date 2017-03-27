@@ -10,9 +10,7 @@ import java.io.IOException;
 /**
  * Created by jowens on 3/23/17.
  */
-public class WaterTerrainView extends HexTileView{
-    BufferedImage image;
-
+public class WaterTerrainView extends TerrainView{
     public WaterTerrainView() {
         try {
             myImage = ImageIO.read(new File(ImagePaths.WATER_TERRAIN));
@@ -22,6 +20,4 @@ public class WaterTerrainView extends HexTileView{
         }
     }
 
-    @Override
-    public BufferedImage getImage() { return myImage; }
 }

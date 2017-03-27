@@ -10,6 +10,7 @@ public class Grass extends TerrainTile {
     public Grass(){
         myView = new GrassTerrainView();
         myType = TerrainType.GRASS;
+        me = this;
     }
 
 

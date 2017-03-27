@@ -54,28 +54,17 @@ public abstract class TileView{
         // paint both images, preserving the alpha channels
         Graphics g = combined.getGraphics();
 
+        if(myImage == null)
+            System.out.println("\n\n\n\nn\n\nNULL BITCH");
         //terrain
-        g.drawImage(getImage(), 0,0, Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+        g.drawImage(myImage, 0,0, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
 
         //tileables
         for(TileableView tv: tileableViews){
-            g.drawImage(tv.getImage(), 0, 0,
-                    Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
+            g.drawImage(tv.getImage(), 0, 0, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
         }
         drawMe = combined;
         return drawMe;
-    }
-
-    public void makeOriginalImage(){
-        BufferedImage combined = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-
-        // paint both images, preserving the alpha channels
-        Graphics g = combined.getGraphics();
-
-        //terrain
-        g.drawImage(getImage(), 0,0, Constants.TILE_HEIGHT, Constants.TILE_WIDTH, null);
-
-        drawMe = combined;
     }
 
     public boolean hasBeenSeen(){
@@ -103,7 +92,11 @@ public abstract class TileView{
         tileableViews.add(current);
     }
 
-    public abstract BufferedImage getImage();
+    public BufferedImage getImage(){
+        if(drawMe ==null)
+            makeNewImage();
+        return drawMe;
+    }
 
     public int getAge(){
         return age;

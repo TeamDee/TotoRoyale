@@ -4,6 +4,8 @@ import GameControl.Placement;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.HexTile;
+import GameModel.Map.Tile.TerrainType;
+import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
@@ -47,7 +49,7 @@ public class Player {
             stupidPlacement = placements.get(0);
         }*/
         placeTile(gameMap, stupidPlacement);
-        buildSettlement(tile.getTileOne());
+        buildSettlement((TerrainTile)tile.getTileOne());
     }
 
     public void placeTile(GameMap gameMap, Placement placement) {
@@ -59,14 +61,14 @@ public class Player {
         return placeTileCheck;
     }
     //end testing
-    public void placeMeeples(HexTile hexTile) {
-        hexTile.placeMeeples(this);
-        removeMeeples(hexTile.getLevel() + 1);
+    public void placeMeeples(TerrainTile tt) {
+        tt.placeMeeple(this);
+        removeMeeples(tt.getLevel() + 1);
     }
 
-    public void buildSettlement(HexTile hexTile) {
-        if(hexTile.numMeeplesOnTile() == 0) {
-            placeMeeples(hexTile);
+    public void buildSettlement(TerrainTile tt) {
+        if(tt.getMeepleCount() == 0) {
+            tt.placeMeeple(this);
             awardPoints(1);
         }
     }
@@ -75,9 +77,9 @@ public class Player {
     /*
         Calls settlement and contiguousUnoccupoedTerrainTyesTiles and plaes meeples on legal tiles of same terrain
      */
-    public void expandSettlement(List<HexTile> settlement) {
-        for(HexTile expand: settlement) {
-            if(expand.numMeeplesOnTile() == 0) {
+    public void expandSettlement(List<TerrainTile> settlement) {
+        for(TerrainTile expand: settlement) {
+            if(expand.getMeepleCount() == 0) {
                 placeMeeples(expand);
                 awardPoints(expand.getLevel()^2);
             }
@@ -140,5 +142,9 @@ public class Player {
 
     int getTotoroCount() {
         return totoroCount;
+    }
+
+    public boolean isWhite(){
+        return false;
     }
 }

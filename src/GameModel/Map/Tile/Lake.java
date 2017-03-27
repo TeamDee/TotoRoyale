@@ -10,6 +10,7 @@ public class Lake extends TerrainTile{
     public Lake(){
         myType = TerrainType.LAKE;
         myView = new WaterTerrainView();
+        me = this;
     }
 
 

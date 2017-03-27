@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by jowens on 3/23/17.
  */
-public class RockTerrainView extends HexTileView{
+public class RockTerrainView extends TerrainView{
 
     public RockTerrainView() {
         try {
@@ -22,6 +22,4 @@ public class RockTerrainView extends HexTileView{
     }
 
 
-    @Override
-    public BufferedImage getImage() { return myImage; }
 }

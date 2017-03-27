@@ -93,25 +93,18 @@ public class ActiveGameViewport extends Viewport {
 
     public void drawMap(Graphics g, List<HexTile> tiles) {
         HexTile start = tiles.get(0);
+
         Point pixels = new HexCoordinate(start.getLocation()).getPixelCoordinate().getPoint();//law of demeter violation
-
-
-        //int dx = pixels.x;//this.getWidth() / 2 - pixels.x;
-        //int dy = pixels.y;//this.getHeight() / 2 - pixels.y;
 
         int dx=500;
         int dy=500;
 
+
         Point p;
         for (HexTile t : tiles) {
-            p = new HexCoordinate(t.getLocation()).getPixelCoordinate().getPoint(); //law of demeter violation
-            TileView tileView = t.getTileView();
-            //if(tileView.hasBeenSeen()){
-                g.drawImage(tileView.getImage(), p.x + dx, p.y + dy,
-                        Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
-//                g.drawImage(tileView.getImage(), 100, 100,
-//                        Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
-           // }
+                p = new HexCoordinate(t.getLocation()).getPixelCoordinate().getPoint(); //law of demeter violation
+                TileView tileView = t.getTileView();
+                g.drawImage(tileView.getImage(), p.x + dx, p.y + dy, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
         }
     }
 

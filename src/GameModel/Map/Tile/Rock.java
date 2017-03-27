@@ -9,6 +9,7 @@ public class Rock extends TerrainTile{
     public Rock(){
         myType = TerrainType.ROCK;
         myView = new RockTerrainView();
+        me = this;
     }
 
     @Override
@@ -19,6 +20,7 @@ public class Rock extends TerrainTile{
     public String toString(){
         return "Rock";
     }
+
 
 
 }

@@ -66,7 +66,7 @@ public class GameLogicDirector implements Runnable{
                         System.out.println("\n");
                         gc.paint();
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException ie) {
                             System.out.println(ie.getStackTrace());
                         }

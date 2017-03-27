@@ -1,6 +1,12 @@
 package GameModel.Map.Tile;
+import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
+import GameControl.Player.WhitePlayer;
 import GameModel.Map.TriHexTile;
+import GameView.Map.TerrainView;
+import GameView.Tileables.MeepleView;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Terrain tiles can hold meeples and totoros.
@@ -10,6 +16,9 @@ import GameModel.Map.TriHexTile;
 
 public abstract class TerrainTile extends HexTile {
 
+    protected TerrainView myView;
+    protected TerrainTile me;
+
     public TerrainTile(TriHexTile compositor){
         this.triHexTile = compositor;
     }
@@ -18,17 +27,49 @@ public abstract class TerrainTile extends HexTile {
         //System.out.println("warning: building a terrainTile without supplying a compositor");
     }
 
+
+
     public boolean placeMeeple(Player p){
-        if(numMeeplesOnTile() != 0) //terrain already has meeples
+        if(getMeepleCount() != 0) //terrain already has meeples
             return false;
         else {
-            if(p.removeMeeples(getLevel()))  //if the player has enough meeples, remove them and award points
+            if(p.removeMeeples(getLevel())) {  //if the player has enough meeples, remove them and award points
                 p.awardPoints(getLevel() * getLevel());
+                meepleCount = getLevel();
+                myView.addToList(new MeepleView(getLevel(),p));
+                this.owner = p;
+                myView.visit(this);
+                owner = p;
+            }
             else
                 return false;
         }
         return true;
     }
+
+    public boolean placeTotoro(Player owner) {
+        if (isOccupied()) {
+            return false;
+        }
+        else {
+            this.owner = owner;
+            hasTotoro = true;
+            return true;
+        }
+    }
+
+    public boolean placeTiger(Player owner) {
+        if (isOccupied()) {
+            return false;
+        }
+        else {
+            this.owner = owner;
+            hasTiger = true;
+            return true;
+        }
+    }
+
+
 
     public boolean ofSameType(VolcanoTile vt){
         return false;
@@ -53,6 +94,11 @@ public abstract class TerrainTile extends HexTile {
     }
     public boolean isJungle(){
         return false;
+    }
+
+    @Override
+    public TerrainView getTileView(){
+        return myView;
     }
 }
 
