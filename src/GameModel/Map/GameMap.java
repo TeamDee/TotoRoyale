@@ -359,13 +359,12 @@ public class GameMap {
     private ArrayList<Placement> getLegalPlacementsAtHexTile(TriHexTile toBePlaced, HexTile placeAt) {
         ArrayList<Placement> returnMe = new ArrayList<Placement>();
 
-        HexTile ht1, ht2, ht3;
 
-        ht1 = toBePlaced.getTileOne();
-        ht2 = toBePlaced.getTileTwo();
-        ht3 = toBePlaced.getTileThree();
-
-        if (placeAt.terrainType() == TerrainType.VOLCANO) { //bombs away
+        VolcanoTile volcanoTile = toBePlaced.getVolcanoTile();
+        HexTile clockwiseNonVolcanoTile = toBePlaced.getClockwiseNonVolcanoTile();
+        HexTile counterClockwiseNonVolcanoTile = toBePlaced.getCounterClockwiseNonVolcanoTile();
+        
+        if(placeAt.terrainType() == TerrainType.VOLCANO){ //bombs away
             BoardSpace mine = placeAt.getBoardSpace();
             BoardSpace north = mine.getNorth();
             BoardSpace northEast = mine.getNorthEast();
@@ -374,29 +373,31 @@ public class GameMap {
             BoardSpace southWest = mine.getSouthWest();
             BoardSpace northWest = mine.getNorthWest();
 
-            if (north.hasTile() && northEast.hasTile()) {
-                if (canPlaceOnHexTiles(placeAt, north.topTile(), northEast.topTile()))
-                    returnMe.add(new Placement(mine, north, northEast, ht1, ht2, ht3));
+
+            if(north.hasTile() && northEast.hasTile()) {
+                if(canPlaceOnHexTiles(placeAt, north.topTile(), northEast.topTile()))
+                        returnMe.add(new Placement(mine, north, northEast, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if (northEast.hasTile() && southEast.hasTile()) {
-                if (canPlaceOnHexTiles(placeAt, northEast.topTile(), southEast.topTile()))
-                    returnMe.add(new Placement(mine, northEast, southEast, ht1, ht2, ht3));
+            if(northEast.hasTile() && southEast.hasTile()) {
+                if(canPlaceOnHexTiles(placeAt, northEast.topTile(), southEast.topTile()))
+                    returnMe.add(new Placement(mine, northEast, southEast, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if (southEast.hasTile() && south.topTile() != null) {
-                if (canPlaceOnHexTiles(placeAt, southEast.topTile(), south.topTile()))
-                    returnMe.add(new Placement(mine, southEast, south, ht1, ht2, ht3));
+            if(southEast.hasTile() && south.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, southEast.topTile(), south.topTile()))
+                    returnMe.add(new Placement(mine, southEast, south, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if (south.topTile() != null && southWest.topTile() != null) {
-                if (canPlaceOnHexTiles(placeAt, south.topTile(), southWest.topTile()))
-                    returnMe.add(new Placement(mine, south, southWest, ht1, ht2, ht3));
+            if(south.topTile() != null && southWest.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, south.topTile(), southWest.topTile()))
+                    returnMe.add(new Placement(mine, south, southWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if (southWest.topTile() != null && northWest.topTile() != null) {
-                if (canPlaceOnHexTiles(placeAt, southWest.topTile(), northWest.topTile()))
-                    returnMe.add(new Placement(mine, southEast, southWest, ht1, ht2, ht3));
+            if(southEast.topTile() != null && northWest.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, southEast.topTile(), northWest.topTile()))
+                    returnMe.add(new Placement(mine, southEast, southWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
             }
-            if (northWest.topTile() != null && north.topTile() != null) {
-                if (canPlaceOnHexTiles(placeAt, northWest.topTile(), north.topTile()))
-                    returnMe.add(new Placement(mine, northWest, north, ht1, ht2, ht3));
+            if(northWest.topTile() != null && north.topTile() != null) {
+                if(canPlaceOnHexTiles(placeAt, northWest.topTile(), north.topTile()))
+                    returnMe.add(new Placement(mine, northWest, north, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+
             }
         } else { //only allow volcano tile placements on top of of other tiles
             return null;
@@ -447,7 +448,7 @@ public class GameMap {
     }
 
     /*
-     * All legal plaaements > 0
+     * All legal placements > 0
      */
     public ArrayList<Placement> getLegalMapPlacements(TriHexTile tht) {
         ArrayList<Placement> returnMe = new ArrayList<Placement>();
