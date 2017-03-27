@@ -348,19 +348,7 @@ public class GameMap {
      */
     private boolean legalLevel0(AxialCoordinate ac) {
         BoardSpace BStoTest = gameBoard2.get(ac);
-        boolean bsExists = !(BStoTest == null);
-        boolean isBoardLevel = true;
-        if(bsExists){
-            if(BStoTest.getLevel() >0){
-                isBoardLevel = false;
-            }
-        }
-        if( isBoardLevel && bsExists) { //tile is legal
-            return true;
-        }
-        else {
-            return false;
-        }
+        return BStoTest.isEmpty();
     }
 
 
@@ -402,7 +390,7 @@ public class GameMap {
                 if(canPlaceOnHexTiles(placeAt, south.topTile(), southWest.topTile()))
                     returnMe.add(new Placement(mine, south, southWest, ht1, ht2, ht3));
             }
-            if(southWest.topTile() != null && northWest.topTile() != null) {
+            if(southEast.topTile() != null && northWest.topTile() != null) {
                 if(canPlaceOnHexTiles(placeAt, southEast.topTile(), northWest.topTile()))
                     returnMe.add(new Placement(mine, southEast, southWest, ht1, ht2, ht3));
             }
@@ -423,7 +411,7 @@ public class GameMap {
         boolean areNotInSameTriHexTile = !(ht1.getTriHexTile() == ht2.getTriHexTile() && ht2.getTriHexTile() == ht3.getTriHexTile());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && ! ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
         boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
-        return areSameLevel && areNotInSameTriHexTile && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
+        return areSameLevel && areNotInSameTriHexTile;//&& doNotContainSize1Settlements;// && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
     }
 
     public boolean containsSize1Settlement(HexTile ht) {
@@ -448,7 +436,7 @@ public class GameMap {
                     }
                 }
             }
-            else {
+            else {//black
                 for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
                     if (neighborBoardSpace.hasTile()) {
                         HexTile neighborHexTile = neighborBoardSpace.topTile();
@@ -475,8 +463,7 @@ public class GameMap {
         }
         return returnMe;
     }
-    /*
-     * returns all triplets of adjacent tiles that aren't all in the same tri-hex tile
+    /* returns all triplets of adjacent tiles that aren't all in the same tri-hex tile
      * TODO this would be useful for ignoring illegal placements
      */
 
@@ -534,19 +521,17 @@ public class GameMap {
     }
 
     public void printInfoAboutMap(){
-//        for(BoardSpace bs: gameBoard2.values()){
-//            if(bs.hasTile())
-//                    System.out.println(bs.topTile() + "\n\t Location: " + bs.getLocation() + "\n\t MeepleCount: " + bs.topTile().getMeepleCount());
-//        }
         for(TriHexTile tht: this.playedTriHexTiles)
         {
             HexTile curr;
             curr = tht.getTileOne();
-            System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount());
-            curr = tht.getTileTwo();
-            System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount());
-            curr = tht.getTileThree();
-            System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount());
+            if(curr.getLevel()>1) {
+                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+                curr = tht.getTileTwo();
+                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+                curr = tht.getTileThree();
+                System.out.println(curr + "\n\t Location: " + curr.getLocation() + "\n\t MeepleCount: " + curr.getMeepleCount() + "\n\t Level: " + curr.getLevel());
+            }
         }
     }
 

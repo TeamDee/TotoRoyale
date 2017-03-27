@@ -1,5 +1,6 @@
 package GameView.Map;
 
+import GameModel.Map.Tile.Jungle;
 import GameView.ImagePaths;
 
 import javax.imageio.ImageIO;
@@ -12,7 +13,8 @@ import java.io.IOException;
  */
 public class JungleTerrainView extends TerrainView{
 
-    public JungleTerrainView() {
+    public JungleTerrainView(Jungle fever) {
+        super(fever);
         try {
             myImage = ImageIO.read(new File(ImagePaths.JUNGLE_TERRAIN));
         }

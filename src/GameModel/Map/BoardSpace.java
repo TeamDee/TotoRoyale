@@ -26,10 +26,7 @@ public class BoardSpace {
     }
 
     public int getLevel(){
-        if(hasTile)
-            return tiles.size() - 1;
-        else
-            return 0;
+            return tiles.size();
     }
 
     public HexTile topTile(){
@@ -55,6 +52,7 @@ public class BoardSpace {
         }
         tiles.add(ht);
         ht.setMyBoardSpace(this);
+
         ht.setLevel(tiles.size());
 
         if(north!=null)

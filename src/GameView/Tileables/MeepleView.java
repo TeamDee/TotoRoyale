@@ -56,13 +56,13 @@ public class MeepleView implements TileableView{
             case 2:
                 g.drawImage(singleMeeple, width/4, height/4,
                         Constants.TILE_WIDTH/4, Constants.TILE_HEIGHT/4, null);
-                g.drawImage(singleMeeple, width*3/4, height*3/4,
+                g.drawImage(singleMeeple, width/2, height*3/8,
                         Constants.TILE_WIDTH/4, Constants.TILE_HEIGHT/4, null);
                 break;
             case 3:
                 g.drawImage(singleMeeple, width/4, height/4,
                         Constants.TILE_WIDTH/4, Constants.TILE_HEIGHT/4, null);
-                g.drawImage(singleMeeple, width*3/4, height*3/4,
+                g.drawImage(singleMeeple, width/4, height*2/4,
                         Constants.TILE_WIDTH/4, Constants.TILE_HEIGHT/4, null);
                 g.drawImage(singleMeeple, width/4, height*3/4,
                         Constants.TILE_WIDTH/4, Constants.TILE_HEIGHT/4, null);

@@ -8,7 +8,7 @@ import GameView.Map.RockTerrainView;
 public class Rock extends TerrainTile{
     public Rock(){
         myType = TerrainType.ROCK;
-        myView = new RockTerrainView();
+        myView = new RockTerrainView(this);
         me = this;
     }
 

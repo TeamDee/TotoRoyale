@@ -20,7 +20,7 @@ import GameEngine.GameLogicDirector;
 import GameModel.Map.TriHexTile;
 import GameView.*;
 import GameView.Map.*;
-
+import java.util.Random;
 
 public class ActiveGameViewport extends Viewport {
 
@@ -92,6 +92,11 @@ public class ActiveGameViewport extends Viewport {
     // ----------------
 
     public void drawMap(Graphics g, List<HexTile> tiles) {
+        g.clearRect(0,0,10000,10000);
+        Random r = new Random();
+        g.setColor(Color.PINK);
+        g.fillRect(0,0,10000,10000);
+
         HexTile start = tiles.get(0);
 
         Point pixels = new HexCoordinate(start.getLocation()).getPixelCoordinate().getPoint();//law of demeter violation

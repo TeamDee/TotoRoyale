@@ -6,6 +6,7 @@ import GameModel.Map.GameMap;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.Tile.TerrainTile;
+import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
@@ -38,13 +39,45 @@ public class Player {
 
     //TODO add AI logic
     public void takeTurn(GameMap gameMap, TriHexTile tile){
-        ArrayList<Placement> placements = gameMap.getLegalTablePlacements(tile); //note this only gets level 0 placements
-        //placements.add(gameMap.getLegalPlacementsAtHexTile());
-        //ArrayList<Placement> nukePlacement = gameMap.getLegalPlacementsAtHexTile(tile,tile.getTileThree());
-        Placement stupidPlacement = placements.get(0);//random.nextInt(placements.size()));
+        ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
+
+        if(placements.size() == 0) {   //todo OR the seen placements aren't good enough
+            placements.addAll(gameMap.getLegalTablePlacements(tile)); //note this only gets level 0 placements
+            System.out.println("NO LEGAL MAP PLACEMENTS");
+        }
+
+        Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
 
         placeTile(gameMap, stupidPlacement);
+
+        ArrayList<HexTile> tiles = gameMap.getVisible();
+
+        //if we settle... currently the only option
+        TerrainTile bestPlaceToSettle = null;
+        int currentBest = 0;
+        for(HexTile ht: tiles){
+
+            if(ht.terrainType() != TerrainType.VOLCANO){
+                if(bestPlaceToSettle == null)
+                    bestPlaceToSettle = (TerrainTile)ht;
+                if(howGoodIsSettlement((TerrainTile)ht, this) >currentBest) {
+                    currentBest = howGoodIsSettlement((TerrainTile)ht, this);
+                    buildSettlement((TerrainTile) ht);
+                    break;
+                }
+            }
+        }
+        VolcanoTile vt = new VolcanoTile();
+
         buildSettlement((TerrainTile)tile.getTileOne());
+    }
+
+    private int howGoodIsSettlement(TerrainTile tt, Player p){
+        return 1; //TODO either add logic here or find a better place to do AI stuff
+        //ideas
+        //get contiguos terrains of a type to see if we could expand there next turn
+        //devalue these terrains if the opponent is also adjacent to them, as they may steal them from us
+
     }
 
     public void placeTile(GameMap gameMap, Placement placement) {

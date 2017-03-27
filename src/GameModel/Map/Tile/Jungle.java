@@ -7,7 +7,7 @@ import GameView.Map.JungleTerrainView;
 public class Jungle extends TerrainTile{
     public Jungle(){
         myType = TerrainType.JUNGLE;
-        this.myView = new JungleTerrainView();
+        this.myView = new JungleTerrainView(this);
         me = this;
     }
 

@@ -8,7 +8,7 @@ import GameView.Map.GrassTerrainView;
 public class Grass extends TerrainTile {
 
     public Grass(){
-        myView = new GrassTerrainView();
+        myView = new GrassTerrainView(this);
         myType = TerrainType.GRASS;
         me = this;
     }
