@@ -8,12 +8,8 @@ import GameModel.Map.Tile.HexTile;
  */
 public class BlackSettlement extends Settlement {
 
-    public BlackSettlement(HexTile startTile) {
-        super(startTile);
+    public BlackSettlement() {
     }
 
-    @Override
-    public boolean isContiguous(HexTile hexTile) {
-        return super.isContiguous(hexTile) && hexTile.isOwnedByWhite();
-    }
+
 }
