@@ -40,21 +40,6 @@ public abstract class HexTile extends Tile {
         triHexTile = compositor;
     }
 
-//    public boolean placeMeeples(Player owner) {
-//        if (isOccupied()) {
-//            return false;
-//        }
-//        else {
-//            this.owner = owner;
-//            meepleCount = level + 1;
-//            return true;
-//        }
-//    }
-
-
-
-
-
     public TerrainType terrainType(){
         return myType;
     }

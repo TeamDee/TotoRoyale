@@ -19,6 +19,8 @@ public class GameMap {
     private int numberOfTriHextiles;
     private boolean firstTurn = true;
 
+
+
     private List<BoardSpace> activeSpaces;
 
     public GameMap() {
@@ -478,6 +480,20 @@ public class GameMap {
 
     }
 
+    private Placement tempPlacement;
+
+    //same as implementPlacement except it doesn't activate board spaces, so it's easier to clean up
+    //ALWAYS CALL revokeLastPlacement() AFTER USING THIS, then call implementPlacement if you want to
+    public void temporaryPlacement(Placement p){
+        tempPlacement = p;
+        p.place();
+    }
+
+    //NOTE: BE VERY CAREFUL WITH THIS
+    public void revokeLastPlacement() {
+
+    }
+
     public boolean isLegalPlacement(Placement p) {
         if (p.isLevelPlacement() && p.isOverlapping() && !p.volcanoMatch())
             return true;
@@ -504,6 +520,7 @@ public class GameMap {
 
     @Override
     public String toString() {
+        StringBuffer sb = new StringBuffer();
 //        for (TriHexTile tht : this.playedTriHexTiles) {
 //            HexTile curr;
 //            curr = tht.getTileOne();
@@ -538,17 +555,18 @@ public class GameMap {
             }
         }
         if(level1 %3 != 0){
-            System.out.println("LEVEL 1 UNEQUAL");
+            sb.append("LEVEL 1 UNEQUAL");
         }
         if(level2 %3 != 0){
-            System.out.println("LEVEL 2 UNEQUAL");
+            sb.append("LEVEL 2 UNEQUAL");
         }
         if(level3 %3 != 0){
-            System.out.println("LEVEL 3 UNEQUAL");
+            sb.append("LEVEL 3 UNEQUAL");
         }
         if(level4 %3 != 0){
-            System.out.println("LEVEL 4 UNEQUAL");
+            sb.append("LEVEL 4 UNEQUAL");
         }
+        return sb.toString();
     }
 
     public int getNumberOfTriHextiles() {

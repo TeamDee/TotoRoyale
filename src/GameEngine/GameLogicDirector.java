@@ -83,7 +83,7 @@ public class GameLogicDirector implements Runnable{
                 }
                 else { //game over
                     System.out.println();
-                    myMap.printInfoAboutMap();
+                    System.out.println(myMap);
                     try {
                         Thread.sleep(1000000);
                     } catch (InterruptedException ie) {
@@ -113,7 +113,7 @@ public class GameLogicDirector implements Runnable{
 
     public void AItakeTurn(){
         currentPlayer.takeTurn(myMap, deck.draw());
-        getMap().printInfoAboutMap();
+        System.out.println(getMap());
         System.out.println("\n");
 
         try {
@@ -136,6 +136,7 @@ public class GameLogicDirector implements Runnable{
         players.add(p1);
         players.add(p2);
         activePlayer = new PlayerController(p1);
+        currentPlayer = p1;
 
         GameController gameController = new GameController();
         gameController.initViewControllerInteractions(p1, activePlayer);
@@ -144,7 +145,6 @@ public class GameLogicDirector implements Runnable{
 
         newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();
-        //myMap.placeFirstTile(deck.draw());
 
     }
 

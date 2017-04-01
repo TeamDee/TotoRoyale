@@ -1,0 +1,48 @@
+package GameView.Tileables;
+
+import GameView.ImagePaths;
+import GameView.Map.Constants;
+import GameView.Map.TileableView;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import GameModel.Map.Tile.HexTile;
+import GameControl.Player.*;
+
+/**
+ * Created by jowens on 3/26/17.
+ */
+public class TotoroView implements TileableView{
+    public int numMeeples;
+    public BufferedImage myImage;
+    public BufferedImage totoro;
+
+    int width = Constants.TILE_WIDTH;
+    int height = Constants.TILE_HEIGHT;
+
+    public TotoroView( Player player) {
+        try {
+            myImage = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT,BufferedImage.TYPE_INT_ARGB);
+            if(player.isWhite())
+                totoro = ImageIO.read(new File(ImagePaths.TOTORO_WHITE));
+            else
+                totoro = ImageIO.read(new File(ImagePaths.TOTORO_BLACK));
+            System.out.println("Totoro File CREATED");
+        }
+        catch (IOException e) {
+            System.out.println("Totoro File NOT FOUND");
+        }
+    }
+
+
+    public int getPriority(){
+        return 0;
+    }
+
+    public BufferedImage getImage(){
+        return myImage;
+    }
+}

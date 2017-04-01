@@ -197,4 +197,9 @@ public class BoardSpace {
     public void setSouthWest(BoardSpace bs){
         southwest = bs;
     }
+
+
+    public void removeTopTile(){
+        tiles.remove(tiles.size() - 1);
+    }
 }

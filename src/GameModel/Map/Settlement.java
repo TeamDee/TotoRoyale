@@ -24,7 +24,6 @@ public class Settlement{
     public boolean HasTotoro;
     public boolean HasTiger;
     public Settlement() {
-
         settlement = new ArrayList<TerrainTile>();
         exsettle = new ArrayList<TerrainTile>();
         Tplacement = new ArrayList<TerrainTile>();
@@ -50,7 +49,7 @@ public class Settlement{
     }
     public ArrayList<TerrainTile> getTotoroPlacement()
     {
-        ArrayList<TerrainTile> getTotoroPlaceMent = new ArrayList<>();
+        ArrayList<TerrainTile> getTotoroPlaceMent = new ArrayList<TerrainTile>();
             for(TerrainTile check: settlement)
             {
                 Tplacement = getAdjacentHexTiles(check);
@@ -67,7 +66,7 @@ public class Settlement{
     }
     public ArrayList<TerrainTile> getTigerPlacement()
     {
-        ArrayList<TerrainTile> getTigerPlaceMent = new ArrayList<>();
+        ArrayList<TerrainTile> getTigerPlaceMent = new ArrayList<TerrainTile>();
         for(TerrainTile check: settlement)
         {
             Tplacement = getAdjacentHexTiles(check);
@@ -83,7 +82,7 @@ public class Settlement{
     }
 
     public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
-    public void adToSettlement(TerrainTile tile){settlement.add(tile);}
+    public void addToSettlement(TerrainTile tile){settlement.add(tile);}
 
     public ArrayList<TerrainTile> getSettlement()
     {

@@ -42,11 +42,17 @@ public class Player {
         settlements = new ArrayList<Settlement>();
     }
 
-    //TODO add AI logic
-    public void takeTurn(GameMap gameMap, TriHexTile tile){
+    //returns true iff there are no legal build moves for the current player on the given map
+    public boolean noLegalBuildMoves(GameMap map){
+        // no settlements, legal totoro, or expansions
 
+    }
+
+    public void placementPhase(GameMap gameMap, TriHexTile tile){
         ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
+        if(noLegalBuildMoves()){
 
+        }
         if(placements.size() == 0) {   //todo OR the seen placements aren't good enough
             placements.addAll(gameMap.getLegalTablePlacements(tile)); //note this only gets level 0 placements
             System.out.println("NO LEGAL MAP PLACEMENTS");
@@ -55,6 +61,33 @@ public class Player {
         Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
 
         placeTile(gameMap, stupidPlacement);
+    }
+
+    public ArrayList<Settlement> getLegalSettlements(GameMap gameMap){
+        ArrayList<HexTile> tiles = gameMap.getVisible();
+
+        ArrayList<Settlement> legalSettlements = new ArrayList<Settlement>();
+        //choose the best available settlement
+        //if we settle... currently the only option
+        TerrainTile bestPlaceToSettle = null;
+        int currentBest = 0;
+        for(HexTile ht: tiles){
+            if(ht.terrainType() != TerrainType.VOLCANO && ht != null){
+                if(ht.isOccupied() || ht.getLevel() != 1)
+                    continue;
+                else {
+                    Settlement s = new Settlement();
+                    s.addToSettlement((TerrainTile)ht);
+                    legalSettlements.add(s);
+                }
+            }
+        }
+
+    }
+
+    //TODO add AI logic
+    public void takeTurn(GameMap gameMap, TriHexTile tile){
+        placementPhase(gameMap, tile);
 
         ArrayList<HexTile> tiles = gameMap.getVisible();
 
@@ -78,7 +111,7 @@ public class Player {
             }
         }
         if(settlements.size() > 0) {
-            ArrayList<Settlement> TotoroLegal = new ArrayList<>();
+            ArrayList<Settlement> TotoroLegal = new ArrayList<Settlement>();
             for(Settlement sizeCheck: settlements)
             {
                 if(sizeCheck.getSettlementSize() >= 5 && !sizeCheck.DoesItHaveTotoro())
@@ -91,7 +124,7 @@ public class Player {
                 int whichTotoro = random.nextInt(TotoroLegal.size());
                 TerrainTile Texpand = getTotoroPlacements(TotoroLegal.get(whichTotoro));
                 placeTotoro(Texpand);
-                TotoroLegal.get(whichTotoro).adToSettlement(Texpand);
+                TotoroLegal.get(whichTotoro).addToSettlement(Texpand);
                 TotoroLegal.get(whichTotoro).placedTotoro();
                 awardPoints(200);
             }
@@ -108,7 +141,7 @@ public class Player {
                     int whichTiger = random.nextInt(TigerLegal.size());
                     TerrainTile Texpand = getTigerPlacements(TigerLegal.get(whichTiger));
                     placeTiger(Texpand);
-                    TigerLegal.get(whichTiger).adToSettlement(Texpand);
+                    TigerLegal.get(whichTiger).addToSettlement(Texpand);
                     TigerLegal.get(whichTiger).placedTiger();
                 }
                 else {*/
@@ -117,12 +150,12 @@ public class Player {
                     if (scoretemp1 >= 1) {
                         for (TerrainTile add : expansion) {
                             placeMeeples(add);
-                            settlements.get(whichsettle).adToSettlement(add);
+                            settlements.get(whichsettle).addToSettlement(add);
                             awardPoints(add.getLevel() ^ 2);
                             System.out.println("added");
                         }
                     }
-                    else {
+                    else{
                         buildSettlement(bestPlaceToSettle);
                         VolcanoTile vt = new VolcanoTile();
                     }

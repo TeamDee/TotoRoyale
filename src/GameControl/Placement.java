@@ -114,5 +114,15 @@ public class Placement {
         return list;
     }
 
+    /*
+        @author Jason Owens
+        only call this after using temporaryPlacement() in GameMap
+     */
+    public void revokeTemporaryPlacement(){
+        oldA.removeTopTile();
+        oldB.removeTopTile();
+        oldC.removeTopTile();
+    }
+
 
 }
