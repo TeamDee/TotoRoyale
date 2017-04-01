@@ -76,4 +76,14 @@ public class TriHexTile extends Tile {
     public void setTileThree(VolcanoTile hexTile) {
         tileThree = hexTile;
     }
+
+    public boolean isTheSameAs(TriHexTile other){
+        if(this.tileOne.ofSameType(other.getTileOne())){
+            if(this.tileTwo.ofSameType(other.getTileTwo())){
+                if(this.tileThree.ofSameType(other.getTileThree()))
+                    return true;
+            }
+        }
+        return false;
+    }
 }

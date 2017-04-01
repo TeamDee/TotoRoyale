@@ -31,8 +31,7 @@ public class GameMap {
         AxialCoordinate originLocation = new AxialCoordinate(0, 0);
         BoardSpace originBS = this.addBoardSpace(originLocation);
 
-        this.addBoardSpace(originLocation);
-        this.addRadialBoardSpaces(2, originBS);
+        this.addRadialBoardSpaces(2,originBS);
         this.connectAdjacentBoardSpaces(originBS);
         this.activateAdjacentBoardSpaces(originBS);
 

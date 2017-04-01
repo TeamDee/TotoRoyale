@@ -27,11 +27,8 @@ public class GameMapTest {
     @Test
     public void testAddAdjacentBoardSpace(){
         int numberOfBoardSpacesBefore = map.getNumberOfBoardSpaces();
+        location = new AxialCoordinate(2,2);
         map.addAdjacentBoardSpaces(location);
-
-        TriHexTile tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
-        map.placeFirstTile(tht);
-
         Assert.assertFalse(map.getNumberOfBoardSpaces()==numberOfBoardSpacesBefore);
     }
 
