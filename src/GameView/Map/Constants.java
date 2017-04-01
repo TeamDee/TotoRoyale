@@ -7,6 +7,7 @@ public class Constants {
     public static int TILE_HEIGHT = 64, TILE_WIDTH = 64; //default
     public static int MEEPLES_PER_PLAYER = 20;
     public static int TOTORO_PER_PLAYER = 3;
+    public static int TIGER_PER_PLAYER = 2;
 
     public void setTileConstants(int newHeight, int newWidth){
         TILE_HEIGHT = newHeight;
