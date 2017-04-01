@@ -4,7 +4,7 @@ import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
-
+import com.sun.prism.shader.Texture_RadialGradient_REFLECT_AlphaTest_Loader;
 
 
 import java.lang.reflect.Array;
@@ -20,10 +20,66 @@ import static GameModel.Map.Tile.TerrainType.VOLCANO;
 public class Settlement{
     public ArrayList<TerrainTile> settlement;
     public ArrayList<TerrainTile> exsettle;
+    public ArrayList<TerrainTile> Tplacement;
+    public boolean HasTotoro;
+    public boolean HasTiger;
     public Settlement() {
 
         settlement = new ArrayList<TerrainTile>();
         exsettle = new ArrayList<TerrainTile>();
+        Tplacement = new ArrayList<TerrainTile>();
+        HasTotoro = false;
+        HasTiger = false;
+    }
+
+    public boolean DoesItHaveTotoro()
+    {
+        return HasTotoro;
+    }
+    public boolean DoesItHaveTiger()
+    {
+        return HasTiger;
+    }
+    public void placedTotoro()
+    {
+        HasTotoro = true;
+    }
+    public void placedTiger()
+    {
+        HasTiger = true;
+    }
+    public ArrayList<TerrainTile> getTotoroPlacement()
+    {
+        ArrayList<TerrainTile> getTotoroPlaceMent = new ArrayList<>();
+            for(TerrainTile check: settlement)
+            {
+                Tplacement = getAdjacentHexTiles(check);
+                for(TerrainTile scan: Tplacement)
+                {
+                    if(!getTotoroPlaceMent.contains(scan)) {
+                        getTotoroPlaceMent.add(scan);
+                    }
+                }
+            }
+            Tplacement.clear();
+            return getTotoroPlaceMent;
+
+    }
+    public ArrayList<TerrainTile> getTigerPlacement()
+    {
+        ArrayList<TerrainTile> getTigerPlaceMent = new ArrayList<>();
+        for(TerrainTile check: settlement)
+        {
+            Tplacement = getAdjacentHexTiles(check);
+            for(TerrainTile scan: Tplacement)
+            {
+                if(!getTigerPlaceMent.contains(scan) && scan.getLevel() >= 3) {
+                    getTigerPlaceMent.add(scan);
+                }
+            }
+        }
+        Tplacement.clear();
+        return getTigerPlaceMent;
     }
 
     public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
@@ -127,5 +183,10 @@ public class Settlement{
             }
         }
         return adjacentHexTiles;
+    }
+
+    public int getSettlementSize()
+    {
+        return settlement.size();
     }
 }
