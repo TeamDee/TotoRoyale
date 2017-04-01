@@ -22,6 +22,7 @@ public class Player {
     //units
     private int totoroCount;
     private int meepleCount;
+    private int tigerCount;
     private List<AxialCoordinate> meeplePlacements;
     private List<AxialCoordinate> totoroPlacements;
     private List<Settlement> settlements;
@@ -35,6 +36,7 @@ public class Player {
     public Player(){
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
+        tigerCount = Constants.TIGER_PER_PLAYER;
         score = 0;
         scoretemp1 = 0;
         settlements = new ArrayList<Settlement>();
@@ -76,18 +78,55 @@ public class Player {
             }
         }
         if(settlements.size() > 0) {
-            int whichsettle = random.nextInt(settlements.size());
-            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
-            if (scoretemp1 >= 1) {
-                for (TerrainTile add : expansion) {
-                    placeMeeples(add);
-                    settlements.get(whichsettle).adToSettlement(add);
-                    awardPoints(add.getLevel()^2);
-                    System.out.println("added");
+            ArrayList<Settlement> TotoroLegal = new ArrayList<>();
+            for(Settlement sizeCheck: settlements)
+            {
+                if(sizeCheck.getSettlementSize() >= 5 && !sizeCheck.DoesItHaveTotoro())
+                {
+                    TotoroLegal.add(sizeCheck);
                 }
-            } else {
-                buildSettlement(bestPlaceToSettle);
-                VolcanoTile vt = new VolcanoTile();
+            }
+            if(TotoroLegal.size() > 0)
+            {
+                int whichTotoro = random.nextInt(TotoroLegal.size());
+                TerrainTile Texpand = getTotoroPlacements(TotoroLegal.get(whichTotoro));
+                placeTotoro(Texpand);
+                TotoroLegal.get(whichTotoro).adToSettlement(Texpand);
+                TotoroLegal.get(whichTotoro).placedTotoro();
+                awardPoints(200);
+            }
+            else {
+               /* ArrayList<Settlement> TigerLegal = new ArrayList<>();
+                for(Settlement sizeCheck: settlements)
+                {
+                    if(!sizeCheck.DoesItHaveTiger())
+                    {
+                        TigerLegal.add(sizeCheck);
+                    }
+                }
+                if(TigerLegal.size() > 0) {
+                    int whichTiger = random.nextInt(TigerLegal.size());
+                    TerrainTile Texpand = getTigerPlacements(TigerLegal.get(whichTiger));
+                    placeTiger(Texpand);
+                    TigerLegal.get(whichTiger).adToSettlement(Texpand);
+                    TigerLegal.get(whichTiger).placedTiger();
+                }
+                else {*/
+                    int whichsettle = random.nextInt(settlements.size());
+                    ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
+                    if (scoretemp1 >= 1) {
+                        for (TerrainTile add : expansion) {
+                            placeMeeples(add);
+                            settlements.get(whichsettle).adToSettlement(add);
+                            awardPoints(add.getLevel() ^ 2);
+                            System.out.println("added");
+                        }
+                    }
+                    else {
+                        buildSettlement(bestPlaceToSettle);
+                        VolcanoTile vt = new VolcanoTile();
+                    }
+                //}
             }
         }
         else
@@ -95,6 +134,7 @@ public class Player {
             buildSettlement(bestPlaceToSettle);
             VolcanoTile vt = new VolcanoTile();
         }
+
         //buildSettlement((TerrainTile)tile.getTileOne());
         //buildSettlement(bestPlaceToSettle);
         System.out.println("Meeple COunt: " + meepleCount);
@@ -170,23 +210,32 @@ public class Player {
         return  expansion;
     }
 
-    public void placeTotoro(List<HexTile> settlement)
+    public void placeTotoro(TerrainTile tt) {
+        tt.placeTotoro(this);
+        removeTotoro(1);
+    }
+
+    public TerrainTile getTotoroPlacements(Settlement settlement)
     {
-        if(settlement.size() >= 5)
-        {
-            //public ArrayList getLegalTotoroPlacements(List<HexTile> settlement)
-            //gets legal place of totoro adjacent to HexTiles in settlement
-            //calls something to adjacent tile
-            /*
-                if(tile.hasTotoro = =false)
-                {
-                    tile.placeTotoro(); set hasTotoro to true
-                    awardPoints(200);
-                }
+        ArrayList<TerrainTile> Tplacements = settlement.getTotoroPlacement();
+        int size = random.nextInt(Tplacements.size());
+        TerrainTile Tplacement = Tplacements.get(size);
+        return  Tplacement;
+        //TODO AI to pick which totoro placment
+    }
 
-             */
+    public void placeTiger(TerrainTile tt) {
+        tt.placeTiger(this);
+        removeTiger(1);
+    }
 
-        }
+    public TerrainTile getTigerPlacements(Settlement settlement)
+    {
+        ArrayList<TerrainTile> Tplacements = settlement.getTigerPlacement();
+        int size = random.nextInt(Tplacements.size());
+        TerrainTile Tplacement = Tplacements.get(size);
+        return  Tplacement;
+        //TODO AI to pick which totoro placment
     }
 
     public int getScore()
@@ -198,6 +247,14 @@ public class Player {
         if(amount > totoroCount)
             return false;
         totoroCount-=amount;
+        checkGameOver();
+        return true;
+    }
+
+    public boolean removeTiger(int amount){
+        if(amount > tigerCount)
+            return false;
+        tigerCount-=amount;
         checkGameOver();
         return true;
     }
