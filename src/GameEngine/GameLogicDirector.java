@@ -9,6 +9,7 @@ import GameModel.Map.Tile.Deck;
 
 import java.util.ArrayList;
 
+
 /**
  * Created by jowens on 3/8/17.
  * responsible for running the game temporally
@@ -19,9 +20,15 @@ public class GameLogicDirector implements Runnable{
     private boolean newGame = true;
 
 
+    private boolean AIgame = true;
+    private boolean AIvsHuman = false;
+    private boolean HumanVsHuman = false;
+
     //Game specific objects
     Player p1,p2;
+
     PlayerController activePlayer;
+    Player currentPlayer;
 
     ArrayList<Player> players;
     public Deck deck;
@@ -32,6 +39,7 @@ public class GameLogicDirector implements Runnable{
         myMap = new GameMap();
         deck = new Deck();
     }
+
 
     public static GameLogicDirector getInstance(){
         if(me == null)
@@ -44,6 +52,12 @@ public class GameLogicDirector implements Runnable{
         gameThread.start();
     }
 
+    private void nextPlayer(){
+        if(currentPlayer == p1)
+            currentPlayer =p2;
+        else
+            currentPlayer =p1;
+    }
     /*
       NEVER CALL THIS - DAVE
      */
@@ -58,28 +72,16 @@ public class GameLogicDirector implements Runnable{
                 //game logic
                 System.out.println("cards left" + deck.cardsLeft());
                 if (deck.cardsLeft() > 0) {
-                    for (Player p : players) {
-                        System.out.println("Round " + (48 - deck.cardsLeft()));
-                        System.out.println("Score " + p.getScore());
-                        p.takeTurn(myMap, deck.draw());
-                        getMap().printInfoAboutMap();
-                        System.out.println("\n");
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
+                    if (AIgame) {
+                        AIvsAIGameTurn();
                     }
-                    if(deck.cardsLeft()%10 == 0){
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
+                    else if (AIvsHuman){
+                        AIvsHumanGameTurn();
                     }
-                } else { //game over
+                    gc.paint();
+
+                }
+                else { //game over
                     System.out.println();
                     myMap.printInfoAboutMap();
                     try {
@@ -88,13 +90,39 @@ public class GameLogicDirector implements Runnable{
                         System.out.println(ie.getStackTrace());
                     }
                 }
+
             }
 
 
         }
     }
 
+    private void AIvsHumanGameTurn(){}
 
+
+    public void AIvsAIGameTurn(){
+
+        System.out.println("Round " + (48 - deck.cardsLeft()));
+        System.out.println("Score " + currentPlayer.getScore());
+
+        for(Player p: players){
+            AItakeTurn();
+            nextPlayer();
+        }
+    }
+
+    public void AItakeTurn(){
+        currentPlayer.takeTurn(myMap, deck.draw());
+        getMap().printInfoAboutMap();
+        System.out.println("\n");
+
+        try {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException ie) {
+            System.out.println(ie.getStackTrace());
+        }
+    }
 
     public GameMap getMap(){
         return myMap;

@@ -123,7 +123,7 @@ public class Player {
     //end testing
     public void placeMeeples(TerrainTile tt) {
         tt.placeMeeple(this);
-        removeMeeples(tt.getLevel() + 1);
+        removeMeeples(tt.getLevel());
     }
 
     public void buildSettlement(TerrainTile tt) {
@@ -138,12 +138,12 @@ public class Player {
 
 
     /*
-        Calls settlement and contiguousUnoccupoedTerrainTyesTiles and plaes meeples on legal tiles of same terrain
+        Calls settlement and contiguousUnoccupoedTerrainTyesTiles and places meeples on legal tiles of same terrain
      */
     public ArrayList<TerrainTile> expandSettlement(Settlement settlement1) {
         scoretemp1 = 0;
         int excheck = 0;
-        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<>();
+        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
         ArrayList<TerrainTile> expansion1 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.GRASS);
         ArrayList<TerrainTile> expansion2 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.JUNGLE);
         ArrayList<TerrainTile> expansion3 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.LAKE);

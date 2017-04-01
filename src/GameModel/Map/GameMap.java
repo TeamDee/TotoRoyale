@@ -502,7 +502,8 @@ public class GameMap {
         return gameBoard2.get(axialCoordinate).topTile();
     }
 
-    public void printInfoAboutMap() {
+    @Override
+    public String toString() {
 //        for (TriHexTile tht : this.playedTriHexTiles) {
 //            HexTile curr;
 //            curr = tht.getTileOne();
@@ -589,3 +590,4 @@ class Distance {
         return mine.getLocation().hashCode();
     }
 }
+
