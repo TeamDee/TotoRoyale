@@ -26,6 +26,7 @@ public class Player {
     private List<AxialCoordinate> meeplePlacements;
     private List<AxialCoordinate> totoroPlacements;
     private List<Settlement> settlements;
+    private TerrainTile Tplacement;
 
     //scoring
     private int score, scoretemp1;
@@ -40,6 +41,7 @@ public class Player {
         score = 0;
         scoretemp1 = 0;
         settlements = new ArrayList<Settlement>();
+        Tplacement = null;
     }
 
     //TODO add AI logic
@@ -89,51 +91,126 @@ public class Player {
             if(TotoroLegal.size() > 0)
             {
                 int whichTotoro = random.nextInt(TotoroLegal.size());
-                TerrainTile Texpand = getTotoroPlacements(TotoroLegal.get(whichTotoro));
-                placeTotoro(Texpand);
-                TotoroLegal.get(whichTotoro).adToSettlement(Texpand);
-                TotoroLegal.get(whichTotoro).placedTotoro();
-                awardPoints(200);
-            }
-            else {
-               /* ArrayList<Settlement> TigerLegal = new ArrayList<>();
-                for(Settlement sizeCheck: settlements)
-                {
-                    if(!sizeCheck.DoesItHaveTiger())
+                //TerrainTile Texpand = getTotoroPlacements(TotoroLegal.get(whichTotoro));
+                if(TotoroCheck(TotoroLegal.get(whichTotoro))) {
+                    placeTotoro(Tplacement);
+                    TotoroLegal.get(whichTotoro).adToSettlement(Tplacement);
+                    TotoroLegal.get(whichTotoro).placedTotoro();
+                    awardPoints(200);
+                }
+                else {
+                    ArrayList<Settlement> TigerLegal = new ArrayList<>();
+                    for(Settlement sizeCheck: settlements)
                     {
-                        TigerLegal.add(sizeCheck);
+                        if(!sizeCheck.DoesItHaveTiger())
+                        {
+                            TigerLegal.add(sizeCheck);
+                        }
                     }
-                }
-                if(TigerLegal.size() > 0) {
-                    int whichTiger = random.nextInt(TigerLegal.size());
-                    TerrainTile Texpand = getTigerPlacements(TigerLegal.get(whichTiger));
-                    placeTiger(Texpand);
-                    TigerLegal.get(whichTiger).adToSettlement(Texpand);
-                    TigerLegal.get(whichTiger).placedTiger();
-                }
-                else {*/
-                    int whichsettle = random.nextInt(settlements.size());
-                    ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
-                    if (scoretemp1 >= 1) {
-                        for (TerrainTile add : expansion) {
-                            placeMeeples(add);
-                            settlements.get(whichsettle).adToSettlement(add);
-                            awardPoints(add.getLevel() ^ 2);
-                            System.out.println("added");
+                    if(TigerLegal.size() > 0) {
+                        int whichTiger = random.nextInt(TigerLegal.size());
+                        //TerrainTile Texpand = getTigerPlacements(TigerLegal.get(whichTiger));
+                        if(TigerCheck(TigerLegal.get(whichTiger))) {
+                            placeTiger(Tplacement);
+                            TigerLegal.get(whichTiger).adToSettlement(Tplacement);
+                            TigerLegal.get(whichTiger).placedTiger();
+                            awardPoints(75);
+                        }
+                        else
+                        {
+                            int whichsettle = random.nextInt(settlements.size());
+                            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
+                            if (scoretemp1 >= 1) {
+                                for (TerrainTile add : expansion) {
+                                    placeMeeples(add);
+                                    settlements.get(whichsettle).adToSettlement(add);
+                                    awardPoints(add.getLevel() ^ 2);
+                                    System.out.println("added");
+                                }
+                            }
+                            else {
+                                buildSettlement(bestPlaceToSettle);
+                                VolcanoTile vt = new VolcanoTile();
+                            }
                         }
                     }
                     else {
-                        buildSettlement(bestPlaceToSettle);
-                        VolcanoTile vt = new VolcanoTile();
+                        int whichsettle = random.nextInt(settlements.size());
+                        ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
+                        if (scoretemp1 >= 1) {
+                            for (TerrainTile add : expansion) {
+                                placeMeeples(add);
+                                settlements.get(whichsettle).adToSettlement(add);
+                                awardPoints(add.getLevel() ^ 2);
+                                System.out.println("added");
+                            }
+                        } else {
+                            buildSettlement(bestPlaceToSettle);
+                            VolcanoTile vt = new VolcanoTile();
+                        }
                     }
-                //}
+                }
             }
-        }
-        else
-        {
-            buildSettlement(bestPlaceToSettle);
-            VolcanoTile vt = new VolcanoTile();
-        }
+            else
+                {
+                    ArrayList<Settlement> TigerLegal = new ArrayList<>();
+                    for(Settlement sizeCheck: settlements)
+                    {
+                        if(!sizeCheck.DoesItHaveTiger())
+                        {
+                            TigerLegal.add(sizeCheck);
+                        }
+                    }
+                    if(TigerLegal.size() > 0) {
+                        int whichTiger = random.nextInt(TigerLegal.size());
+                        //TerrainTile Texpand = getTigerPlacements(TigerLegal.get(whichTiger));
+                        if(TigerCheck(TigerLegal.get(whichTiger))) {
+                            placeTiger(Tplacement);
+                            TigerLegal.get(whichTiger).adToSettlement(Tplacement);
+                            TigerLegal.get(whichTiger).placedTiger();
+                            awardPoints(75);
+                        }
+                        else
+                        {
+                            int whichsettle = random.nextInt(settlements.size());
+                            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
+                            if (scoretemp1 >= 1) {
+                                for (TerrainTile add : expansion) {
+                                    placeMeeples(add);
+                                    settlements.get(whichsettle).adToSettlement(add);
+                                    awardPoints(add.getLevel() ^ 2);
+                                    System.out.println("added");
+                                }
+                            }
+                            else {
+                                buildSettlement(bestPlaceToSettle);
+                                VolcanoTile vt = new VolcanoTile();
+                            }
+                        }
+                    }
+                    else {
+                        int whichsettle = random.nextInt(settlements.size());
+                        ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
+                        if (scoretemp1 >= 1) {
+                            for (TerrainTile add : expansion) {
+                                placeMeeples(add);
+                                settlements.get(whichsettle).adToSettlement(add);
+                                awardPoints(add.getLevel() ^ 2);
+                                System.out.println("added");
+                            }
+                        }
+                        else {
+                            buildSettlement(bestPlaceToSettle);
+                            VolcanoTile vt = new VolcanoTile();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                buildSettlement(bestPlaceToSettle);
+                VolcanoTile vt = new VolcanoTile();
+            }
 
         //buildSettlement((TerrainTile)tile.getTileOne());
         //buildSettlement(bestPlaceToSettle);
@@ -214,12 +291,37 @@ public class Player {
         tt.placeTotoro(this);
         removeTotoro(1);
     }
-
-    public TerrainTile getTotoroPlacements(Settlement settlement)
+    public boolean TotoroCheck(Settlement settlement)
     {
         ArrayList<TerrainTile> Tplacements = settlement.getTotoroPlacement();
+        if(Tplacements.size() != 0)
+        {
+            getTotoroPlacements(Tplacements);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public boolean TigerCheck(Settlement settlement)
+    {
+        ArrayList<TerrainTile> Tplacements = settlement.getTigerPlacement();
+        if(Tplacements.size() != 0)
+        {
+            getTigerPlacements(Tplacements);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public TerrainTile getTotoroPlacements(ArrayList<TerrainTile> Tplacements)
+    {
         int size = random.nextInt(Tplacements.size());
-        TerrainTile Tplacement = Tplacements.get(size);
+        Tplacement = Tplacements.get(size);
         return  Tplacement;
         //TODO AI to pick which totoro placment
     }
@@ -229,11 +331,10 @@ public class Player {
         removeTiger(1);
     }
 
-    public TerrainTile getTigerPlacements(Settlement settlement)
+    public TerrainTile getTigerPlacements(ArrayList<TerrainTile> Tplacements)
     {
-        ArrayList<TerrainTile> Tplacements = settlement.getTigerPlacement();
         int size = random.nextInt(Tplacements.size());
-        TerrainTile Tplacement = Tplacements.get(size);
+        Tplacement = Tplacements.get(size);
         return  Tplacement;
         //TODO AI to pick which totoro placment
     }
