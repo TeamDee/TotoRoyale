@@ -20,6 +20,7 @@ import java.util.Random;
  */
 public class Player {
     //units
+    String name;
     private int totoroCount;
     private int meepleCount;
     private int tigerCount;
@@ -78,7 +79,7 @@ public class Player {
             }
         }
         if(settlements.size() > 0) {
-            ArrayList<Settlement> TotoroLegal = new ArrayList<>();
+            ArrayList<Settlement> TotoroLegal = new ArrayList<Settlement>();
             for(Settlement sizeCheck: settlements)
             {
                 if(sizeCheck.getSettlementSize() >= 5 && !sizeCheck.DoesItHaveTotoro())
@@ -183,7 +184,7 @@ public class Player {
     public ArrayList<TerrainTile> expandSettlement(Settlement settlement1) {
         scoretemp1 = 0;
         int excheck = 0;
-        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<>();
+        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
         ArrayList<TerrainTile> expansion1 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.GRASS);
         ArrayList<TerrainTile> expansion2 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.JUNGLE);
         ArrayList<TerrainTile> expansion3 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.LAKE);
@@ -268,24 +269,39 @@ public class Player {
     }
 
     private void checkGameOver(){
-        if (meepleCount == 0 && totoroCount == 0) {
-            //TODO end the game
+        boolean gameOver = false;
+        if ((meepleCount==0 && totoroCount==0) || (meepleCount==0 && tigerCount==0) || (totoroCount==0 && tigerCount==0)) {
+            gameOver = true;
         }
+    }
+
+    public boolean checkOnlyOneTypeTokenIsLeft(){
+        boolean gameOver = false;
+        if ((meepleCount==0 && totoroCount==0) || (meepleCount==0 && tigerCount==0) || (totoroCount==0 && tigerCount==0)) {
+            gameOver = true;
+        }
+        return gameOver;
     }
 
     public void awardPoints(int amount){
         score += amount;
     }
 
-    int getMeepleCount() {
+    public int getMeepleCount() {
         return meepleCount;
     }
 
-    int getTotoroCount() {
+    public int getTigerCount() { return tigerCount; }
+
+    public int getTotoroCount() {
         return totoroCount;
     }
 
     public boolean isWhite(){
         return false;
+    }
+
+    public String toString(){
+        return this.name;
     }
 }

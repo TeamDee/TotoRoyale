@@ -1,10 +1,10 @@
 package GameControl;
 
+import GameView.Viewports.MainMenuViewport;
+import GameView.Viewports.Viewport;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import GameView.Viewports.*;
-import GameEngine.GameController;
 
 public class MainMenuController extends Controller {
 
@@ -23,7 +23,6 @@ public class MainMenuController extends Controller {
     }
 
     public class NewGameListener implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
             //System.out.println("NEW GAME");
             //GameController.getInstance().swapViews(new CharacterCreationController());
@@ -32,14 +31,12 @@ public class MainMenuController extends Controller {
     }
 
     public class LoadGameListener implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("LOAD GAME");
         }
     }
 
     public class ExitGameListener implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }

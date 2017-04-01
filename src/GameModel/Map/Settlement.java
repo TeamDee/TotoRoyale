@@ -4,13 +4,8 @@ import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
-import com.sun.prism.shader.Texture_RadialGradient_REFLECT_AlphaTest_Loader;
 
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static GameModel.Map.Tile.TerrainType.VOLCANO;
 
@@ -50,7 +45,7 @@ public class Settlement{
     }
     public ArrayList<TerrainTile> getTotoroPlacement()
     {
-        ArrayList<TerrainTile> getTotoroPlaceMent = new ArrayList<>();
+        ArrayList<TerrainTile> getTotoroPlaceMent = new ArrayList<TerrainTile>();
             for(TerrainTile check: settlement)
             {
                 Tplacement = getAdjacentHexTiles(check);
@@ -67,7 +62,7 @@ public class Settlement{
     }
     public ArrayList<TerrainTile> getTigerPlacement()
     {
-        ArrayList<TerrainTile> getTigerPlaceMent = new ArrayList<>();
+        ArrayList<TerrainTile> getTigerPlaceMent = new ArrayList<TerrainTile>();
         for(TerrainTile check: settlement)
         {
             Tplacement = getAdjacentHexTiles(check);

@@ -21,6 +21,7 @@ public class GameLogicDirector implements Runnable{
 
     //Game specific objects
     Player p1,p2;
+    Player winner;
     PlayerController activePlayer;
 
     ArrayList<Player> players;
@@ -31,6 +32,7 @@ public class GameLogicDirector implements Runnable{
     public GameLogicDirector(){
         myMap = new GameMap();
         deck = new Deck();
+        winner=null;
     }
 
     public static GameLogicDirector getInstance(){
@@ -48,53 +50,114 @@ public class GameLogicDirector implements Runnable{
       NEVER CALL THIS - DAVE
      */
     public void run(){
-        while(true) {
+        while(winner==null) {
             if (newGame) {
                 System.out.println("Initializing new game.");
                 initializeNewGame();
+                winner = null;
                 gc = GameController.getInstance();
                 gc.initViewControllerInteractions(p1, activePlayer );
             } else {
                 //game logic
-                System.out.println("cards left" + deck.cardsLeft());
-                if (deck.cardsLeft() > 0) {
-                    for (Player p : players) {
-                        System.out.println("Round " + (48 - deck.cardsLeft()));
-                        System.out.println("Score " + p.getScore());
-                        p.takeTurn(myMap, deck.draw());
-                        getMap().printInfoAboutMap();
-                        System.out.println("\n");
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
+
+                for (Player p : players) {
+                    System.out.println("Round " + (48 - deck.cardsLeft()));
+                    System.out.println("cards left" + deck.cardsLeft());
+                    System.out.println(p.toString() + " Score: " + p.getScore());
+                    p.takeTurn(myMap, deck.draw());
+
+                    //check if the player has only one type of tokens left. If yes, end the game.
+                    if(p.checkOnlyOneTypeTokenIsLeft()){
+                        winner = p;
+                        break;
+                    } else if(deck.cardsLeft()==0){
+                        break;
                     }
-                    if(deck.cardsLeft()%10 == 0){
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
-                    }
-                } else { //game over
-                    System.out.println();
-                    myMap.printInfoAboutMap();
+
+                    getMap().printInfoAboutMap();
+                    System.out.println("\n");
+                    gc.paint();
                     try {
-                        Thread.sleep(1000000);
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                        System.out.println(ie.getStackTrace());
+                    }
+                }
+                //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
+                if(deck.cardsLeft()==0){
+                    winner = gameEndCheckWinner();
+                    gc.paint();
+                }
+
+                if(deck.cardsLeft()%10 == 0){
+                    gc.paint();
+                    try {
+                        Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                         System.out.println(ie.getStackTrace());
                     }
                 }
             }
-
-
         }
+        System.out.println("Winner: " + winner.toString());
     }
 
+    public Player gameEndCheckWinner(){
+        Player winner = compareScores();
+        if(winner==null){
+            winner = compareTotoroCount();
+            if(winner==null){
+                winner = compareTigerCount();
+                if(winner==null){
+                    winner = compareMeepleCount();
+                }
+            }
+        }
+        return winner;
+    }
 
+    private Player compareScores(){
+        Player winner;
+        if(p1.getScore() > p2.getScore()){
+            winner = p1;
+        } else if(p1.getScore() < p2.getScore()){
+            winner = p2;
+        } else
+            winner = null; //score ties
+        return winner;
+    }
+
+    private Player compareTotoroCount(){
+        Player winner;
+        if(p1.getTotoroCount() < p2.getTotoroCount()){
+            winner = p1;
+        } else if(p1.getTotoroCount() > p2.getTotoroCount()){
+            winner = p2;
+        } else
+            winner = null; //totoro count ties
+        return winner;
+    }
+
+    private Player compareTigerCount(){
+        Player winner;
+        if(p1.getTigerCount() < p2.getTigerCount()){
+            winner = p1;
+        } else if(p1.getTigerCount() > p2.getTigerCount()){
+            winner = p2;
+        } else
+            winner = null; //tiger count ties
+        return winner;
+    }
+
+    private Player compareMeepleCount(){
+        Player winner;
+        if(p1.getMeepleCount() < p2.getMeepleCount()){
+            winner = p1;
+        } else {
+            winner = p2;
+        }
+        return winner;
+    }
 
     public GameMap getMap(){
         return myMap;
