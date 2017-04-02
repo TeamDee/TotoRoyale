@@ -100,7 +100,7 @@ public class Player {
                     awardPoints(200);
                 }
                 else {
-                    ArrayList<Settlement> TigerLegal = new ArrayList<>();
+                    ArrayList<Settlement> TigerLegal = new ArrayList<Settlement>();
                     for(Settlement sizeCheck: settlements)
                     {
                         if(!sizeCheck.DoesItHaveTiger())
@@ -154,7 +154,7 @@ public class Player {
             }
             else
                 {
-                    ArrayList<Settlement> TigerLegal = new ArrayList<>();
+                    ArrayList<Settlement> TigerLegal = new ArrayList<Settlement>();
                     for(Settlement sizeCheck: settlements)
                     {
                         if(!sizeCheck.DoesItHaveTiger())
