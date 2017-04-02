@@ -491,7 +491,7 @@ public class GameMap {
 
     //NOTE: BE VERY CAREFUL WITH THIS
     public void revokeLastPlacement() {
-
+        tempPlacement.revokeTemporaryPlacement();
     }
 
     public boolean isLegalPlacement(Placement p) {

@@ -4,13 +4,9 @@ import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
-import com.sun.prism.shader.Texture_RadialGradient_REFLECT_AlphaTest_Loader;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static GameModel.Map.Tile.TerrainType.VOLCANO;
 
@@ -20,22 +16,21 @@ import static GameModel.Map.Tile.TerrainType.VOLCANO;
 public class Settlement{
     public ArrayList<TerrainTile> settlement;
     public ArrayList<TerrainTile> exsettle;
-    public ArrayList<TerrainTile> Tplacement;
+    //public ArrayList<TerrainTile> Tplacement;
     public boolean HasTotoro;
     public boolean HasTiger;
     public Settlement() {
         settlement = new ArrayList<TerrainTile>();
         exsettle = new ArrayList<TerrainTile>();
-        Tplacement = new ArrayList<TerrainTile>();
         HasTotoro = false;
         HasTiger = false;
     }
 
-    public boolean DoesItHaveTotoro()
+    public boolean hasTotoro()
     {
         return HasTotoro;
     }
-    public boolean DoesItHaveTiger()
+    public boolean hasTiger()
     {
         return HasTiger;
     }
@@ -47,38 +42,37 @@ public class Settlement{
     {
         HasTiger = true;
     }
-    public ArrayList<TerrainTile> getTotoroPlacement()
-    {
-        ArrayList<TerrainTile> getTotoroPlaceMent = new ArrayList<TerrainTile>();
-            for(TerrainTile check: settlement)
-            {
-                Tplacement = getAdjacentHexTiles(check);
-                for(TerrainTile scan: Tplacement)
-                {
-                    if(!getTotoroPlaceMent.contains(scan)) {
-                        getTotoroPlaceMent.add(scan);
-                    }
-                }
-            }
-            Tplacement.clear();
-            return getTotoroPlaceMent;
 
-    }
-    public ArrayList<TerrainTile> getTigerPlacement()
-    {
-        ArrayList<TerrainTile> getTigerPlaceMent = new ArrayList<TerrainTile>();
+    public ArrayList<TerrainTile> getAdjacentTerrainTiles(){
+        ArrayList<TerrainTile> adjacentTerrainTiles = new ArrayList<TerrainTile>();
+        ArrayList<TerrainTile> potentialPlacements = new ArrayList<TerrainTile>();
         for(TerrainTile check: settlement)
         {
-            Tplacement = getAdjacentHexTiles(check);
-            for(TerrainTile scan: Tplacement)
+            potentialPlacements = getAdjacentTerrainTiles(check);
+            for(TerrainTile scan: potentialPlacements)
             {
-                if(!getTigerPlaceMent.contains(scan) && scan.getLevel() >= 3) {
-                    getTigerPlaceMent.add(scan);
+                if(!adjacentTerrainTiles.contains(scan)) {
+                    adjacentTerrainTiles.add(scan);
                 }
             }
         }
-        Tplacement.clear();
-        return getTigerPlaceMent;
+        return adjacentTerrainTiles;
+    }
+    public ArrayList<TerrainTile> getLegalTotoroTiles()
+    {
+        return getAdjacentTerrainTiles();
+
+    }
+    public ArrayList<TerrainTile> getLegalTigerTiles()
+    {
+        ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
+        ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
+        for(TerrainTile t: getTigerPlaceMent){
+            if(t.getLevel() >= 3){
+                returnMe.add(t);
+            }
+        }
+        return returnMe;
     }
 
     public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
@@ -113,7 +107,7 @@ public class Settlement{
     }
 
     public void fill(TerrainTile hexTile, TerrainType terrainType) {
-        ArrayList<TerrainTile> adjacentHexTiles = getAdjacentHexTiles(hexTile);
+        ArrayList<TerrainTile> adjacentHexTiles = getAdjacentTerrainTiles(hexTile);
         for (TerrainTile adjacentHexTile : adjacentHexTiles) {
             if (!exsettle.contains(adjacentHexTile) && isContiguous(adjacentHexTile) && adjacentHexTile.terrainType() == terrainType && adjacentHexTile.getMeepleCount() == 0 && !adjacentHexTile.hasTotoro()) {
                 exsettle.add(adjacentHexTile);
@@ -122,7 +116,7 @@ public class Settlement{
         }
     }
 
-    public ArrayList<TerrainTile> getAdjacentHexTiles(TerrainTile hexTile) {
+    public ArrayList<TerrainTile> getAdjacentTerrainTiles(TerrainTile hexTile) {
         BoardSpace bs = hexTile.getBoardSpace();
         BoardSpace temp = null;
         TerrainTile tile = null;

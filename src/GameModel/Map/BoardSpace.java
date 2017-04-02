@@ -198,6 +198,22 @@ public class BoardSpace {
         southwest = bs;
     }
 
+    public boolean hasEmptyAdjacentLevel3(){
+        ArrayList<BoardSpace> neighbors = new ArrayList<BoardSpace>();
+        neighbors.add(getNorth());
+        neighbors.add(getNorthEast());
+        neighbors.add(getNorthWest());
+        neighbors.add(getSouth());
+        neighbors.add(getSouthEast());
+        neighbors.add(getSouthWest());
+
+        for(BoardSpace b: neighbors){
+            if(b.getLevel() >=3 && !b.topTile().isOccupied()){ //if it is level 3 and is not occupied
+             return true;
+            }
+        }
+        return false;
+    }
 
     public void removeTopTile(){
         tiles.remove(tiles.size() - 1);
