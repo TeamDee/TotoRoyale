@@ -20,6 +20,7 @@ import java.util.Random;
  */
 public class Player {
     //units
+    String name;
     private int totoroCount;
     private int meepleCount;
     private int tigerCount;
@@ -471,24 +472,39 @@ public class Player {
     }
 
     private void checkGameOver(){
-        if (meepleCount == 0 && totoroCount == 0) {
-            //TODO end the game
+        boolean gameOver = false;
+        if ((meepleCount==0 && totoroCount==0) || (meepleCount==0 && tigerCount==0) || (totoroCount==0 && tigerCount==0)) {
+            gameOver = true;
         }
+    }
+
+    public boolean checkOnlyOneTypeTokenIsLeft(){
+        boolean gameOver = false;
+        if ((meepleCount==0 && totoroCount==0) || (meepleCount==0 && tigerCount==0) || (totoroCount==0 && tigerCount==0)) {
+            gameOver = true;
+        }
+        return gameOver;
     }
 
     public void awardPoints(int amount){
         score += amount;
     }
 
-    int getMeepleCount() {
+    public int getMeepleCount() {
         return meepleCount;
     }
 
-    int getTotoroCount() {
+    public int getTigerCount() { return tigerCount; }
+
+    public int getTotoroCount() {
         return totoroCount;
     }
 
     public boolean isWhite(){
         return false;
+    }
+
+    public String toString(){
+        return this.name;
     }
 }

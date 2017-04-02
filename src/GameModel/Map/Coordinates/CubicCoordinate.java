@@ -15,6 +15,8 @@ public class CubicCoordinate {
         int xAxial = x;
         int yAxial = z;
         AxialCoordinate ac = new AxialCoordinate(0,0);
-        
+
+
+
     }
 }
