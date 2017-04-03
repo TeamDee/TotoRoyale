@@ -1,7 +1,4 @@
-package GameModel.Map;
-
-import GameControl.Player.BlackPlayer;
-import GameModel.Map.Tile.HexTile;
+package GameModel.Map.Contiguous;
 
 /**
  * Created by conor on 3/20/2017.

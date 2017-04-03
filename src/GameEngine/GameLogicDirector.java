@@ -102,7 +102,7 @@ public class GameLogicDirector implements Runnable{
                         System.out.println("\n");
                         gc.paint();
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(3000);
                         } catch (InterruptedException ie) {
                             System.out.println(ie.getStackTrace());
                         }
@@ -111,15 +111,6 @@ public class GameLogicDirector implements Runnable{
                     if (deck.cardsLeft() == 0) {
                         winner = gameEndCheckWinner();
                         gc.paint();
-                    }
-
-                    if (deck.cardsLeft() % 10 == 0) {
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
                     }
 
                 }
@@ -231,7 +222,6 @@ public class GameLogicDirector implements Runnable{
 
         newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();
-
     }
 
 }

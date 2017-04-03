@@ -3,7 +3,7 @@ package GameControl.Player;
 import GameControl.Placement;
 import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
-import GameModel.Map.Settlement;
+import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.Tile.TerrainTile;

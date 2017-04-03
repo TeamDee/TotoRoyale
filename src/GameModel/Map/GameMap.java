@@ -1,6 +1,7 @@
 package GameModel.Map;
 
 import GameControl.Placement;
+import GameModel.Map.Contiguous.ContiguousTerrainTypeTiles;
 import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;

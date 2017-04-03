@@ -1,4 +1,4 @@
-package GameModel.Map;
+package GameModel.Map.Contiguous;
 
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainType;

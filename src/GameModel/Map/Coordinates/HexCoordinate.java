@@ -18,8 +18,8 @@ public class HexCoordinate {
     */
     public HexCoordinate(OffsetCoordinate ac){
         this.ac = ac;
-        double x = Constants.TILE_WIDTH * Math.sqrt(3) * (getAxialCoordinate().x + getAxialCoordinate().y/2);
-        double y = Constants.TILE_HEIGHT * 3/2 * getAxialCoordinate().y/2;
+        double x = Constants.TILE_WIDTH * Math.sqrt(3) * (getOffsetCoordinate().x + getOffsetCoordinate().y/2);
+        double y = Constants.TILE_HEIGHT * 3/2 * getOffsetCoordinate().y/2;
         int x1 = (int)x;
         int y1 = (int)y;
         //pc = new PixelCoordinate(x1, y1);
@@ -28,7 +28,7 @@ public class HexCoordinate {
         //cc = new CubicCoordinate();
     }
 
-    public OffsetCoordinate getAxialCoordinate(){
+    public OffsetCoordinate getOffsetCoordinate(){
         return ac;
     }
     public PixelCoordinate getPixelCoordinate(){
