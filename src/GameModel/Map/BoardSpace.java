@@ -1,6 +1,6 @@
 package GameModel.Map;
 
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.HexTile;
 
 import java.util.ArrayList;
@@ -13,11 +13,11 @@ public class BoardSpace {
     private ArrayList<HexTile> tiles;
     private boolean isActive; //Whether you can add hextiles to this boardspace yet
 
-    private AxialCoordinate location;
+    private OffsetCoordinate location;
 
     private BoardSpace north, northeast, southeast, south, southwest, northwest;
 
-    public BoardSpace(AxialCoordinate location, GameMap containingMap){
+    public BoardSpace(OffsetCoordinate location, GameMap containingMap){
         this.hasTile = false;
         isActive = false;
         tiles = new ArrayList<HexTile>();
@@ -119,10 +119,10 @@ public class BoardSpace {
         isActive = true;
     }
 
-    public AxialCoordinate getLocation(){
+    public OffsetCoordinate getLocation(){
         return location;
     }
-    public void setLocation(AxialCoordinate ac){
+    public void setLocation(OffsetCoordinate ac){
         this.location = ac;
     }
 

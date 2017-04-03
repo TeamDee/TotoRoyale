@@ -1,6 +1,6 @@
 package GameModel.Map;
 
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
@@ -83,7 +83,7 @@ public class Settlement{
     }
     public boolean isContiguous(TerrainTile tile) {
         for (TerrainTile contiguousTile : settlement) {
-            if (AxialCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
+            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }
         return false;

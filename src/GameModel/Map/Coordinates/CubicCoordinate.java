@@ -11,12 +11,10 @@ public class CubicCoordinate {
         this.z = z;
     }
 
-    public AxialCoordinate getAxialCoordinate(){
-        int xAxial = x;
-        int yAxial = z;
-        AxialCoordinate ac = new AxialCoordinate(0,0);
-
-
-
+    public OffsetCoordinate getAxialCoordinate(){
+        int qAxial = x;
+        int rAxial = z;
+        OffsetCoordinate ac = new OffsetCoordinate(qAxial,rAxial);
+        return ac;
     }
 }

@@ -1,6 +1,7 @@
 package GameView.Viewports;
 
 import GameControl.Player.Player;
+import GameControl.Player.WhitePlayer;
 import GameEngine.GameController;
 import GameEngine.GameLogicDirector;
 import GameModel.Map.Coordinates.HexCoordinate;
@@ -24,7 +25,7 @@ public class ActiveGameViewport extends Viewport {
     Player currentPlayer;
     Deck deck = GameLogicDirector.getInstance().deck;
 
-    private static ActiveGameViewport activeGameViewport = new ActiveGameViewport(new Player());
+    private static ActiveGameViewport activeGameViewport = new ActiveGameViewport(new WhitePlayer("WhitePlayer", null));
 
     public ActiveGameViewport(Player ownedBy) {
         this.setPreferredSize(ViewFrame.getInstance().getSize());

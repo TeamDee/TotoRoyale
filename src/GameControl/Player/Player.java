@@ -1,7 +1,7 @@
 package GameControl.Player;
 
 import GameControl.Placement;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Settlement;
 import GameModel.Map.Tile.HexTile;
@@ -24,8 +24,8 @@ public class Player {
     private int totoroCount;
     private int meepleCount;
     private int tigerCount;
-    private List<AxialCoordinate> meeplePlacements;
-    private List<AxialCoordinate> totoroPlacements;
+    private List<OffsetCoordinate> meeplePlacements;
+    private List<OffsetCoordinate> totoroPlacements;
     private List<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
 
