@@ -26,7 +26,7 @@ public class Player {
     private int tigerCount;
     private List<OffsetCoordinate> meeplePlacements;
     private List<OffsetCoordinate> totoroPlacements;
-    private List<Settlement> settlements;
+    private ArrayList<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
 
     private GameMap myMap;
@@ -183,6 +183,9 @@ public class Player {
             activeSettlement.addToSettlement(placeTotoroHere);
             activeSettlement.placedTotoro();
             this.awardPoints(200);
+            //System.out.println("Player Settlement Size Before: " + settlements.size());
+            settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(placeTotoroHere,settlements,activeSettlement);
+            //System.out.println("Player Settlement Size After: " + settlements.size());
             return true;
         }
         return false;
@@ -207,6 +210,9 @@ public class Player {
             placeTiger(placeTigerHere);
             activeSettlement.addToSettlement(placeTigerHere);
             activeSettlement.placedTiger();
+            //System.out.println("Player Settlement Size Before: " + settlements.size());
+            settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(placeTigerHere,settlements,activeSettlement);
+            //System.out.println("Player Settlement Size After: " + settlements.size());
             this.awardPoints(75);
             return true;
         }
@@ -274,9 +280,13 @@ public class Player {
     public boolean expandSettlement() {
         Integer tempValue = new Integer(0);
         for(int i = 0; i!= settlements.size();++i){
-            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(i), tempValue);
+            Settlement s = settlements.get(i);
+            ArrayList<TerrainTile> expansion = expandSettlement(s, tempValue);
             if (tempValue >= 50) {
                 executeExpansion(expansion, settlements.get(i));
+                //System.out.println("Player Settlement Size Before: " + settlements.size());
+                settlements = s.combineAdacentSettlementsforMultTiles(expansion,settlements,s);
+                //System.out.println("Player Settlement Size After: " + settlements.size());
                 return true;
             }
         }
@@ -597,5 +607,18 @@ public class Player {
         return returnMe;
     }
 
+    public void nukeSettlements(TerrainTile nukedTile) {
+        Settlement settlementToNuke = getSettlementContaining(nukedTile);
+        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTile);
+        settlements.remove(settlementToNuke);
+        settlements.addAll(newSettlements);
+    }
 
+    public Settlement getSettlementContaining(TerrainTile tt) {
+        for (Settlement s : settlements) {
+            if (s.contains(tt));
+            return s;
+        }
+        return null;
+    }
 }
