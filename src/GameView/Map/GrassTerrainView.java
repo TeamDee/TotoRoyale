@@ -9,10 +9,11 @@ package GameView.Map;
         import javax.imageio.ImageIO;
 
         //import view.tools.ImagePaths;
-
+import GameModel.Map.Tile.Grass;
 public class GrassTerrainView extends TerrainView {
 
-    public GrassTerrainView() {
+    public GrassTerrainView(Grass gt){
+        super(gt);
         try {
             myImage = ImageIO.read(new File(ImagePaths.GRASS_TERRAIN));
         }

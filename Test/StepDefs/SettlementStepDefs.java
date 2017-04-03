@@ -5,9 +5,11 @@ import GameControl.Player.WhitePlayer;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.AxialCoordinate;
 import GameModel.Map.GameMap;
+
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
+
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

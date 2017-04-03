@@ -22,8 +22,16 @@ Feature: BoardSpace
     When I place a  TriHexTile adjacent to an exisiting TriHexTile
     Then the user's placement is legal
 
-#  Scenario: The user is in placement phase and decides to place a tile illegaly
-#    Given  I have a game map initialized
-#    And  TriHexTiles are already placed on the board
-#    When I do not place a  TriHexTile adjacent to an exisiting TriHexTile
-#    Then the user's placement is illegal
+
+
+  Scenario: The user is in placement phase and decides to place a tile illegaly
+    Given  I have a game map initialized
+    And  TriHexTiles are already placed on the board
+    When I do not place a  TriHexTile adjacent to an existing TriHexTile
+    Then the user's placement is illegal
+
+  Scenario: The user nukes hextiles and they level up.
+    Given I have a game running for a while
+    When I nuke some hextiles
+    Then The hextiles being nuked level up
+

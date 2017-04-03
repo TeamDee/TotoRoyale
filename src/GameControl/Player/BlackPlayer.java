@@ -5,4 +5,12 @@ package GameControl.Player;
  */
 public class BlackPlayer extends Player{
 
+    public BlackPlayer(){
+        this("BlackPlayer");
+    }
+
+    public BlackPlayer(String name){
+        super();
+        this.name = name;
+    }
 }

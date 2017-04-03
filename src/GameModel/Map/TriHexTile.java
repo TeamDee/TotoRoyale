@@ -7,8 +7,8 @@ import GameModel.Map.Tile.*;
  */
 
 public class TriHexTile extends Tile {
-    private HexTile tileOne;
-    private HexTile tileTwo;
+    private TerrainTile tileOne;
+    private TerrainTile tileTwo;
     private VolcanoTile tileThree; //generally the volcano
 
     //TODO validate that a, b, and c are properly referencing each other
@@ -18,7 +18,7 @@ public class TriHexTile extends Tile {
         System.out.println("Warning: using incorrect TriHexTile constructor");
     }
 
-    public TriHexTile(HexTile a, HexTile b, VolcanoTile c){
+    public TriHexTile(TerrainTile a, TerrainTile b, VolcanoTile c){
         tileOne = a;
         tileTwo = b;
         tileThree = c;
@@ -42,11 +42,11 @@ public class TriHexTile extends Tile {
         return false;
     }
 
-    public HexTile getTileOne() {
+    public TerrainTile getTileOne() {
         return tileOne; //exposes internals but arguably necessary
     }
 
-    public HexTile getTileTwo() {
+    public TerrainTile getTileTwo() {
         return tileTwo; //exposes internals but arguably necessary
     }
 
@@ -54,15 +54,36 @@ public class TriHexTile extends Tile {
         return tileThree; //exposes internals but arguably necessary
     }
 
-    public void setTileOne(HexTile hexTile) {
+    public TerrainTile getClockwiseNonVolcanoTile() {
+        return tileOne;
+    }
+
+    public TerrainTile getCounterClockwiseNonVolcanoTile() {
+        return tileTwo;
+    }
+
+    public VolcanoTile getVolcanoTile() {
+        return tileThree;
+    }
+    public void setTileOne(TerrainTile hexTile) {
         tileOne = hexTile;
     }
 
-    public void setTileTwo(HexTile hexTile) {
+    public void setTileTwo(TerrainTile hexTile) {
         tileTwo = hexTile;
     }
 
     public void setTileThree(VolcanoTile hexTile) {
         tileThree = hexTile;
+    }
+
+    public boolean isTheSameAs(TriHexTile other){
+        if(this.tileOne.ofSameType(other.getTileOne())){
+            if(this.tileTwo.ofSameType(other.getTileTwo())){
+                if(this.tileThree.ofSameType(other.getTileThree()))
+                    return true;
+            }
+        }
+        return false;
     }
 }

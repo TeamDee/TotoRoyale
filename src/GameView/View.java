@@ -15,7 +15,10 @@ public class View extends JPanel {
     public static View view = new View();
     private ViewportOrder viewportOrder = ViewportOrder.getInstance();
 
-    public View() {}
+    public View() {
+        this.setOpaque(false);
+        this.setBackground(new Color(0,0,0,0));
+    }
 
     public void render() {}
 

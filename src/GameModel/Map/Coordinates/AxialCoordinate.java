@@ -50,8 +50,23 @@ public class AxialCoordinate {
         return new AxialCoordinate(x-1,y-1);
     }
 
+
+
     public static boolean areAdjacent(AxialCoordinate ac1, AxialCoordinate ac2) {
-        return Math.abs(ac1.x - ac2.x + ac1.y - ac2.y) == 2;
+        if(ac1.getNorth().equals(ac2))
+            return true;
+        if(ac1.getNorthEast().equals(ac2))
+            return true;
+        if(ac1.getNorthWest().equals(ac2))
+            return true;
+        if(ac1.getSouth().equals(ac2))
+            return true;
+        if(ac1.getSouthEast().equals( ac2))
+            return true;
+        if(ac1.getSouthWest().equals(ac2))
+            return true;
+        return false;
+        //return Math.abs(ac1.x - ac2.x + ac1.y - ac2.y) == 2;
     }
 
     @Override

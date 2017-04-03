@@ -40,21 +40,6 @@ public abstract class HexTile extends Tile {
         triHexTile = compositor;
     }
 
-//    public boolean placeMeeples(Player owner) {
-//        if (isOccupied()) {
-//            return false;
-//        }
-//        else {
-//            this.owner = owner;
-//            meepleCount = level + 1;
-//            return true;
-//        }
-//    }
-
-
-
-
-
     public TerrainType terrainType(){
         return myType;
     }
@@ -96,7 +81,7 @@ public abstract class HexTile extends Tile {
     }
 
     public boolean isOccupied() {
-        return meepleCount == 0 && !hasTotoro && !hasTiger;
+        return getMeepleCount()>0 || hasTotoro || hasTiger;
     }
 
     public int getMeepleCount(){

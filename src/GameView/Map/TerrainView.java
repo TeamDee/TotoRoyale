@@ -8,6 +8,9 @@ import GameView.Tileables.MeepleView;
  * Created by jowens on 3/8/17.
  */
 public abstract class TerrainView extends HexTileView {
+    public TerrainView(TerrainTile tt){
+        super(tt);
+    }
 
     public void visit(TerrainTile tt){
         if(tt.getMeepleCount()>0){

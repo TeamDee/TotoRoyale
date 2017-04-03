@@ -5,6 +5,7 @@ import GameControl.Player.WhitePlayer;
 import GameModel.Map.TriHexTile;
 import GameView.Map.TerrainView;
 import GameView.Tileables.MeepleView;
+import GameView.Tileables.TotoroView;
 
 import java.awt.image.BufferedImage;
 
@@ -20,14 +21,13 @@ public abstract class TerrainTile extends HexTile {
     protected TerrainTile me;
 
     public TerrainTile(TriHexTile compositor){
+
         this.triHexTile = compositor;
     }
     public TerrainTile(){
 
         //System.out.println("warning: building a terrainTile without supplying a compositor");
     }
-
-
 
     public boolean placeMeeple(Player p){
         if(getMeepleCount() != 0) //terrain already has meeples
@@ -54,6 +54,7 @@ public abstract class TerrainTile extends HexTile {
         else {
             this.owner = owner;
             hasTotoro = true;
+            myView.addToList(new TotoroView(owner));
             return true;
         }
     }

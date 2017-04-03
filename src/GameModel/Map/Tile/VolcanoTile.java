@@ -10,7 +10,7 @@ import GameView.Map.VolcanoView;
 public class VolcanoTile extends HexTile {
     public VolcanoTile(){
         myType = TerrainType.VOLCANO;
-        myView = new VolcanoView();
+        myView = new VolcanoView(this);
 
     }
 

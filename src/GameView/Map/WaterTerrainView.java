@@ -7,11 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import GameModel.Map.Tile.Lake;
 /**
  * Created by jowens on 3/23/17.
  */
 public class WaterTerrainView extends TerrainView{
-    public WaterTerrainView() {
+    public WaterTerrainView(Lake waterTerrain) {
+        super(waterTerrain);
         try {
             myImage = ImageIO.read(new File(ImagePaths.WATER_TERRAIN));
         }

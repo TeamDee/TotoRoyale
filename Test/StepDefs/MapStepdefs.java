@@ -30,6 +30,8 @@ public class MapStepdefs {
     @When("^I go to place TriHexTile$")
     public void I_go_to_place_triHexTile(){
         map.getAllLegalPlacements(tht);
+        map.implementPlacement(map.getAllLegalPlacements(tht).get(0));
+
     }
 
     @Then("^the gameMap should have (\\d+) hextiles$")

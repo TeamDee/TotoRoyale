@@ -26,10 +26,7 @@ public class BoardSpace {
     }
 
     public int getLevel(){
-        if(hasTile)
-            return tiles.size() - 1;
-        else
-            return 0;
+            return tiles.size();
     }
 
     public HexTile topTile(){
@@ -49,10 +46,12 @@ public class BoardSpace {
 
     //adding a tile to a board space activates it and all adjacent tiles
     public void addTile(HexTile ht){
+
         if(!hasTile){
             tiles = new ArrayList<HexTile>();
             hasTile = true;
         }
+
         tiles.add(ht);
         ht.setMyBoardSpace(this);
         ht.setLevel(tiles.size());
@@ -197,5 +196,26 @@ public class BoardSpace {
     }
     public void setSouthWest(BoardSpace bs){
         southwest = bs;
+    }
+
+    public boolean hasEmptyAdjacentLevel3(){
+        ArrayList<BoardSpace> neighbors = new ArrayList<BoardSpace>();
+        neighbors.add(getNorth());
+        neighbors.add(getNorthEast());
+        neighbors.add(getNorthWest());
+        neighbors.add(getSouth());
+        neighbors.add(getSouthEast());
+        neighbors.add(getSouthWest());
+
+        for(BoardSpace b: neighbors){
+            if(b.getLevel() >=3 && !b.topTile().isOccupied()){ //if it is level 3 and is not occupied
+             return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeTopTile(){
+        tiles.remove(tiles.size() - 1);
     }
 }

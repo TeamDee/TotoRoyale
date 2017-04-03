@@ -4,7 +4,7 @@ package GameView;
  */
 public class ImagePaths {
     //initial directory
-    public static final String IMG_DIR = "/Users/jowens/IdeaProjects/TotoRoyale/src/res/images/";
+    public static final String IMG_DIR = "src/res/images/";
 
     //terrain sprites
     public static final String GRASS_TERRAIN = IMG_DIR + "grass.png";
@@ -16,6 +16,11 @@ public class ImagePaths {
     //Meeple sprites
     public static final String MEEPLE_WHITE = IMG_DIR + "Meeple_white.png";
     public static final String MEEPLE_BLACK = IMG_DIR + "Meeple_Black.png";
+
+    //totoro
+    public static final String TOTORO_WHITE = IMG_DIR + "totoro.png";
+    public static final String TOTORO_BLACK = IMG_DIR + "totoro_black.png";
+
 
     //random
     public static final String MAGIC_CAT = IMG_DIR + "magicCat.png";
