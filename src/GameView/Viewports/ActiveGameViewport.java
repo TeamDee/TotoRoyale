@@ -25,7 +25,7 @@ public class ActiveGameViewport extends Viewport {
     Player currentPlayer;
     Deck deck = GameLogicDirector.getInstance().deck;
 
-    private static ActiveGameViewport activeGameViewport = new ActiveGameViewport(new WhitePlayer("WhitePlayer", null));
+    private static ActiveGameViewport activeGameViewport;// = new ActiveGameViewport(new WhitePlayer("WhitePlayer", null));
 
     public ActiveGameViewport(Player ownedBy) {
         this.setPreferredSize(ViewFrame.getInstance().getSize());
@@ -90,6 +90,8 @@ public class ActiveGameViewport extends Viewport {
     public void drawInfo(Graphics g){
         g.setColor(Color.WHITE);
         g.drawString(currentPlayer.toString(), 10,10);
+        g.setColor(Color.RED);
+        g.drawString(currentPlayer.enemyPlayer.toString(),10,30);
     }
 
     public void drawMap(Graphics g, List<HexTile> tiles) {

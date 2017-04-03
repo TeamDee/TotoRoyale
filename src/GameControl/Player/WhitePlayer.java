@@ -11,8 +11,8 @@ public class WhitePlayer extends Player {
 //        this("WhitePlayer", null);
 //    }
 
-    public WhitePlayer(String name, GameMap gameMap){
-        super(gameMap);
+    public WhitePlayer(String name, GameMap gameMap, Player enemy){
+        super(gameMap, enemy);
         this.name = name;
     }
 

@@ -248,8 +248,9 @@ public class GameLogicDirector implements Runnable{
     }
 
     private void initializeNewGame() {
-        p1 = new WhitePlayer("Whitey", myMap);
-        p2 = new BlackPlayer("Blacky", myMap);
+        p1 = new WhitePlayer("Whitey", myMap,null);
+        p2 = new BlackPlayer("Blacky", myMap,p1);
+        p1.enemyPlayer = p2;
 
         players = new ArrayList<Player>();
         players.add(p1);

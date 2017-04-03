@@ -29,6 +29,8 @@ public class Player {
     private ArrayList<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
 
+    public Player enemyPlayer;
+
     private GameMap myMap;
     //private TerrainTile Tplacement;
 
@@ -38,7 +40,7 @@ public class Player {
 
     //random
     Random random = new Random();
-    public Player(GameMap thisPlayersMap){
+    public Player(GameMap thisPlayersMap, Player enemy){
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
         tigerCount = Constants.TIGER_PER_PLAYER;
@@ -222,10 +224,9 @@ public class Player {
     private void expandSettlementToMaximizeMeepleUsage(){
         Integer tempValue = new Integer(0);
         for(int i = 0; i!= settlements.size();++i){
-            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(i), tempValue);
-            if (tempValue >= 50) {
-                executeExpansion(expansion, settlements.get(i));
-            }
+            ArrayList<TerrainTile> expansion = expandSettlementToMaximizeMeeplePlacement(settlements.get(i), tempValue);
+            executeExpansion(expansion, settlements.get(i));
+
         }
     }
     public ArrayList<TerrainTile> expandSettlementToMaximizeMeeplePlacement(Settlement settlement1, Integer value) {
@@ -366,7 +367,11 @@ public class Player {
     }
 
     private void getRidOfMeeples(){
-        this.expandSettlementToMaximizeMeepleUsage();
+        if(meepleCount == 1){
+            buildSettlement(this.myMap);
+        }
+        else
+            this.expandSettlementToMaximizeMeepleUsage();
     }
 
     private void buildPhase(GameMap gameMap){

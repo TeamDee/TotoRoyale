@@ -7,12 +7,12 @@ import GameModel.Map.GameMap;
  */
 public class BlackPlayer extends Player{
 
-    public BlackPlayer(){
-        this("BlackPlayer", null);
-    }
+//    public BlackPlayer(){
+//        this("BlackPlayer", null, null);
+//    }
 
-    public BlackPlayer(String name, GameMap gameMap){
-        super(gameMap);
+    public BlackPlayer(String name, GameMap gameMap, Player enemy){
+        super(gameMap, enemy);
         this.name = name;
     }
 }
