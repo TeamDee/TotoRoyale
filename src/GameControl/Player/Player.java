@@ -226,8 +226,9 @@ public class Player {
         //if we settle... currently the only option
         ArrayList<TerrainTile> legalSettlements = getLegalNewSettlements(gameMap);
         TerrainTile bestPlaceToSettle = getBestNewSettlement(legalSettlements);
+        if(bestPlaceToSettle == null)
+            return false;
         buildSettlement(bestPlaceToSettle);
-        VolcanoTile vt = new VolcanoTile();
 
         return true; //todo should there be a false?
     }
@@ -290,7 +291,7 @@ public class Player {
 
 
     /*
-        Calls settlement and contiguousUnoccupoedTerrainTyesTiles but DOES NOT places meeples on legal tiles of same terrain
+        Calls settlement and contiguous UnoccuppiedTerrainTyesTiles but DOES NOT places meeples on legal tiles of same terrain
         TODO this is currently dumb AI
      */
     public ArrayList<TerrainTile> expandSettlement(Settlement settlement1) {

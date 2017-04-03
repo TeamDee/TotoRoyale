@@ -30,6 +30,9 @@ public class TotoroView implements TileableView{
                 totoro = ImageIO.read(new File(ImagePaths.TOTORO_WHITE));
             else
                 totoro = ImageIO.read(new File(ImagePaths.TOTORO_BLACK));
+            Graphics graphics = myImage.getGraphics();
+            graphics.drawImage(totoro, width/4, height/4,
+                    Constants.TILE_WIDTH/2, Constants.TILE_HEIGHT/2, null);
             System.out.println("Totoro File CREATED");
         }
         catch (IOException e) {

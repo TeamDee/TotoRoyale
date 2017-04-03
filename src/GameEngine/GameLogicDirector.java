@@ -80,33 +80,9 @@ public class GameLogicDirector implements Runnable{
                     } else if (AIvsHuman) {
                         AIvsHumanGameTurn();
                     }
-                    gc.paint();
+                    endRoundChecks();
 
                 } else { //game over
-                    System.out.println();
-                    System.out.println(myMap);
-                    for (Player p : players) {
-                        System.out.println("Round " + (48 - deck.cardsLeft()));
-                        System.out.println("cards left" + deck.cardsLeft());
-                        System.out.println(p.toString() + " Score: " + p.getScore());
-                        p.takeTurn(myMap, deck.draw());
-
-                        //check if the player has only one type of tokens left. If yes, end the game.
-                        if (p.checkOnlyOneTypeTokenIsLeft()) {
-                            winner = p;
-                            break;
-                        } else if (deck.cardsLeft() == 0) {
-                            break;
-                        }
-
-                        System.out.println("\n");
-                        gc.paint();
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
-                    }
                     //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
                     if (deck.cardsLeft() == 0) {
                         winner = gameEndCheckWinner();
@@ -143,6 +119,21 @@ public class GameLogicDirector implements Runnable{
             winner = null; //score ties
         return winner;
     }
+    private void paint(){
+        gc.paint();
+    }
+
+    private void endRoundChecks(){
+        for (Player p : players) {
+            //check if the player has only one type of tokens left. If yes, end the game.
+            if (p.checkOnlyOneTypeTokenIsLeft()) {
+                winner = p;
+                break;
+            } else if (deck.cardsLeft() == 0) {
+                break;
+            }
+        }
+    }
 
     private void AIvsHumanGameTurn(){}
 
@@ -155,6 +146,12 @@ public class GameLogicDirector implements Runnable{
         for(Player p: players){
             AItakeTurn();
             nextPlayer();
+            paint();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
+            }
         }
     }
 
@@ -164,7 +161,7 @@ public class GameLogicDirector implements Runnable{
         System.out.println("\n");
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(250);
         } catch (InterruptedException ie) {
             System.out.println(ie.getStackTrace());
         }
