@@ -520,5 +520,18 @@ public class Player {
         return this.name;
     }
 
+    public void nukeSettlements(TerrainTile nukedTile) {
+        Settlement settlementToNuke = getSettlementContaining(nukedTile);
+        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTile);
+        settlements.remove(settlementToNuke);
+        settlements.addAll(newSettlements);
+    }
 
+    public Settlement getSettlementContaining(TerrainTile tt) {
+        for (Settlement s : settlements) {
+            if (s.contains(tt));
+            return s;
+        }
+        return null;
+    }
 }

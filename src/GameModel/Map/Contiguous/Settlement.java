@@ -2,11 +2,13 @@ package GameModel.Map.Contiguous;
 
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.OffsetCoordinate;
+import GameModel.Map.Direction;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import static GameModel.Map.Tile.TerrainType.VOLCANO;
 
@@ -181,5 +183,49 @@ public class Settlement{
     public int getSettlementSize()
     {
         return settlement.size();
+    }
+
+    public ArrayList<Settlement> getSplitSettlementsAfterNuke(TerrainTile nukedTile) {
+        ArrayList<TerrainTile> ungroupedTiles = (ArrayList<TerrainTile>) settlement.clone();
+        ungroupedTiles.remove(nukedTile);
+        ArrayList<Settlement> splitSettlements = new ArrayList<Settlement>();
+
+        while(!ungroupedTiles.isEmpty()) {
+            splitSettlements.add(getNextSplitSettlement(ungroupedTiles));
+        }
+        return splitSettlements;
+    }
+
+    public Settlement getNextSplitSettlement(ArrayList<TerrainTile> ungroupedTiles) {
+        ArrayList<TerrainTile> splitSettlementTiles = new ArrayList<TerrainTile>();
+        Stack<TerrainTile> tilesToVisit = new Stack<TerrainTile>();
+        tilesToVisit.push(ungroupedTiles.remove(0));
+        TerrainTile currentTile;
+        while(!tilesToVisit.isEmpty()) {
+            currentTile = tilesToVisit.pop();
+            splitSettlementTiles.add(currentTile);
+            for(Direction d : Direction.values()) {
+                if (currentTile.hasNeighborInDirection(d)) {
+                    HexTile adjacentHexTile = currentTile.getNeighborInDirection(d);
+                    if (adjacentHexTile instanceof TerrainTile) {
+                        TerrainTile adjacentTerrainTile = (TerrainTile) adjacentHexTile;
+                        if (ungroupedTiles.contains(adjacentTerrainTile)) {
+                            ungroupedTiles.remove(adjacentTerrainTile);
+                            tilesToVisit.push(adjacentTerrainTile);
+                        }
+                    }
+                }
+            }
+        }
+
+        Settlement splitSettlement = new Settlement();
+        for (TerrainTile tt : splitSettlementTiles) {
+            splitSettlement.addToSettlement(tt);
+        }
+        return splitSettlement;
+    }
+
+    public boolean contains(TerrainTile tt) {
+        return settlement.contains(tt);
     }
 }
