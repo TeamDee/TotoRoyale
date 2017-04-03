@@ -5,6 +5,7 @@ import GameControl.Player.WhitePlayer;
 import GameModel.Map.TriHexTile;
 import GameView.Map.TerrainView;
 import GameView.Tileables.MeepleView;
+import GameView.Tileables.TigerView;
 import GameView.Tileables.TotoroView;
 
 import java.awt.image.BufferedImage;
@@ -55,6 +56,7 @@ public abstract class TerrainTile extends HexTile {
             this.owner = owner;
             hasTotoro = true;
             myView.addToList(new TotoroView(owner));
+            System.out.println("\n\n\n\n\n\n\n\n\nA TOTORO HAS BEEN SUCCESSFULLY PLACE\n\n\n\n\n\n\n\n");
             return true;
         }
     }
@@ -66,6 +68,7 @@ public abstract class TerrainTile extends HexTile {
         else {
             this.owner = owner;
             hasTiger = true;
+            myView.addToList(new TigerView(owner));
             return true;
         }
     }

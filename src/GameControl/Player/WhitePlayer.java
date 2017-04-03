@@ -19,4 +19,5 @@ public class WhitePlayer extends Player {
     public boolean isWhite(){
         return true;
     }
+
 }

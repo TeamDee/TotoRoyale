@@ -33,7 +33,7 @@ public class Player {
     //private TerrainTile Tplacement;
 
     //scoring
-    private int score, expansionWorth;
+    private int score;//, expansionWorth;
     public boolean placeTileCheck = false; //added for testing
 
     //random
@@ -43,7 +43,6 @@ public class Player {
         meepleCount = Constants.MEEPLES_PER_PLAYER;
         tigerCount = Constants.TIGER_PER_PLAYER;
         score = 0;
-        expansionWorth = 0;
         settlements = new ArrayList<Settlement>();
         myMap = thisPlayersMap;
     }
@@ -66,7 +65,8 @@ public class Player {
 
     private boolean legalExpansionVisible(){
         int whichsettle = random.nextInt(settlements.size());
-        ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
+        Integer expansionWorth = new Integer(0);
+        ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle), expansionWorth);
         if (expansionWorth >= 50) {
             for (TerrainTile add : expansion) {
                 placeMeeples(add);
@@ -212,14 +212,72 @@ public class Player {
     }
 
     public boolean expandSettlement() {
-        int whichsettle = random.nextInt(settlements.size());
-        ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle));
-        if (expansionWorth >= 50) {
-            executeExpansion(expansion, settlements.get(whichsettle));
-            return true;
+        Integer tempValue = new Integer(0);
+        for(int i = 0; i!= settlements.size();++i){
+            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(i), tempValue);
+            if (tempValue >= 50) {
+                executeExpansion(expansion, settlements.get(i));
+                return true;
+            }
         }
         return false;
     }
+
+    public ArrayList<TerrainTile> expandSettlement(Settlement settlement1, Integer value) {
+        value = 0;
+        int excheck = 0;
+        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
+        ArrayList<TerrainTile> expansion1 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.GRASS);
+        ArrayList<TerrainTile> expansion2 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.JUNGLE);
+        ArrayList<TerrainTile> expansion3 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.LAKE);
+        ArrayList<TerrainTile> expansion4 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.ROCK);
+        //System.out.println("Expand test: " + expansion1.size() + " " + expansion2.size() + " " + expansion3.size() + " " + expansion4.size());
+        allexpand.add(expansion1);
+        allexpand.add(expansion2);
+        allexpand.add(expansion3);
+        allexpand.add(expansion4);
+        for(int i = 0; i < allexpand.size(); i ++)
+        {
+            int tmpValue = settlement1.getSettlementSize()*10; //ten points per tile
+
+
+            for(TerrainTile checkpoint: allexpand.get(i))
+            {
+                //temporarily place meeples TODO
+            }
+            for(TerrainTile checkpoint: allexpand.get(i))
+            {
+
+                //todo maybe use a neural net here -- ignore this one if you're not Jason
+                //TODO FIX THIS TO USE TEMP MEEPLES
+                tmpValue += 10;
+                tmpValue += checkpoint.getLevel()^2; //todo how much do we value high levels
+                if(checkpoint.getBoardSpace().hasEmptyAdjacentLevel3()) {
+                    tmpValue += 20; //todo make this number more accurately reflect the value of an adjacent level 3 when expanding
+                }
+
+            }
+            if(allexpand.get(i).size() + settlement1.getSettlementSize() >= 5){
+                tmpValue += 50;
+            }
+            if(allexpand.get(i).size() >= 2){
+                tmpValue += 50;
+            }
+
+            for(TerrainTile checkpoint: allexpand.get(i)) {
+                //remove all temporary meeples TODO
+            }
+            if(tmpValue > value)
+            {
+                value = tmpValue;
+                excheck = i;
+            }
+            tmpValue = 0;
+        }
+        ArrayList<TerrainTile> expansion = allexpand.get(excheck);
+        return  expansion;
+    }
+
 
     public boolean buildSettlement(GameMap gameMap){
         //choose the best available settlement
@@ -294,54 +352,6 @@ public class Player {
         Calls settlement and contiguous UnoccuppiedTerrainTyesTiles but DOES NOT places meeples on legal tiles of same terrain
         TODO this is currently dumb AI
      */
-    public ArrayList<TerrainTile> expandSettlement(Settlement settlement1) {
-        expansionWorth = 0;
-        int excheck = 0;
-        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
-        ArrayList<TerrainTile> expansion1 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.GRASS);
-        ArrayList<TerrainTile> expansion2 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.JUNGLE);
-        ArrayList<TerrainTile> expansion3 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.LAKE);
-        ArrayList<TerrainTile> expansion4 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.ROCK);
-        //System.out.println("Expand test: " + expansion1.size() + " " + expansion2.size() + " " + expansion3.size() + " " + expansion4.size());
-        allexpand.add(expansion1);
-        allexpand.add(expansion2);
-        allexpand.add(expansion3);
-        allexpand.add(expansion4);
-        for(int i = 0; i < allexpand.size(); i ++)
-        {
-            int expansionWorth = settlement1.getSettlementSize()*10; //ten points per tile
-
-
-            for(TerrainTile checkpoint: allexpand.get(i))
-            {
-                //temporarily place meeples TODO
-            }
-            for(TerrainTile checkpoint: allexpand.get(i))
-            {
-
-                //todo maybe use a neural net here -- ignore this one if you're not Jason
-                //TODO FIX THIS TO USE TEMP MEEPLES
-                expansionWorth += 10;
-                expansionWorth += checkpoint.getLevel()^2; //todo how much do we value high levels
-                if(checkpoint.getBoardSpace().hasEmptyAdjacentLevel3()) {
-                    expansionWorth += 20; //todo make this number more accurately reflect the value of an adjacent level 3 when expanding
-
-                }
-            }
-            for(TerrainTile checkpoint: allexpand.get(i)) {
-                //remove all temporary meeples TODO
-            }
-
-
-            if(expansionWorth > this.expansionWorth)
-            {
-                this.expansionWorth = expansionWorth;
-                excheck = i;
-            }
-        }
-        ArrayList<TerrainTile> expansion = allexpand.get(excheck);
-        return  expansion;
-    }
 
     public void placeTotoro(TerrainTile tt) {
         tt.placeTotoro(this);
@@ -505,7 +515,10 @@ public class Player {
         return false;
     }
 
+    @Override
     public String toString(){
         return this.name;
     }
+
+
 }

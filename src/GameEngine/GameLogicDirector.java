@@ -140,6 +140,7 @@ public class GameLogicDirector implements Runnable{
 
     public void AIvsAIGameTurn(){
 
+        System.out.println("Player " + currentPlayer);
         System.out.println("Round " + (48 - deck.cardsLeft()));
         System.out.println("Score " + currentPlayer.getScore());
 

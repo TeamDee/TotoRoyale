@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class BoardSpace {
     private boolean hasTile = false;
     private ArrayList<HexTile> tiles;
-    private boolean isActive; //Whether you can add hextiles to this boardspace yet
+    private boolean isActive = false; //Whether you can add hextiles to this boardspace yet
 
     private OffsetCoordinate location;
 

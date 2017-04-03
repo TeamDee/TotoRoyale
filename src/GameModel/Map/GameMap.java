@@ -471,7 +471,6 @@ public class GameMap {
      */
     public void implementPlacement(Placement p) {
         p.place();
-        //System.out.println(p.isLegalPlacement(p));
         for (BoardSpace b : p.getBoardSpaces()) {
             addRadialBoardSpaces(2, b);
             this.activateAdjacentBoardSpaces(b);
