@@ -21,7 +21,7 @@ public class BoardSpaceTest {
 
     @Test
     public void createABoardSpaceTest(){
-        BoardSpace boardSpace = new BoardSpace(location);
+        BoardSpace boardSpace = new BoardSpace(location,map);
         Assert.assertFalse(boardSpace.hasTile());
         Assert.assertTrue(boardSpace.getLocation().compare(location));
     }
@@ -29,7 +29,7 @@ public class BoardSpaceTest {
     @Test
     public void activateAdjacentBoardSpaceTest(){
         TriHexTile tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
-        map.placeFirstTile(tht);
+        map.getAllLegalPlacements(tht);
         BoardSpace center = map.getVisibleAtAxialCoordinate(new AxialCoordinate(0,0)).getBoardSpace();
         Assert.assertTrue(center.getNorth().isActive());
         Assert.assertTrue(center.getNorthEast().isActive());

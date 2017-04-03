@@ -81,7 +81,7 @@ public class Placement {
     
     // Added it here to test the legal check , same as code in GameMap: 417
     public boolean isLegalPlacement(Placement p) {
-        if(p.isLevelPlacement() && p.isOverlapping() && !p.volcanoMatch())
+        if(p.isLevelPlacement() && !p.isOverlapping() && p.volcanoMatch())
             return true;
         else
             return false;

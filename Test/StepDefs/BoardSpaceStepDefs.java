@@ -59,34 +59,34 @@ public class BoardSpaceStepDefs {
     }
 
 
-
-    @Given("^I have a game map initialized$")
-    public void init_the_gamemap() throws Throwable{
-        map = new GameMap();
-    }
-
-    @And("^TriHexTiles are already placed on the board$")
-    public void there_are_Exsisting_triHexTile(){
-        tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
-
-
-    }
-
-    @When("^I do not place a TriHexTile adjacent to an exisiting TriHexTile$")
-    public void illegaly_place_Tile() {
-        player = new Player();
-        placement = map.getAllLegalPlacements(tht);
-
-
-    }
-
-    @Then("^the user's placement is illegal$")
-    public void cannot_update_BoardSpace() {
-        Assert.assertFalse(player.placementCheck() );
-
-
-    }
-
+//
+//    @Given("^I have a game map initialized$")
+//    public void init_the_gamemap() throws Throwable{
+//        map = new GameMap();
+//    }
+//
+//    @And("^TriHexTiles are already placed on the board$")
+//    public void there_are_Exsisting_triHexTile(){
+//        tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
+//
+//
+//    }
+//
+//    @When("^I do not place a TriHexTile adjacent to an exisiting TriHexTile$")
+//    public void illegaly_place_Tile() {
+//        player = new Player();
+//        placement = map.getAllLegalPlacements(tht);
+//
+//
+//    }
+//
+//    @Then("^the user's placement is illegal$")
+//    public void cannot_update_BoardSpace() {
+//        Assert.assertFalse(player.placementCheck() );
+//
+//
+//    }
+//
 
 }
 

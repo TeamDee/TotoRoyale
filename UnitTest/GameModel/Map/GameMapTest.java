@@ -30,7 +30,7 @@ public class GameMapTest {
         map.addAdjacentBoardSpaces(location);
 
         TriHexTile tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
-        map.placeFirstTile(tht);
+        map.getAllLegalPlacements(tht);
 
         Assert.assertFalse(map.getNumberOfBoardSpaces()==numberOfBoardSpacesBefore);
     }
