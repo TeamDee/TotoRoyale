@@ -189,6 +189,8 @@ public class Player {
     }
 
     private boolean addTiger() {
+        if(this.getTigerCount() < 1)
+            return false;
         ArrayList<Settlement> TigerLegal = new ArrayList<Settlement>();
         for(Settlement s: settlements)
         {
@@ -210,6 +212,64 @@ public class Player {
         }
         return false;
     }
+
+    private void expandSettlementToMaximizeMeepleUsage(){
+        Integer tempValue = new Integer(0);
+        for(int i = 0; i!= settlements.size();++i){
+            ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(i), tempValue);
+            if (tempValue >= 50) {
+                executeExpansion(expansion, settlements.get(i));
+            }
+        }
+    }
+    public ArrayList<TerrainTile> expandSettlementToMaximizeMeeplePlacement(Settlement settlement1, Integer value) {
+        value = 0;
+        int excheck = 0;
+        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
+        ArrayList<TerrainTile> expansion1 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.GRASS);
+        ArrayList<TerrainTile> expansion2 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.JUNGLE);
+        ArrayList<TerrainTile> expansion3 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.LAKE);
+        ArrayList<TerrainTile> expansion4 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.ROCK);
+        //System.out.println("Expand test: " + expansion1.size() + " " + expansion2.size() + " " + expansion3.size() + " " + expansion4.size());
+        allexpand.add(expansion1);
+        allexpand.add(expansion2);
+        allexpand.add(expansion3);
+        allexpand.add(expansion4);
+        for(int i = 0; i < allexpand.size(); i ++)
+        {
+            int tmpValue = 0; //ten points per tile
+
+
+            for(TerrainTile checkpoint: allexpand.get(i))
+            {
+                //temporarily place meeples TODO
+            }
+            for(TerrainTile checkpoint: allexpand.get(i))
+            {
+                //todo maybe use a neural net here -- ignore this one if you're not Jason
+                //TODO FIX THIS TO USE TEMP MEEPLES
+                tmpValue += checkpoint.getLevel(); //todo how much do we value high levels
+            }
+
+            for(TerrainTile checkpoint: allexpand.get(i)) {
+                //remove all temporary meeples TODO
+            }
+            if(tmpValue == this.getMeepleCount()){
+                ArrayList<TerrainTile> expansion = allexpand.get(excheck);
+                return  expansion;
+            }
+            if(tmpValue > value)
+            {
+                value = tmpValue;
+                excheck = i;
+            }
+            tmpValue = 0;
+        }
+        ArrayList<TerrainTile> expansion = allexpand.get(excheck);
+        return  expansion;
+    }
+
+
 
     public boolean expandSettlement() {
         Integer tempValue = new Integer(0);
@@ -291,12 +351,21 @@ public class Player {
         return true; //todo should there be a false?
     }
 
+    private boolean outOfTotoroOrTigers(){
+        return (totoroCount == 0 || tigerCount == 0);
+    }
 
-    //TODO add AI logic
-    public void takeTurn(GameMap gameMap, TriHexTile tile){
-        placementPhase(gameMap, tile);
+    private void getRidOfMeeples(){
+        this.expandSettlementToMaximizeMeepleUsage();
+    }
 
+    private void buildPhase(GameMap gameMap){
         ArrayList<HexTile> tiles = gameMap.getVisible();
+
+        if(outOfTotoroOrTigers()){
+            getRidOfMeeples();
+            return;
+        }
 
         if(settlements.size() > 0) { //if current player has at least one settlement already
             if (addTotoro()) {
@@ -312,6 +381,12 @@ public class Player {
         else {
             buildSettlement(gameMap);
         }
+    }
+
+    //TODO add AI logic
+    public void takeTurn(GameMap gameMap, TriHexTile tile){
+        placementPhase(gameMap, tile);
+        buildPhase(gameMap);
     }
 
     //TODO this
@@ -517,7 +592,9 @@ public class Player {
 
     @Override
     public String toString(){
-        return this.name;
+        String returnMe = "";
+        returnMe += name +"\n\tscore: " + this.getScore() +"\n\tMeepleCount: " + this.getMeepleCount() +"\n\tTotoroCount: " + this.getTotoroCount() + "\n\tTigerCount: " + this.getTigerCount();
+        return returnMe;
     }
 
 

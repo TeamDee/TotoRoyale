@@ -74,6 +74,7 @@ public class ActiveGameViewport extends Viewport {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
         List<HexTile> tiles = GameLogicDirector.getInstance().getMap().getVisible();
 
         if(tiles!=null)
@@ -81,14 +82,21 @@ public class ActiveGameViewport extends Viewport {
                 drawMap(g, tiles);
                 System.out.println("drawMap called");
             }
+
+        drawInfo(g);
     }
     // ----------------
+
+    public void drawInfo(Graphics g){
+        g.setColor(Color.WHITE);
+        g.drawString(currentPlayer.toString(), 10,10);
+    }
 
     public void drawMap(Graphics g, List<HexTile> tiles) {
         g.clearRect(0,0,10000,10000);
         Random r = new Random();
-        Color c = new Color(255, 58,0,255);
-        g.setColor(c);
+        //Color c = new Color(Color.black);
+        g.setColor(Color.black);
         g.fillRect(0,0,10000,10000);
 
         HexTile start = tiles.get(0);

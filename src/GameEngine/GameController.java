@@ -13,6 +13,7 @@ public class GameController {
 
     private Stack<Controller> stack;
     private Viewport activeViewport;
+    private Viewport inactiveViewport;
     private Controller activeController;
     private JFrame frame;
 
@@ -49,6 +50,7 @@ public class GameController {
 
     public void paint(){
         activeViewport.paint(activeViewport.getGraphics());
+
         //this.activeController.getViewport().paint(this.activeController.getViewport().getGraphics());
     }
 

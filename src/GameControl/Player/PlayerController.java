@@ -100,9 +100,10 @@ public class PlayerController extends Controller{
 
     }
 
-    public void paint(){
-        viewport.paint(viewport.getGraphics());
-    }
+//    @Override
+//    public void paint(){
+//        viewport.paint(viewport.getGraphics());
+//    }
     public Viewport getViewport(){
         return viewport;
     }
