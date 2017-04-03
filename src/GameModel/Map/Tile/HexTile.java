@@ -5,6 +5,7 @@ import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.*;
+import GameModel.Map.Direction;
 import GameModel.Map.TriHexTile;
 import GameView.Map.HexTileView;
 import GameView.Map.TileView;
@@ -180,4 +181,28 @@ public abstract class HexTile extends Tile {
         return new OffsetCoordinate(0,0);
     }
     public abstract TileView getTileView();
+
+    public boolean hasNeighborInDirection(Direction d) {
+        switch (d) {
+            case NORTH      : return getNorth() != null;
+            case NORTHEAST  : return getNorthWest() != null;
+            case SOUTHEAST  : return getSouthEast() != null;
+            case SOUTH      : return getSouth() != null;
+            case SOUTHWEST  : return getSouthWest() != null;
+            case NORTHWEST  : return getNorthWest() != null;
+            default         : return false;
+        }
+    }
+
+    public HexTile getNeighborInDirection(Direction d) {
+        switch (d) {
+            case NORTH      : return getNorth();
+            case NORTHEAST  : return getNorthWest();
+            case SOUTHEAST  : return getSouthEast();
+            case SOUTH      : return getSouth();
+            case SOUTHWEST  : return getSouthWest();
+            case NORTHWEST  : return getNorthWest();
+            default         : return null;
+        }
+    }
 }
