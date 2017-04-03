@@ -117,6 +117,103 @@ public class Settlement{
             }
         }
     }
+    public ArrayList<Settlement> combineAdacentSettlementsforMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
+    {
+        ArrayList<Settlement> ss = PlayerSettlements;
+        for(TerrainTile t: ExpandedTile)
+        {
+            ss = combineAdjacentSettlementsforSingleTile(t,PlayerSettlements,BeingEdit);
+        }
+        return ss;
+    }
+    public ArrayList<Settlement> combineAdjacentSettlementsforSingleTile(TerrainTile hexTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
+    {
+        BoardSpace bs = hexTile.getBoardSpace();
+        BoardSpace temp = null;
+        HexTile check = null;
+        ArrayList<Settlement> tempSettlements = PlayerSettlements;
+        ArrayList<TerrainTile> adjacentHexTiles = new ArrayList<TerrainTile>();
+        if (bs.getNorth().getLevel() > 0) {
+            temp = bs.getNorth();
+            check = temp.topTile();
+            for(int i = 0; i < tempSettlements.size();i++)
+            {
+                Settlement s = tempSettlements.get(i);
+                ArrayList<TerrainTile> a = s.getSettlement();
+                if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    PlayerSettlements.remove(s);
+                    adjacentHexTiles.addAll(a);
+                }
+            }
+        }
+        if (bs.getNorthEast().getLevel() > 0) {
+            temp = bs.getNorthEast();
+            check = temp.topTile();
+            for(int i = 0; i < tempSettlements.size();i++)
+            {
+                Settlement s = tempSettlements.get(i);
+                ArrayList<TerrainTile> a = s.getSettlement();
+                if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    PlayerSettlements.remove(s);
+                    adjacentHexTiles.addAll(a);
+                }
+            }
+        }
+        if (bs.getSouthEast().getLevel() > 0) {
+            temp = bs.getSouthEast();
+            check = temp.topTile();
+            for(int i = 0; i < tempSettlements.size();i++)
+            {
+                Settlement s = tempSettlements.get(i);
+                ArrayList<TerrainTile> a = s.getSettlement();
+                if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    PlayerSettlements.remove(s);
+                    adjacentHexTiles.addAll(a);
+                }
+            }
+        }
+        if (bs.getSouth().getLevel() > 0) {
+            temp = bs.getSouth();
+            check = temp.topTile();
+            for(int i = 0; i < tempSettlements.size();i++)
+            {
+                Settlement s = tempSettlements.get(i);
+                ArrayList<TerrainTile> a = s.getSettlement();
+                if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    PlayerSettlements.remove(s);
+                    adjacentHexTiles.addAll(a);
+                }
+            }
+        }
+        if (bs.getSouthWest().getLevel() > 0) {
+            temp = bs.getSouthWest();
+            check = temp.topTile();
+            for(int i = 0; i < tempSettlements.size();i++)
+            {
+                Settlement s = tempSettlements.get(i);
+                ArrayList<TerrainTile> a = s.getSettlement();
+                if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    PlayerSettlements.remove(s);
+                    adjacentHexTiles.addAll(a);
+                }
+            }
+        }
+        if (bs.getNorthWest().getLevel() > 0) {
+            temp = bs.getNorthWest();
+            check = temp.topTile();
+            for(int i = 0; i < tempSettlements.size();i++)
+            {
+                Settlement s = tempSettlements.get(i);
+                ArrayList<TerrainTile> a = s.getSettlement();
+                if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    PlayerSettlements.remove(s);
+                    adjacentHexTiles.addAll(a);
+                }
+            }
+        }
+        BeingEdit.getSettlement().addAll(adjacentHexTiles);
+        return PlayerSettlements;
+    }
 
     public ArrayList<TerrainTile> getAdjacentTerrainTiles(TerrainTile hexTile) {
         BoardSpace bs = hexTile.getBoardSpace();
