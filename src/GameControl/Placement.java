@@ -1,4 +1,5 @@
 package GameControl;
+import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.Tile.VolcanoTile;

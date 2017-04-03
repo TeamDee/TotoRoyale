@@ -113,6 +113,10 @@ public abstract class HexTile extends Tile {
         return owner;
     }
 
+    public void resetOwner(){
+        this.owner = null;
+    }
+
     public boolean hasTotoro() {
         return hasTotoro;
     }
