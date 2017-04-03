@@ -170,10 +170,10 @@ public abstract class HexTile extends Tile {
     }
     public void setBoardSpace(BoardSpace boardSpace) { this.myBoardSpace = boardSpace; }
 
-    public AxialCoordinate getLocation(){
+    public OffsetCoordinate getLocation(){
         if(myBoardSpace != null)
             return myBoardSpace.getLocation();
-        return new AxialCoordinate(0,0);
+        return new OffsetCoordinate(0,0);
     }
     public abstract TileView getTileView();
 }

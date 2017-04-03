@@ -65,70 +65,81 @@ public class GameLogicDirector implements Runnable{
      */
     public void run() {
         while (winner == null) {
-            if (newGame) {
-                System.out.println("Initializing new game.");
-                initializeNewGame();
-                winner = null;
-                gc = GameController.getInstance();
-                gc.initViewControllerInteractions(p1, activePlayer);
-            } else {
-                //game logic
-                System.out.println("cards left" + deck.cardsLeft());
-                if (deck.cardsLeft() > 0) {
-                    if (AIgame) {
-                        AIvsAIGameTurn();
-                    } else if (AIvsHuman) {
-                        AIvsHumanGameTurn();
-                    }
-                    gc.paint();
-
-                } else { //game over
-                    System.out.println();
-                    System.out.println(myMap);
-                    for (Player p : players) {
-                        System.out.println("Round " + (48 - deck.cardsLeft()));
-                        System.out.println("cards left" + deck.cardsLeft());
-                        System.out.println(p.toString() + " Score: " + p.getScore());
-                        p.takeTurn(myMap, deck.draw());
-
-                        //check if the player has only one type of tokens left. If yes, end the game.
-                        if (p.checkOnlyOneTypeTokenIsLeft()) {
-                            winner = p;
-                            break;
-                        } else if (deck.cardsLeft() == 0) {
-                            break;
-                        }
-
-                        System.out.println("\n");
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
-                    }
-                    //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
-                    if (deck.cardsLeft() == 0) {
-                        winner = gameEndCheckWinner();
-                        gc.paint();
-                    }
-
-                    if (deck.cardsLeft() % 10 == 0) {
-                        gc.paint();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.out.println(ie.getStackTrace());
-                        }
-                    }
-
+                if (newGame) {
+                    System.out.println("Initializing new game.");
+                    initializeNewGame();
+                    winner = null;
+                    gc = GameController.getInstance();
+                    gc.initViewControllerInteractions(p1, activePlayer);
                 }
-            }
-            System.out.println("Winner: " + winner.toString());
-        }
-    }
+                else {
+                    //game logic
+                    System.out.println("cards left" + deck.cardsLeft());
+                    if (deck.cardsLeft() > 0) {
+                        if (AIgame) {
+                            AIvsAIGameTurn();
+                        } else if (AIvsHuman) {
+                            AIvsHumanGameTurn();
+                        }
+                        endRoundChecks();
 
-    public Player gameEndCheckWinner(){
+                    } else { //game over
+                        System.out.println();
+                        System.out.println(myMap);
+                        for (Player p : players) {
+                            System.out.println("Round " + (48 - deck.cardsLeft()));
+                            System.out.println("cards left" + deck.cardsLeft());
+                            System.out.println(p.toString() + " Score: " + p.getScore());
+                            p.takeTurn(myMap, deck.draw());
+
+                            //check if the player has only one type of tokens left. If yes, end the game.
+                            if (p.checkOnlyOneTypeTokenIsLeft()) {
+                                winner = p;
+                                break;
+                            } else if (deck.cardsLeft() == 0) {
+                                break;
+                            }
+
+                            System.out.println("\n");
+                            gc.paint();
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ie) {
+                                System.out.println(ie.getStackTrace());
+                            }
+                        }
+                        //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
+                        if (deck.cardsLeft() == 0) {
+                            winner = gameEndCheckWinner();
+                            gc.paint();
+                        }
+
+                        if (deck.cardsLeft() % 10 == 0) {
+                            gc.paint();
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ie) {
+                                System.out.println(ie.getStackTrace());
+                            }
+                        }
+
+                    }
+                }
+                //System.out.println("Winner: " + winner.toString());
+                    //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
+                if (deck.cardsLeft() == 0) {
+                    winner = gameEndCheckWinner();
+                    gc.paint();
+                }
+
+
+            }
+            //System.out.println("Winner: " + winner.toString());
+        }
+
+
+
+    private Player gameEndCheckWinner(){
         Player winner = compareScores();
         if(winner==null){
             winner = compareTotoroCount();
@@ -152,18 +163,40 @@ public class GameLogicDirector implements Runnable{
             winner = null; //score ties
         return winner;
     }
+    private void paint(){
+        gc.paint();
+    }
+
+    private void endRoundChecks(){
+        for (Player p : players) {
+            //check if the player has only one type of tokens left. If yes, end the game.
+            if (p.checkOnlyOneTypeTokenIsLeft()) {
+                winner = p;
+                break;
+            } else if (deck.cardsLeft() == 0) {
+                break;
+            }
+        }
+    }
 
     private void AIvsHumanGameTurn(){}
 
 
     public void AIvsAIGameTurn(){
 
+        System.out.println("Player " + currentPlayer);
         System.out.println("Round " + (48 - deck.cardsLeft()));
         System.out.println("Score " + currentPlayer.getScore());
 
         for(Player p: players){
             AItakeTurn();
             nextPlayer();
+            paint();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
+            }
         }
     }
 
@@ -173,7 +206,7 @@ public class GameLogicDirector implements Runnable{
         System.out.println("\n");
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(250);
         } catch (InterruptedException ie) {
             System.out.println(ie.getStackTrace());
         }
@@ -215,8 +248,8 @@ public class GameLogicDirector implements Runnable{
     }
 
     private void initializeNewGame() {
-        p1 = new WhitePlayer();
-        p2 = new BlackPlayer();
+        p1 = new WhitePlayer("Whitey", myMap);
+        p2 = new BlackPlayer("Blacky", myMap);
 
         players = new ArrayList<Player>();
         players.add(p1);
@@ -231,7 +264,6 @@ public class GameLogicDirector implements Runnable{
 
         newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();
-
     }
 
 }

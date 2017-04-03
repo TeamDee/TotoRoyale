@@ -11,16 +11,6 @@ import GameModel.Map.Tile.VolcanoTile;
 public class Main {
     public static void main(String[] args) {
 
-
-        //Main game = new Main();
-        //game.RunGame();
-//        GameMap map = new GameMap();
-//        TriHexTile tht = new TriHexTile();
-//        tht.setTileOne(new Grass());
-//        tht.setTileTwo(new Rock());
-//        tht.setTileThree(new VolcanoTile());
-
-
 //        map.placeFirstTile(tht);
 //        map.printInfoAboutMap();
 

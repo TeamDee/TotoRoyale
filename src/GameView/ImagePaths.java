@@ -21,6 +21,10 @@ public class ImagePaths {
     public static final String TOTORO_WHITE = IMG_DIR + "totoro.png";
     public static final String TOTORO_BLACK = IMG_DIR + "totoro_black.png";
 
+    //"Tigers"
+    public static final String TIGER_WHITE = IMG_DIR  + "Gator.png";
+    public static final String TIGER_BLACK = IMG_DIR + "Tiger.png";
+
 
     //random
     public static final String MAGIC_CAT = IMG_DIR + "magicCat.png";

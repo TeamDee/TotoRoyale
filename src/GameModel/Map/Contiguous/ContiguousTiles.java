@@ -1,6 +1,6 @@
-package GameModel.Map;
+package GameModel.Map.Contiguous;
 
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.HexTile;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public abstract class ContiguousTiles {
 
     public boolean isContiguous(HexTile tile) {
         for (HexTile contiguousTile : contiguousTiles) {
-            if (AxialCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
+            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }
         return false;

@@ -1,6 +1,7 @@
 package GameView.Viewports;
 
 import GameControl.Player.Player;
+import GameControl.Player.WhitePlayer;
 import GameEngine.GameController;
 import GameEngine.GameLogicDirector;
 import GameModel.Map.Coordinates.HexCoordinate;
@@ -24,7 +25,7 @@ public class ActiveGameViewport extends Viewport {
     Player currentPlayer;
     Deck deck = GameLogicDirector.getInstance().deck;
 
-    private static ActiveGameViewport activeGameViewport = new ActiveGameViewport(new Player());
+    private static ActiveGameViewport activeGameViewport = new ActiveGameViewport(new WhitePlayer("WhitePlayer", null));
 
     public ActiveGameViewport(Player ownedBy) {
         this.setPreferredSize(ViewFrame.getInstance().getSize());
@@ -86,7 +87,7 @@ public class ActiveGameViewport extends Viewport {
     public void drawMap(Graphics g, List<HexTile> tiles) {
         g.clearRect(0,0,10000,10000);
         Random r = new Random();
-        Color c = new Color(255,0,0,0);
+        Color c = new Color(255, 58,0,255);
         g.setColor(c);
         g.fillRect(0,0,10000,10000);
 

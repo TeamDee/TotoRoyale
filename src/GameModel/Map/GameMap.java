@@ -1,7 +1,8 @@
 package GameModel.Map;
 
 import GameControl.Placement;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Contiguous.ContiguousTerrainTypeTiles;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
@@ -14,7 +15,7 @@ import java.util.*;
  */
 public class GameMap {
 
-    private HashMap<AxialCoordinate, BoardSpace> gameBoard2;
+    private HashMap<OffsetCoordinate, BoardSpace> gameBoard2;
     private ArrayList<TriHexTile> playedTriHexTiles = new ArrayList<TriHexTile>();
     private int numberOfTriHextiles;
     private boolean firstTurn = true;
@@ -29,8 +30,8 @@ public class GameMap {
 
     //using axial coordinate system, initialize the board to prepare it for play
     public void initializeBoard() {
-        gameBoard2 = new HashMap<AxialCoordinate, BoardSpace>();
-        AxialCoordinate originLocation = new AxialCoordinate(0, 0);
+        gameBoard2 = new HashMap<OffsetCoordinate, BoardSpace>();
+        OffsetCoordinate originLocation = new OffsetCoordinate(0, 0);
         BoardSpace originBS = this.addBoardSpace(originLocation);
 
         this.addRadialBoardSpaces(2,originBS);
@@ -54,7 +55,7 @@ public class GameMap {
     }
 
     //call this whenever you place a hextile on an empty boardspace.
-    public void addAdjacentBoardSpaces(AxialCoordinate initial) {
+    public void addAdjacentBoardSpaces(OffsetCoordinate initial) {
         //given an axial coordinate
         //     check to see if adjacent boardspaces are active
         //          if they are not, add them to board map
@@ -121,7 +122,7 @@ public class GameMap {
     }
 
     public void connectAdjacentBoardSpaces(BoardSpace initial) {
-        AxialCoordinate initialLocation = initial.getLocation();
+        OffsetCoordinate initialLocation = initial.getLocation();
 
         BoardSpace north = gameBoard2.get(initialLocation.getNorth());
         BoardSpace northEast = gameBoard2.get(initialLocation.getNorthEast());
@@ -147,7 +148,7 @@ public class GameMap {
 //    public void placeFirstTile(TriHexTile first) {
 //        System.out.println("placing first tile");
 //        //TODO we'll probably have to deal with orienting "north" when the opposing player starts.
-//        BoardSpace firstBS = gameBoard2.get(new AxialCoordinate(0,0));;
+//        BoardSpace firstBS = gameBoard2.get(new OffsetCoordinate(0,0));;
 //        addRadialBoardSpaces(2, firstBS);
 //
 //        BoardSpace current = gameBoard2.get(firstBS.getLocation());
@@ -220,8 +221,8 @@ public class GameMap {
             // iterate through all of the current Tile's neighbors
             for (Direction direction : Direction.values()) {
                 BoardSpace bs = current.getBoardSpace();
-                AxialCoordinate location = bs.getLocation();
-                AxialCoordinate neighborLocation = location.getByDirection(direction);
+                OffsetCoordinate location = bs.getLocation();
+                OffsetCoordinate neighborLocation = location.getByDirection(direction);
                 BoardSpace neighbor = gameBoard2.get(neighborLocation);
                 // if the Tile is on the map and we haven't visited it already
                 if (neighbor == null) {
@@ -238,7 +239,7 @@ public class GameMap {
     /*
      CALL THIS INSTEAD OF DIRECTLY MODIFYING GAMEBOARD2
      */
-    public BoardSpace addBoardSpace(AxialCoordinate ac) {
+    public BoardSpace addBoardSpace(OffsetCoordinate ac) {
         BoardSpace newBS = new BoardSpace(ac, this);
         gameBoard2.put(ac, newBS);
         return newBS;
@@ -264,7 +265,7 @@ public class GameMap {
         firstTurn = false;
 //
         for (BoardSpace bs : gameBoard2.values()) { //for each active board space (i.e. above a played tile, or adjacent to one)
-            AxialCoordinate location = bs.getLocation();
+            OffsetCoordinate location = bs.getLocation();
             BoardSpace north = gameBoard2.get(location.getNorth());
             BoardSpace northeast = gameBoard2.get(location.getNorthEast());
             BoardSpace northwest = gameBoard2.get(location.getNorthWest());
@@ -331,7 +332,7 @@ public class GameMap {
      * A. the board space exists in the gameBoard (at the give coordiate)
      * B. The Board Space is level 0
      */
-    private boolean legalLevel0(AxialCoordinate ac) {
+    private boolean legalLevel0(OffsetCoordinate ac) {
         BoardSpace BStoTest = gameBoard2.get(ac);
         return BStoTest.isEmpty() && BStoTest.getLevel() == 0;
     }
@@ -392,8 +393,8 @@ public class GameMap {
     public boolean canPlaceOnHexTiles(HexTile ht1, HexTile ht2, HexTile ht3) {
         boolean areSameLevel = ht1.getLevel() == ht2.getLevel() && ht2.getLevel() == ht3.getLevel();
         boolean areNotInSameTriHexTile = !(ht1.getTriHexTile() == ht2.getTriHexTile() && ht2.getTriHexTile() == ht3.getTriHexTile());
-        boolean areAdjacent = AxialCoordinate.areAdjacent(ht1.getLocation(),ht2.getLocation()) && AxialCoordinate.areAdjacent(ht2.getLocation(),ht3.getLocation())
-                && AxialCoordinate.areAdjacent(ht1.getLocation(),ht3.getLocation());
+        boolean areAdjacent = OffsetCoordinate.areAdjacent(ht1.getLocation(),ht2.getLocation()) && OffsetCoordinate.areAdjacent(ht2.getLocation(),ht3.getLocation())
+                && OffsetCoordinate.areAdjacent(ht1.getLocation(),ht3.getLocation());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && !ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
         boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
         return areSameLevel && areNotInSameTriHexTile && areAdjacent;//&& doNotContainSize1Settlements;// && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
@@ -470,7 +471,6 @@ public class GameMap {
      */
     public void implementPlacement(Placement p) {
         p.place();
-        //System.out.println(p.isLegalPlacement(p));
         for (BoardSpace b : p.getBoardSpaces()) {
             addRadialBoardSpaces(2, b);
             this.activateAdjacentBoardSpaces(b);
@@ -513,8 +513,8 @@ public class GameMap {
         return visible;
     }
 
-    public HexTile getVisibleAtAxialCoordinate(AxialCoordinate axialCoordinate) {
-        return gameBoard2.get(axialCoordinate).topTile();
+    public HexTile getVisibleAtAxialCoordinate(OffsetCoordinate offsetCoordinate) {
+        return gameBoard2.get(offsetCoordinate).topTile();
     }
 
     @Override
