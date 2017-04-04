@@ -1,13 +1,12 @@
 package GameControl.Player;
 
 import GameControl.Placement;
+import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
-import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Tile.HexTile;
-import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.Tile.TerrainTile;
-import GameModel.Map.Tile.VolcanoTile;
+import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
@@ -47,6 +46,7 @@ public class Player {
         score = 0;
         settlements = new ArrayList<Settlement>();
         myMap = thisPlayersMap;
+        enemyPlayer = enemy;
     }
 
     //returns true iff there are no legal build moves for the current player on the given map
@@ -297,8 +297,6 @@ public class Player {
         ArrayList<TerrainTile> expansion = allexpand.get(excheck);
         return  expansion;
     }
-
-
 
     public boolean expandSettlement() {
         Integer tempValue = new Integer(0);
@@ -627,6 +625,8 @@ public class Player {
     public boolean isWhite(){
         return false;
     }
+
+    public void setEnemyPlayer(Player enemyPlayer) { this.enemyPlayer = enemyPlayer; }
 
     @Override
     public String toString(){

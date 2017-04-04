@@ -6,8 +6,10 @@ import GameControl.Player.PlayerController;
 import GameControl.Player.WhitePlayer;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Deck;
-
+import GameModel.Map.TriHexTile;
+import GameNetworking.FrequentlyUsedPatterns;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 
 /**
@@ -16,13 +18,11 @@ import java.util.ArrayList;
  */
 public class GameLogicDirector implements Runnable{
     private static GameLogicDirector me;
-
     private boolean newGame = true;
-
-
     private boolean AIgame = true;
     private boolean AIvsHuman = false;
     private boolean HumanVsHuman = false;
+    private int myId, opponentId;
 
     //Game specific objects
     Player p1,p2;
@@ -42,6 +42,64 @@ public class GameLogicDirector implements Runnable{
         winner=null;
     }
 
+    public GameLogicDirector(int playerOneId, int playerTwoId){
+        myMap = new GameMap();
+        initializeNewGame(""+playerOneId, ""+playerTwoId);
+        winner=null;
+    }
+
+    public String tournamentMove(String tileAssigned){
+        String ActionMessage = "PLACE " + tileAssigned + " AT ";
+        TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
+        currentPlayer.takeTurn(myMap, tht);
+        nextPlayer();
+        return ActionMessage;
+    }
+
+    public void opponentPlayerMove(String moveMssg){
+        //TODO: interpret Opponent Player's Placement and Build action
+        if(moveMssg.contains("FORFEITED") || moveMssg.contains("LOST")){
+
+        } else{
+            int cutPoint = 0;
+            if(moveMssg.contains("FOUND")){
+                cutPoint = moveMssg.indexOf("FOUND");
+            } else if(moveMssg.contains("EXPAND")){
+                cutPoint = moveMssg.indexOf("EXPAND");
+            } else if(moveMssg.contains("BUILD")){
+                cutPoint = moveMssg.indexOf("BUILD");
+            }
+            String placeMssg = moveMssg.substring(0, cutPoint);
+            String buildMssg = moveMssg.substring(cutPoint);
+
+            opponentPlayerPlace(placeMssg);
+            opponentPlayerBuild(buildMssg);
+        }
+    }
+
+    public void opponentPlayerPlace(String placement){
+        int x,y,z, orientation;
+        Matcher placementMatcher = FrequentlyUsedPatterns.PlacementMssgPattern.matcher(placement);
+        if(placementMatcher.matches()){
+            TriHexTile tht = TriHexTile.makeTriHexTileFromString(placementMatcher.group(1));
+            x = Integer.parseInt(placementMatcher.group(2));
+            y = Integer.parseInt(placementMatcher.group(3));
+            z = Integer.parseInt(placementMatcher.group(4));
+            orientation = Integer.parseInt(placementMatcher.group(5));
+        }
+    }
+
+    public void opponentPlayerBuild(String build){
+        int x,y,z;
+        String terrainType;
+        Matcher buildMatcher = FrequentlyUsedPatterns.BuildPattern.matcher(build);
+        if(buildMatcher.matches()){
+            x = Integer.parseInt(buildMatcher.group(2));
+            y = Integer.parseInt(buildMatcher.group(3));
+            z = Integer.parseInt(buildMatcher.group(4));
+            
+        }
+    }
 
     public static GameLogicDirector getInstance(){
         if(me == null)
@@ -67,7 +125,7 @@ public class GameLogicDirector implements Runnable{
         while (winner == null) {
                 if (newGame) {
                     System.out.println("Initializing new game.");
-                    initializeNewGame();
+                    initializeNewGame("Whitety", "Blackey");
                     winner = null;
                     gc = GameController.getInstance();
                     gc.initViewControllerInteractions(p1, activePlayer);
@@ -192,6 +250,7 @@ public class GameLogicDirector implements Runnable{
             AItakeTurn();
             nextPlayer();
             paint();
+            //TODO: for the official game tournament, this block should be removed
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ie) {
@@ -205,6 +264,7 @@ public class GameLogicDirector implements Runnable{
         System.out.println(getMap());
         System.out.println("\n");
 
+        //TODO: for the official game tournament, this block should be removed
         try {
             Thread.sleep(250);
         } catch (InterruptedException ie) {
@@ -247,10 +307,11 @@ public class GameLogicDirector implements Runnable{
         return myMap;
     }
 
-    private void initializeNewGame() {
-        p1 = new WhitePlayer("Whitey", myMap,null);
-        p2 = new BlackPlayer("Blacky", myMap,p1);
-        p1.enemyPlayer = p2;
+
+    private void initializeNewGame(String WhitePlayerName, String BlackPlayerName) {
+        p1 = new WhitePlayer(WhitePlayerName, myMap, null);
+        p2 = new BlackPlayer(BlackPlayerName, myMap, p1);
+        p1.setEnemyPlayer(p2);
 
         players = new ArrayList<Player>();
         players.add(p1);
@@ -261,7 +322,7 @@ public class GameLogicDirector implements Runnable{
         GameController gameController = new GameController();
         gameController.initViewControllerInteractions(p1, activePlayer);
         deck = Deck.newExampleDeck();
-        System.out.println(deck.cardsLeft());
+//        System.out.println(deck.cardsLeft());
 
         newGame = false; // Q: what's this for? A: see run method
         gc = new GameController();

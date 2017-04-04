@@ -1,10 +1,7 @@
 package GameModel.Map;
-package GameControl.Player;
 
 import GameControl.Player.WhitePlayer;
-import GameModel.Map.BoardSpace;
-import GameControl.Player.WhitePlayer;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
@@ -21,13 +18,13 @@ public class WhiteSettlementTest {
             private GameMap map;
             private BoardSpace boardspace;
             private WhitePlayer whitePlayer;
-            private static AxialCoordinate location;
+            private static OffsetCoordinate location;
 
             //WHITE MEEPLE SETTLEMENT
             @Before
             public void Game_map_is_init() {
                 map = new GameMap();
-                location = new AxialCoordinate(0, 0);
+                location = new OffsetCoordinate(0, 0);
                 BoardSpace boardspace = new BoardSpace(location, map);
                 boardspace.getLevel();
 
@@ -36,7 +33,7 @@ public class WhiteSettlementTest {
             @Test
             public void check_terrain() {
                 map = new GameMap();
-                whitePlayer = new WhitePlayer();
+                whitePlayer = new WhitePlayer("WhitePlayer", map);
                 ArrayList<HexTile> tiles = map.getVisible();
                 for (HexTile ht : tiles) {
                     if (ht.terrainType() == TerrainType.VOLCANO)
@@ -44,13 +41,12 @@ public class WhiteSettlementTest {
                         whitePlayer.buildSettlement((TerrainTile) ht);
                     break;
                 }
-
-                @After
-                public void cleanUp () {
-
-                }
-
-
             }
-        }
+
+            @After
+            public void cleanUp() {
+                ;
+            }
+
+}
 

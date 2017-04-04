@@ -86,4 +86,32 @@ public class TriHexTile extends Tile {
         }
         return false;
     }
+
+    public static TriHexTile makeTriHexTileFromString(String tile){
+        String[] splited = tile.split("[+]");
+        TerrainTile tileOne = null, tileTwo = null;
+        if(splited[0].compareTo("JUNGLE") == 0){
+            tileOne = new Jungle();
+        } else if(splited[0].compareTo("ROCK") == 0){
+            tileOne = new Rock();
+        } else if(splited[0].compareTo("LAKE") == 0){
+            tileOne = new Lake();
+        } else if(splited[0].compareTo("GRASS") == 0){
+            tileOne = new Grass();
+        }
+        if(splited[1].compareTo("JUNGLE") == 0){
+            tileTwo = new Jungle();
+        } else if(splited[1].compareTo("ROCK") == 0){
+            tileTwo = new Rock();
+        } else if(splited[1].compareTo("LAKE") == 0){
+            tileTwo = new Lake();
+        } else if(splited[1].compareTo("GRASS") == 0){
+            tileTwo = new Grass();
+        }
+        return new TriHexTile(tileOne, tileTwo, new VolcanoTile());
+    }
+
+    public String toString(){
+        return "TileOne: "+tileOne.toString()+" TileTwo: "+tileTwo.toString()+" TileThree: "+tileThree.toString();
+    }
 }

@@ -1,5 +1,7 @@
 package GameNetworking;
 
+import GameModel.Map.TriHexTile;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,5 +27,13 @@ public class RegexTest {
                 System.out.println("Item " + i + ": " + myMatcher.group(i));
             }
         }
+
+        String exampleTile = "JUNGLE+ROCK";
+//        String[] splited = exampleTile.split("[+]");
+//        for(String str : splited){
+//            System.out.println("Item: " + str);
+//        }
+        TriHexTile tht = TigerLandDelegate.makeTriHexTileFromString(exampleTile);
+        System.out.println(tht.toString());
     }
 }
