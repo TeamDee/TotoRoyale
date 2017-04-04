@@ -52,8 +52,7 @@ public class Player {
     //returns true iff there are no legal build moves for the current player on the given map
     public boolean noLegalBuildMoves(GameMap map){
         // no settlements, legal totoro, or expansions
-
-        return legalNewSettlementVisible(map) && legalTotoroPlacementVisible() && legalExpansionVisible();
+        return !legalNewSettlementVisible(map) && !legalTotoroPlacementVisible() && !legalExpansionVisible();
     }
 
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
@@ -66,6 +65,9 @@ public class Player {
     }
 
     private boolean legalExpansionVisible(){
+        if(settlements.size() == 0){
+            return false;
+        }
         int whichsettle = random.nextInt(settlements.size());
         Integer expansionWorth = new Integer(0);
         ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle), expansionWorth);
@@ -108,16 +110,36 @@ public class Player {
 
     public void placementPhase(GameMap gameMap, TriHexTile tile){
         ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
-        if(noLegalBuildMoves(gameMap)){
 
+        Placement mapPlacementThatFixesNoBuildOptionsProblem = null;
+        if(noLegalBuildMoves(gameMap)){
+            //todo
+            //check to see if our "map" placement will leave us with a legal build move so we don't forfeit
+            for(Placement p: placements){
+                myMap.temporaryPlacement(p);
+                if(noLegalBuildMoves(gameMap)){
+                    //not helpful move, ignore
+                }
+                else{
+                    mapPlacementThatFixesNoBuildOptionsProblem = p;
+                }
+                    myMap.revokeLastPlacement();
+            }
+            if(mapPlacementThatFixesNoBuildOptionsProblem == null){
+                placements = new ArrayList<Placement>();
+            }
         }
+
         if(placements.size() == 0) {   //todo OR the seen placements aren't good enough
             placements.addAll(gameMap.getLegalTablePlacements(tile)); //note this only gets level 0 placements
-            System.out.println("NO LEGAL MAP PLACEMENTS");
+            System.out.println("NO LEGAL LEVEL >1 PLACEMENTS");
         }
 
         Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
 
+        if(mapPlacementThatFixesNoBuildOptionsProblem != null){
+            placeTile(gameMap, mapPlacementThatFixesNoBuildOptionsProblem);
+        }
         placeTile(gameMap, stupidPlacement);
     }
 
