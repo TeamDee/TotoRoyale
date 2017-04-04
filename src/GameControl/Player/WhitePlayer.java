@@ -1,6 +1,7 @@
 package GameControl.Player;
 
 import GameModel.Map.GameMap;
+import org.omg.PortableInterceptor.INACTIVE;
 
 /**
  * Created by jowens on 3/10/17.
@@ -10,6 +11,8 @@ public class WhitePlayer extends Player {
 //    public WhitePlayer(){
 //        this("WhitePlayer", null);
 //    }
+
+
 
     public WhitePlayer(String name, GameMap gameMap, Player enemy){
         super(gameMap, enemy);

@@ -13,7 +13,7 @@ package GameView.Viewports;
 
 /**
  *
- * @author Owens shout-out to Connor Doherty, tho
+ * @author Owens shout-out to Connor Doherty, tho; from whom's code this code was derived
  */
 public class MainMenuViewport extends Viewport {
 
