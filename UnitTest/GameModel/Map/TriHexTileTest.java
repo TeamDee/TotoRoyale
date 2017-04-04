@@ -2,10 +2,7 @@ package GameModel.Map;
 
 import GameControl.Placement;
 import GameControl.Player.Player;
-import GameModel.Map.Coordinates.AxialCoordinate;
-import GameModel.Map.Tile.Grass;
-import GameModel.Map.Tile.Rock;
-import GameModel.Map.Tile.VolcanoTile;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
  */
 public class TriHexTileTest {
     private TriHexTile tht;
-    private AxialCoordinate location;
+    private OffsetCoordinate location;
     private GameMap map;
     private Player player;
     private ArrayList<Placement> placements;
@@ -26,14 +23,14 @@ public class TriHexTileTest {
 
     @Before
     public void create_tile() {
-        location = new AxialCoordinate(0, 0);
+        location = new OffsetCoordinate(0, 0);
 
     }
 
     @Test
         public void create_levels() {
         map = new GameMap();
-        player = new Player();
+        player = new Player(map);
         placements = map.getLegalMapPlacements(tht);
     }
 

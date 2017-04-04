@@ -1,7 +1,7 @@
 package GameModel.Map;
 
 import GameControl.Placement;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.Grass;
 import GameModel.Map.Tile.Rock;
 import GameModel.Map.Tile.VolcanoTile;
@@ -16,18 +16,18 @@ import java.util.ArrayList;
  */
 public class GameMapTest {
     private static GameMap map;
-    private static AxialCoordinate location;
+    private static OffsetCoordinate location;
 
     @BeforeClass
     public static void initializeTest(){
         map = new GameMap();
-        location = new AxialCoordinate(0, 0);
+        location = new OffsetCoordinate(0, 0);
     }
 
     @Test
     public void testAddAdjacentBoardSpace(){
         int numberOfBoardSpacesBefore = map.getNumberOfBoardSpaces();
-        location = new AxialCoordinate(2,2);
+        location = new OffsetCoordinate(2,2);
         map.addAdjacentBoardSpaces(location);
 
 

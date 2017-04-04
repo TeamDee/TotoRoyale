@@ -2,7 +2,7 @@ package StepDefs;
 
 import GameControl.Placement;
 import GameControl.Player.Player;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.*;
 import GameModel.Map.TriHexTile;
@@ -20,7 +20,7 @@ public class TriHexTileStepdefs {
 
     private GameMap map;
     private ArrayList<Placement> placements;
-    private static AxialCoordinate location;
+    private static OffsetCoordinate location;
     private Player player;
     private TriHexTile tht;
 
@@ -36,7 +36,7 @@ public class TriHexTileStepdefs {
 
     @When("^A TriHexTile get created$")
     public void aTriHexTileGetCreated() {
-        location = new AxialCoordinate(0, 0);
+        location = new OffsetCoordinate(0, 0);
         tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
     }
 
@@ -64,14 +64,14 @@ public class TriHexTileStepdefs {
 
     @And("^TriHexTiles exist on the board$")
     public void game_is_running(){
-        location = new AxialCoordinate(0, 0);
+        location = new OffsetCoordinate(0, 0);
 
     }
 
     @When("^a user places a TriHexTile with intentions to build a new level$")
     public void build_new_level(){
         map = new GameMap();
-        player = new Player();
+        player = new Player(map);
         placements = map.getLegalMapPlacements(tht);
         //map.implementPlacement( placements.get(0));
     }

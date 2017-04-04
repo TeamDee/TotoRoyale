@@ -1,6 +1,6 @@
 package GameModel.Map;
 
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.Grass;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.Rock;
@@ -12,21 +12,17 @@ import org.junit.*;
  */
 public class BoardSpaceTest {
     private static GameMap map;
-    private static AxialCoordinate location;
+    private static OffsetCoordinate location;
 
     @Before
     public void initializeTest(){
         map = new GameMap();
-        location = new AxialCoordinate(0, 0);
+        location = new OffsetCoordinate(0, 0);
     }
 
     @Test
     public void createABoardSpaceTest(){
-<<<<<<< HEAD
         BoardSpace boardSpace = new BoardSpace(location,map);
-=======
-        BoardSpace boardSpace = new BoardSpace(location, map);
->>>>>>> 9adb5cdc9299c966599d600b8bc8f25170d72b52
         Assert.assertFalse(boardSpace.hasTile());
         Assert.assertTrue(boardSpace.getLocation().compare(location));
     }
@@ -37,7 +33,8 @@ public class BoardSpaceTest {
 
         map.implementPlacement(map.getAllLegalPlacements(tht).get(0));
 
-        BoardSpace center = map.getVisibleAtAxialCoordinate(new AxialCoordinate(0,0)).getBoardSpace();
+        BoardSpace center = map.getVisibleAtAxialCoordinate(new OffsetCoordinate(0,0)).getBoardSpace();
+
         Assert.assertTrue(center.getNorth().isActive());
         Assert.assertTrue(center.getNorthEast().isActive());
         Assert.assertTrue(center.getNorthWest().isActive());
@@ -50,7 +47,7 @@ public class BoardSpaceTest {
     public void levelUpTest(){
         TriHexTile tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
         map.implementPlacement(map.getAllLegalPlacements(tht).get(0));
-        BoardSpace center = map.getVisibleAtAxialCoordinate(new AxialCoordinate(0,0)).getBoardSpace();
+        BoardSpace center = map.getVisibleAtAxialCoordinate(new OffsetCoordinate(0,0)).getBoardSpace();
         int centerLevelBefore = center.getLevel();
         HexTile grass = new Grass();
         center.addTile(grass);

@@ -3,10 +3,7 @@ package GameModel.Map;
 import GameControl.Placement;
 import GameModel.Map.Contiguous.ContiguousTerrainTypeTiles;
 import GameModel.Map.Coordinates.OffsetCoordinate;
-import GameModel.Map.Tile.HexTile;
-import GameModel.Map.Tile.TerrainTile;
-import GameModel.Map.Tile.TerrainType;
-import GameModel.Map.Tile.VolcanoTile;
+import GameModel.Map.Tile.*;
 
 import java.util.*;
 
@@ -20,8 +17,6 @@ public class GameMap {
     private int numberOfTriHextiles;
     private boolean firstTurn = true;
 
-
-
     private List<BoardSpace> activeSpaces;
 
     public GameMap() {
@@ -33,11 +28,10 @@ public class GameMap {
         gameBoard2 = new HashMap<OffsetCoordinate, BoardSpace>();
         OffsetCoordinate originLocation = new OffsetCoordinate(0, 0);
         BoardSpace originBS = this.addBoardSpace(originLocation);
-
+        originBS.activate();
         this.addRadialBoardSpaces(2,originBS);
         this.connectAdjacentBoardSpaces(originBS);
         this.activateAdjacentBoardSpaces(originBS);
-
 
         this.connectAdjacentBoardSpaces(originBS.getNorth());
         this.connectAdjacentBoardSpaces(originBS.getNorthEast());
@@ -46,12 +40,31 @@ public class GameMap {
         this.connectAdjacentBoardSpaces(originBS.getSouthWest());
         this.connectAdjacentBoardSpaces(originBS.getSouthEast());
 
-        originBS.activate();
+        placeStartingTile();
+
         numberOfTriHextiles = 0;
 
         for (BoardSpace bs : gameBoard2.values()) {
             connectAdjacentBoardSpaces(bs);
         }
+    }
+
+    private void placeStartingTile(){
+        VolcanoTile volcano = new VolcanoTile();
+        TriHexTile topPart = new TriHexTile(new Jungle(), new Lake(), volcano);
+        TriHexTile bottomPart = new TriHexTile(new Grass(), new Rock(), volcano);
+
+        BoardSpace center = gameBoard2.get(new OffsetCoordinate(0, 0));
+        BoardSpace northWest = gameBoard2.get(new OffsetCoordinate(-1, -1));
+        BoardSpace northEast = gameBoard2.get(new OffsetCoordinate(-1, 1));
+        BoardSpace southWest = gameBoard2.get(new OffsetCoordinate(1, -1));
+        BoardSpace southEast = gameBoard2.get(new OffsetCoordinate(1, 1));
+        Placement topPlacement = new Placement(northWest, northEast, center, topPart.getTileOne(), topPart.getTileTwo(), volcano);
+        Placement bottomPlacement = new Placement(southEast, southWest, center, bottomPart.getTileOne(), bottomPart.getTileTwo(), volcano);
+        implementPlacement(topPlacement);
+        implementPlacement(bottomPlacement);
+        center.removeTopTile();
+        volcano.setLevel(1);
     }
 
     //call this whenever you place a hextile on an empty boardspace.
@@ -90,7 +103,6 @@ public class GameMap {
         }
         initialBS.setSouthWest(gameBoard2.get(initial.getSouthWest()));
     }
-
 
     private void connectTwoBoardSpaces(BoardSpace bs1, BoardSpace bs2, Direction bs1TObs2) {
         switch (bs1TObs2) {
@@ -327,7 +339,7 @@ public class GameMap {
         return firstTurn;
     }
 
-    /*
+    /**
      * tests that
      * A. the board space exists in the gameBoard (at the give coordiate)
      * B. The Board Space is level 0
@@ -338,7 +350,7 @@ public class GameMap {
     }
 
 
-    /*  TODO
+    /**  TODO
         for each of the three hextiles in the tri-hex, attempt to place them at the placeAt tile, and then check each rotation with that tile
         as center to see if such rotations are legal.
      */
@@ -433,7 +445,7 @@ public class GameMap {
         }
     }
 
-    /*
+    /**
      * All legal placements > 0
      */
     public ArrayList<Placement> getLegalMapPlacements(TriHexTile tht) {
@@ -452,7 +464,6 @@ public class GameMap {
      * TODO this would be useful for ignoring illegal placements
      */
 
-
 //    public List<HexTile> sameLevelAdjacentHexesOfDifferentTriHexes() {
 //        List<HexTile> returnMe;
 //        for
@@ -465,7 +476,6 @@ public class GameMap {
         return returnMe;
     }
 
-
     /*
         takes a placement object and implements it's effects on the board
      */
@@ -473,6 +483,7 @@ public class GameMap {
         p.place();
         for (BoardSpace b : p.getBoardSpaces()) {
             addRadialBoardSpaces(2, b);
+            this.connectAdjacentBoardSpaces(b);
             this.activateAdjacentBoardSpaces(b);
         }
         this.playedTriHexTiles.add(p.getBoardSpaces().get(0).topTile().getTriHexTile());

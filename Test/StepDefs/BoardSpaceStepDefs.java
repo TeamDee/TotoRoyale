@@ -5,7 +5,7 @@ package StepDefs;
 import GameControl.Placement;
 import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.*;
 import GameModel.Map.TriHexTile;
@@ -90,8 +90,8 @@ public class BoardSpaceStepDefs {
     }
 
     @When("^I nuke some hextiles$")
-    public void nukeTiles() {
-        HexTile tile = map.getVisibleAtAxialCoordinate(new AxialCoordinate(0, 0));
+    public void nukeTiles(){
+        HexTile tile = map.getVisibleAtAxialCoordinate(new OffsetCoordinate(0,0));
         before = tile.getBoardSpace();
         levelBefore = before.getLevel();
         tht = new TriHexTile(new Grass(), new Rock(), new VolcanoTile());
