@@ -62,7 +62,18 @@ public class Settlement{
     }
     public ArrayList<TerrainTile> getLegalTotoroTiles()
     {
-        return getAdjacentTerrainTiles();
+        if(this.getSettlementSize() <5) {
+            System.out.println("calling getLegalTotoroTiles when you shouldn't be.");
+            return null;
+        }
+        ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
+        ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
+        for(TerrainTile t: getTotoroPlaceMent){
+            if(!t.isOccupied()){
+                returnMe.add(t);
+            }
+        }
+        return returnMe;
 
     }
     public ArrayList<TerrainTile> getLegalTigerTiles()
@@ -70,7 +81,7 @@ public class Settlement{
         ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTigerPlaceMent){
-            if(t.getLevel() >= 3){
+            if(t.getLevel() >= 3 && !t.isOccupied()){
                 returnMe.add(t);
             }
         }

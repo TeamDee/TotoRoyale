@@ -407,12 +407,13 @@ public class Player {
         if(settlements.size() > 0) { //if current player has at least one settlement already
             if (addTotoro()) {
                 //logic is done in addTotoro()
-            } else if (addTiger()) { //can't add totoro, add tiger
+            }
+            else if (addTiger()) { //can't add totoro, add tiger
                 //logic is done in addTiger()
-            } else if (expandSettlement()) {
-
-            } else if (buildSettlement(gameMap)) {
-
+            }
+            else if (expandSettlement()) {
+            }
+            else if (buildSettlement(gameMap)) {
             }
         }
         else {
