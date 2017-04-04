@@ -18,6 +18,7 @@ public class TigerLandDelegate {
     private String tournamentPW;
     private String username;
     private String password;
+    private boolean unexpectedError;
 
     public TigerLandDelegate(String serverName, int port){
         client = new TigerLandClient(serverName, port);
@@ -25,10 +26,11 @@ public class TigerLandDelegate {
         username = "TeamD";
         password = "Password";
         gameEnded = false;
+        unexpectedError = false;
         System.out.println("Game Delegate successfully created.");
     }
 
-    public void Interpret(){
+    public void TournamentProtocol(){
         String serverMessage = "";
         DataInputStream dataInputStream = client.getDataInputStream();
         DataOutputStream dataOutputStream = client.getDataOutputStream();
@@ -41,6 +43,9 @@ public class TigerLandDelegate {
 
             AuthenticationProtocol(dataInputStream, dataOutputStream);
 
+            ChallengeProtocol(dataInputStream, dataOutputStream);
+
+            //The exit message
             serverMessage = dataInputStream.readUTF();
             System.out.println("SERVER: " + serverMessage);
         }catch(IOException ex){
@@ -53,12 +58,14 @@ public class TigerLandDelegate {
         try {
             outMessage = "ENTER THUNDERDOME " + tournamentPW;
             out.writeUTF(outMessage);
+            System.out.println("Client: " + outMessage);
 
             inMessage = in.readUTF();
             System.out.println("SERVER: " + inMessage);
 
             outMessage = "I AM " + username + " " + password;
             out.writeUTF(outMessage);
+            System.out.println("Client: " + outMessage);
 
             inMessage = in.readUTF();
             System.out.println("SERVER: " + inMessage);
@@ -67,9 +74,9 @@ public class TigerLandDelegate {
                 playerId = Integer.parseInt(PlayerIDMatcher.group(1));
             else
                 throw new IOException();
-            ChallengeProtocol(in, out);
         }catch(IOException ex){
             System.out.println("Failed to AuthenticationProtocol with server.");
+
         }
     }
 
@@ -122,7 +129,11 @@ public class TigerLandDelegate {
         try{
             serverMessage = in.readUTF();
             System.out.println("SERVER: " + serverMessage);
+
+
             MoveProtocol(in, out);
+
+
         }catch (IOException ex){
             System.out.println("Failed to obtain message from server.");
         }
