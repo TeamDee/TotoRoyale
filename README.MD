@@ -2,7 +2,9 @@ Git Workflow
 
 git status
 
-git commit [relevant files]
+git add [relevant files you want to track]
+
+git commit -m [comment]
 
 git pull origin master
 
