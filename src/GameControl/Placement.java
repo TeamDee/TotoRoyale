@@ -1,5 +1,7 @@
 package GameControl;
+import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
+import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
@@ -104,6 +106,7 @@ public class Placement {
         oldA.addTile(newA);
         oldB.addTile(newB);
         oldC.addTile(newC);
+        nukeAnySettlements();
     }
 
     public ArrayList<BoardSpace> getBoardSpaces(){
@@ -124,5 +127,14 @@ public class Placement {
         oldC.removeTopTile();
     }
 
-
+    public void nukeAnySettlements() {
+        HexTile h;
+        for (BoardSpace b: getBoardSpaces()) {
+            h = b.topTile();
+            if (h.isOccupied()) {
+                Player owner = h.getOwner();
+                owner.nukeSettlements((TerrainTile) h);
+            }
+        }
+    }
 }

@@ -397,7 +397,7 @@ public class GameMap {
                 && OffsetCoordinate.areAdjacent(ht1.getLocation(),ht3.getLocation());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && !ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
         boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
-        return areSameLevel && areNotInSameTriHexTile && areAdjacent;//&& doNotContainSize1Settlements;// && doNotContainTotorosOrTigers && doNotContainSize1Settlements;
+        return areSameLevel && areNotInSameTriHexTile && areAdjacent && doNotContainSize1Settlements && doNotContainTotorosOrTigers;
     }
 
     public boolean containsSize1Settlement(HexTile ht) {
@@ -476,6 +476,7 @@ public class GameMap {
             this.activateAdjacentBoardSpaces(b);
         }
         this.playedTriHexTiles.add(p.getBoardSpaces().get(0).topTile().getTriHexTile());
+        p.getBoardSpaces().get(0).topTile().resetOwner();
 
     }
 
