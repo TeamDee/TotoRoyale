@@ -1,16 +1,18 @@
 Git Workflow
 
-git status
+<b>1. git status </b>
 
-git add [relevant files you want to track]
+<b>2.git add [relevant files you want to track]</b>
 
-git commit -m [comment]
+<b>3.git commit -m [comment]</b>
 
-git pull origin master
+<b>4.git pull origin master</b>
 
-(resolve merge conflicts if necessary, goto git status again) 
+<b>5.(resolve merge conflicts if necessary, goto git status again) </b>
 
-git push origin master
+<b>6.git push origin master</b>
+
+
 
 (alternatively, if you want to start your own branch...) 
 
