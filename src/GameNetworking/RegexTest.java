@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Z_K on 4/1/2017.
  */
-public class RegexTest {
+/*public class RegexTest {
     public static void main(String[] args){
         String s = "Hello my name is 23 ha 46";
         Matcher m = Pattern.compile("^Hello my name is ([\\d]*) ha ([\\d]*)$").matcher(s);
@@ -36,4 +36,4 @@ public class RegexTest {
         TriHexTile tht = TigerLandDelegate.makeTriHexTileFromString(exampleTile);
         System.out.println(tht.toString());
     }
-}
+}*/

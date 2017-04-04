@@ -375,10 +375,12 @@ public class Player {
         //if we settle... currently the only option
         ArrayList<TerrainTile> legalSettlements = getLegalNewSettlements(gameMap);
         TerrainTile bestPlaceToSettle = getBestNewSettlement(legalSettlements);
-        if(bestPlaceToSettle == null)
+        if(bestPlaceToSettle == null) {
             return false;
+        }
         buildSettlement(bestPlaceToSettle);
-
+        activeSettlement = settlements.get(settlements.size()-1);
+        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(bestPlaceToSettle,settlements,activeSettlement);
         return true; //todo should there be a false?
     }
 

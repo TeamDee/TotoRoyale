@@ -122,7 +122,7 @@ public class Settlement{
     public void fill(TerrainTile hexTile, TerrainType terrainType) {
         ArrayList<TerrainTile> adjacentHexTiles = getAdjacentTerrainTiles(hexTile);
         for (TerrainTile adjacentHexTile : adjacentHexTiles) {
-            if (!exsettle.contains(adjacentHexTile) && isContiguous(adjacentHexTile) && adjacentHexTile.terrainType() == terrainType && adjacentHexTile.getMeepleCount() == 0 && !adjacentHexTile.hasTotoro()) {
+            if (!exsettle.contains(adjacentHexTile) && isContiguous(adjacentHexTile) && adjacentHexTile.terrainType() == terrainType && !adjacentHexTile.isOccupied()) {
                 exsettle.add(adjacentHexTile);
                 fill(adjacentHexTile, terrainType);
             }
@@ -137,6 +137,7 @@ public class Settlement{
         }
         return ss;
     }
+
     public ArrayList<Settlement> combineAdjacentSettlementsforSingleTile(TerrainTile hexTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
     {
         BoardSpace bs = hexTile.getBoardSpace();
@@ -152,6 +153,14 @@ public class Settlement{
                 Settlement s = tempSettlements.get(i);
                 ArrayList<TerrainTile> a = s.getSettlement();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    if(BeingEdit.hasTotoro() || s.hasTotoro())
+                    {
+                        BeingEdit.placedTotoro();
+                    }
+                    if(BeingEdit.hasTiger() || s.hasTiger())
+                    {
+                        BeingEdit.placedTiger();
+                    }
                     PlayerSettlements.remove(s);
                     adjacentHexTiles.addAll(a);
                 }
@@ -165,6 +174,14 @@ public class Settlement{
                 Settlement s = tempSettlements.get(i);
                 ArrayList<TerrainTile> a = s.getSettlement();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    if(BeingEdit.hasTotoro() || s.hasTotoro())
+                    {
+                        BeingEdit.placedTotoro();
+                    }
+                    if(BeingEdit.hasTiger() || s.hasTiger())
+                    {
+                        BeingEdit.placedTiger();
+                    }
                     PlayerSettlements.remove(s);
                     adjacentHexTiles.addAll(a);
                 }
@@ -178,6 +195,14 @@ public class Settlement{
                 Settlement s = tempSettlements.get(i);
                 ArrayList<TerrainTile> a = s.getSettlement();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    if(BeingEdit.hasTotoro() || s.hasTotoro())
+                    {
+                        BeingEdit.placedTotoro();
+                    }
+                    if(BeingEdit.hasTiger() || s.hasTiger())
+                    {
+                        BeingEdit.placedTiger();
+                    }
                     PlayerSettlements.remove(s);
                     adjacentHexTiles.addAll(a);
                 }
@@ -191,6 +216,14 @@ public class Settlement{
                 Settlement s = tempSettlements.get(i);
                 ArrayList<TerrainTile> a = s.getSettlement();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    if(BeingEdit.hasTotoro() || s.hasTotoro())
+                    {
+                        BeingEdit.placedTotoro();
+                    }
+                    if(BeingEdit.hasTiger() || s.hasTiger())
+                    {
+                        BeingEdit.placedTiger();
+                    }
                     PlayerSettlements.remove(s);
                     adjacentHexTiles.addAll(a);
                 }
@@ -204,6 +237,14 @@ public class Settlement{
                 Settlement s = tempSettlements.get(i);
                 ArrayList<TerrainTile> a = s.getSettlement();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    if(BeingEdit.hasTotoro() || s.hasTotoro())
+                    {
+                        BeingEdit.placedTotoro();
+                    }
+                    if(BeingEdit.hasTiger() || s.hasTiger())
+                    {
+                        BeingEdit.placedTiger();
+                    }
                     PlayerSettlements.remove(s);
                     adjacentHexTiles.addAll(a);
                 }
@@ -217,6 +258,14 @@ public class Settlement{
                 Settlement s = tempSettlements.get(i);
                 ArrayList<TerrainTile> a = s.getSettlement();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
+                    if(BeingEdit.hasTotoro() || s.hasTotoro())
+                    {
+                        BeingEdit.placedTotoro();
+                    }
+                    if(BeingEdit.hasTiger() || s.hasTiger())
+                    {
+                        BeingEdit.placedTiger();
+                    }
                     PlayerSettlements.remove(s);
                     adjacentHexTiles.addAll(a);
                 }
