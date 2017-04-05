@@ -8,12 +8,11 @@ import java.util.regex.Pattern;
 /**
  * Created by Z_K on 4/1/2017.
  */
-/*public class RegexTest {
+public class RegexTest {
     public static void main(String[] args){
         String s = "Hello my name is 23 ha 46";
         Matcher m = Pattern.compile("^Hello my name is ([\\d]*) ha ([\\d]*)$").matcher(s);
-        if(m.matches())
-        {
+        if(m.matches()) {
             System.out.println("Before Name: " + m.group(0));
             System.out.println("Name entered: " + m.group(1));
             System.out.println("2nd entered: " + m.group(2));
@@ -33,7 +32,13 @@ import java.util.regex.Pattern;
 //        for(String str : splited){
 //            System.out.println("Item: " + str);
 //        }
-        TriHexTile tht = TigerLandDelegate.makeTriHexTileFromString(exampleTile);
+        TriHexTile tht = TriHexTile.makeTriHexTileFromString(exampleTile);
         System.out.println(tht.toString());
+
+
+        Thread t = new MockTigerLandServer(6066);
+        t.start();
+        TigerLandDelegate delegate = new TigerLandDelegate("localhost", 6066);
+        delegate.TournamentProtocol();
     }
-}*/
+}

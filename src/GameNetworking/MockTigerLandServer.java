@@ -36,7 +36,7 @@ public class MockTigerLandServer extends Thread{
                 DataOutputStream out = new DataOutputStream(server.getOutputStream());
                 while(true) {
                     String username = null;
-                    String serverusername = null;
+                    String serverusername = "1234";
                     int rounds = 2;
                     int challengeID = 1;
                     int RID = 1;
@@ -45,76 +45,74 @@ public class MockTigerLandServer extends Thread{
                     int score = 1;
                     int number = 1;
                     int time_move = 1;
-                    String message = in.readUTF();
-                    System.out.println(message);
+
                     out.writeUTF("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("TWO SHALL ENTER ONE SHALL LEAVE");
+                    String message = in.readUTF();
+                    System.out.println(message);
+                    out.writeUTF("TWO SHALL ENTER ONE SHALL LEAVE");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("Echo received: " + message);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    message = in.readUTF();
+                    System.out.println("Echo received: " + message);
                     out.writeUTF("WAIT FOR THE TOURNAMENT TO BEGIN " + serverusername);
+
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("NEW CHALLENGE" + challengeID + "YOU WILL PLAY" + rounds + "MATCHES");
+                    out.writeUTF("NEW CHALLENGE " + challengeID + " YOU WILL PLAY " + rounds + " MATCHES");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("BEGIN ROUND" + RID + "OF" + rounds);
+                    out.writeUTF("BEGIN ROUND " + RID + " OF " + rounds);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER" + username);
+                    out.writeUTF("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + username);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("MAKE YOUR MOVE IN GAME" + GID + "WITHIN" + time_move + "SECOND:MOVE");
+                    out.writeUTF("MAKE YOUR MOVE IN GAME " + GID + " WITHIN " + time_move + " SECOND:MOVE");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     ///ADD MORE OF THE MOVES HERE
-                    out.writeUTF("GAME" + GID + "MOVE" + number + "PLAYER" + PID + "FORFEITED: ILLEGAL TILE PLACEMENT");
+                    out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: ILLEGAL TILE PLACEMENT");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("GAME" + GID + "MOVE" + number + "PLAYER" + PID + "FORFEITED: ILLEGAL BUILD");
+                    out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: ILLEGAL BUILD");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("GAME" + GID + "MOVE" + number + "PLAYER" + PID + "FORFEITED: TIMEOUT");
+                    out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: TIMEOUT");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    out.writeUTF("GAME" + GID + "MOVE" + number + "PLAYER" + PID + "LOST: UNABLE TO BUILD");
+                    out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " LOST: UNABLE TO BUILD");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -122,7 +120,7 @@ public class MockTigerLandServer extends Thread{
                     }
 
                     //end of game
-                    out.writeUTF("GAME" + GID + "OVER PLAYER" + PID + score + "PLAYER" + PID + score);
+                    out.writeUTF("GAME " + GID + " OVER PLAYER " + PID + " " + score + " PLAYER " + PID + " " + score);
 
                     try {
                         Thread.sleep(1000);
@@ -130,7 +128,7 @@ public class MockTigerLandServer extends Thread{
                         e.printStackTrace();
                     }
 
-                    out.writeUTF("END OF ROUND" + RID + "OF" + rounds);
+                    out.writeUTF("END OF ROUND " + RID + " OF " + rounds);
 
                     try {
                         Thread.sleep(1000);
@@ -139,9 +137,9 @@ public class MockTigerLandServer extends Thread{
                     }
 
 
-                    System.out.println("END OF CHALLENGES");
-                    System.out.println("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
-                    System.out.println("THANK YOU FOR PLAYING! GOODBYE");
+                    out.writeUTF("END OF CHALLENGES");
+                    out.writeUTF("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
+                    out.writeUTF("THANK YOU FOR PLAYING! GOODBYE");
 
                 }
 //                server.close();

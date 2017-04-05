@@ -23,6 +23,7 @@ public class GameLogicDirector implements Runnable{
     private boolean AIvsHuman = false;
     private boolean HumanVsHuman = false;
     private int myId, opponentId;
+    private boolean isGameOver = false;
 
     //Game specific objects
     Player p1,p2;
@@ -86,6 +87,7 @@ public class GameLogicDirector implements Runnable{
             y = Integer.parseInt(placementMatcher.group(3));
             z = Integer.parseInt(placementMatcher.group(4));
             orientation = Integer.parseInt(placementMatcher.group(5));
+            //TODO: Add code actually place the tile
         }
     }
 
@@ -97,7 +99,7 @@ public class GameLogicDirector implements Runnable{
             x = Integer.parseInt(buildMatcher.group(2));
             y = Integer.parseInt(buildMatcher.group(3));
             z = Integer.parseInt(buildMatcher.group(4));
-            
+            //TODO: Add code actually carry out the build action
         }
     }
 
@@ -328,4 +330,9 @@ public class GameLogicDirector implements Runnable{
         gc = new GameController();
     }
 
+    public boolean isGameOver(){
+        return isGameOver;
+    }
+
+    public void setGameOver() { isGameOver = true; }
 }
