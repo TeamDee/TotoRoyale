@@ -32,6 +32,9 @@ public abstract class HexTile extends Tile {
     protected boolean hasTotoro = false;
     protected boolean hasTiger = false;
 
+    public boolean isPartOfSettlement;
+    public int settlementSize;
+
 
     public HexTile() {
         //you shouldn't be calling this in the context of this game, since you need a TriHexTile compositor

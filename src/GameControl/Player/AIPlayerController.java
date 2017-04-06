@@ -1,6 +1,10 @@
 package GameControl.Player;
 
 import GameControl.Placement;
+import GameModel.Map.BoardSpace;
+import GameModel.Map.Tile.HexTile;
+import GameModel.Map.Tile.TerrainTile;
+import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.TriHexTile;
 
 import java.util.List;
@@ -36,9 +40,28 @@ public class AIPlayerController extends PlayerController{
     }
 
     public int scoreTilePlacement(Placement placement) {
-        int score;
-        score = (int) (100 * Math.random());
+        int score = 0;
+        //score = (int) (100 * Math.random());
         //TODO score placements nonrandomly
+        for (int i = 0; i < 2; i++){
+            BoardSpace hex = placement.getBoardSpaces().get(i);
+            //Level Consideration
+            if (hex.topTile().getLevel() == 0) //Empty space
+                score += 15;
+            if (hex.topTile().getLevel() == 1) //Nuke and potential for a tiger
+                score += 20;
+            if (hex.topTile().getLevel() == 2) //Causes a tiger to be place-able, high priority
+                score += 50;
+            if (hex.topTile().getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
+                score += 10;
+            //Enemy Occupant
+            if (myPlayer.isWhite() && hex.topTile().isOwnedByBlack()) { //Enemy owns place
+                if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5)
+                    score += 0;
+                else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
+                    score += 20;
+            }
+        }
         return score;
     }
 

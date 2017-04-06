@@ -89,7 +89,11 @@ public class Settlement{
     }
 
     public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
-    public void addToSettlement(TerrainTile tile){settlement.add(tile);}
+    public void addToSettlement(TerrainTile tile){
+        settlement.add(tile);
+        tile.getBoardSpace().topTile().isPartOfSettlement = true;
+        tile.getBoardSpace().topTile().settlementSize = settlement.size(); //both used for AI purposes
+    }
 
     public ArrayList<TerrainTile> getSettlement()
     {
