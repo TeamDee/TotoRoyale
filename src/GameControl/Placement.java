@@ -1,11 +1,11 @@
 package GameControl;
 import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
+import GameModel.Map.Coordinates.OffsetCoordinate;
+import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
-import GameModel.Map.Tile.VolcanoTile;
 import GameModel.Map.TriHexTile;
-import GameModel.Map.Tile.HexTile;
 
 import java.util.ArrayList;
 
@@ -136,5 +136,17 @@ public class Placement {
                 owner.nukeSettlements((TerrainTile) h);
             }
         }
+    }
+
+    public OffsetCoordinate getVolcanoLocation(){
+        BoardSpace volcano;
+        if(newA.myType == TerrainType.VOLCANO){
+            volcano = oldA;
+        } else if(newB.myType == TerrainType.VOLCANO){
+            volcano = oldB;
+        } else{
+            volcano = oldC;
+        }
+        return volcano.getLocation();
     }
 }

@@ -8,6 +8,7 @@ import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Deck;
 import GameModel.Map.TriHexTile;
 import GameNetworking.FrequentlyUsedPatterns;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -52,7 +53,7 @@ public class GameLogicDirector implements Runnable{
     public String tournamentMove(String tileAssigned){
         String ActionMessage = "PLACE " + tileAssigned + " AT ";
         TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
-        currentPlayer.takeTurn(myMap, tht);
+        ActionMessage += currentPlayer.takeTurn(myMap, tht);
         nextPlayer();
         return ActionMessage;
     }
@@ -321,13 +322,12 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1);
         currentPlayer = p1;
 
-        GameController gameController = new GameController();
-        gameController.initViewControllerInteractions(p1, activePlayer);
+        gc = new GameController();
+        gc.initViewControllerInteractions(p1, activePlayer);
         deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
 
         newGame = false; // Q: what's this for? A: see run method
-        gc = new GameController();
     }
 
     public boolean isGameOver(){

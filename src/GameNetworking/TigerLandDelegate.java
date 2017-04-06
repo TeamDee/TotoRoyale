@@ -130,13 +130,43 @@ public class TigerLandDelegate {
             System.out.println("SERVER: " + serverMessage);
 
             if(FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
-                MatchProtocol(in, out);
+                MockMatchProtocol(in, out);
                 serverMessage = in.readUTF();
                 System.out.println("SERVER: " + serverMessage);
             }
             System.out.println("Delegate: End of Round Protocol!");
         } catch (IOException ex){
             unexpectedError = "RoundProtocol: " + ex.getMessage();
+            System.out.println("Failed to obtain message from server.");
+        }
+    }
+
+    public void MockMatchProtocol(DataInputStream in, DataOutputStream out){
+        String serverMessage = "", clientMessage = "";
+        int opponentId;
+        try{
+            //match start message
+            serverMessage = in.readUTF();
+            System.out.println("SERVER: " + serverMessage);
+            Matcher NewMatchMatcher = FrequentlyUsedPatterns.NewMatchMssgPattern.matcher(serverMessage);
+            if(NewMatchMatcher.matches()) {
+                opponentId = Integer.parseInt(NewMatchMatcher.group(1));
+                game1 = new GameLogicDirector(playerId, opponentId);
+
+                game1Id = -1;
+
+                game1.begin();
+
+                for (int i = 0; (!game1.isGameOver()) && i < 48; i++) {
+                    MoveProtocol(in, out);
+                }
+                //game1 score
+                serverMessage = in.readUTF();
+                System.out.println("SERVER: " + serverMessage);
+            }
+            System.out.println("Delegate: End of Match Protocol!");
+        }catch (IOException ex){
+            unexpectedError = "MatchProtocol: " + ex.getMessage();
             System.out.println("Failed to obtain message from server.");
         }
     }
@@ -161,11 +191,7 @@ public class TigerLandDelegate {
                 game2.begin();
 
                 for (int i = 0; (!game1.isGameOver() || !game2.isGameOver()) && i < 48; i++) {
-                    serverMessage = in.readUTF();
-                    System.out.println("SERVER: " + serverMessage);
-
                     MoveProtocol(in, out);
-
                 }
                 //game1 score
                 serverMessage = in.readUTF();
@@ -185,7 +211,7 @@ public class TigerLandDelegate {
         String serverMessage = "", clientMessage = "", placedAndBuildMssg = "";
         int gameId, moveNumber, pId;
         String tileAssigned;
-        int messageCountExpeted = 3;
+        int messageCountExpeted = 1;
 
         try{
             while(messageCountExpeted>0){

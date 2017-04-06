@@ -80,11 +80,7 @@ public class OffsetCoordinate {
 
     @Override
     public String toString(){
-        String s ="";
-        s += "x: " + x;
-        s += " ";
-        s += "y: " + y;
-        return s;
+        return "" + x + " " + y + " ";
     }
 
     public boolean compare(OffsetCoordinate other){
@@ -94,4 +90,5 @@ public class OffsetCoordinate {
         }
         return result;
     }
+
 }
