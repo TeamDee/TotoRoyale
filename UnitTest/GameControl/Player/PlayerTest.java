@@ -19,7 +19,7 @@ public class PlayerTest {
     @BeforeClass
     public static void setUp(){
         map = new GameMap();
-        player1 = new WhitePlayer("WhitePlayer", map);
+        player1 = new WhitePlayer("WhitePlayer", map, null);
     }
 
     @Test

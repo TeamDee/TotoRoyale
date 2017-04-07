@@ -36,6 +36,8 @@ public class TigerLandDelegate {
         System.out.println("Game Delegate successfully created.");
     }
 
+    public TigerLandClient getClient() { return client; }
+
     public void TournamentProtocol(){
         String serverMessage = "";
         DataInputStream dataInputStream = client.getDataInputStream();
@@ -239,7 +241,7 @@ public class TigerLandDelegate {
                         placedAndBuildMssg = game2.tournamentMove(tileAssigned);
                     }
 
-                    clientMessage = "GAME " + gameId + " MOVE " + moveNumber + " PLAYER " + playerId + " ";
+                    clientMessage = "GAME " + gameId + " MOVE " + moveNumber + " ";
                     clientMessage += placedAndBuildMssg;
                     out.writeUTF(clientMessage);
                     System.out.println("Client: " + clientMessage);

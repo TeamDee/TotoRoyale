@@ -55,6 +55,10 @@ public class GameLogicDirector implements Runnable{
         TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
         ActionMessage += currentPlayer.takeTurn(myMap, tht);
         nextPlayer();
+        paint();
+        endRoundChecks();
+        if(winner != null)
+            setGameOver();
         return ActionMessage;
     }
 
@@ -121,10 +125,15 @@ public class GameLogicDirector implements Runnable{
         else
             currentPlayer =p1;
     }
+
+    public void run(){
+        while(!isGameOver){ }
+    }
+
     /*
       NEVER CALL THIS - DAVE
      */
-    public void run() {
+    public void run2() {
         while (winner == null) {
                 if (newGame) {
                     System.out.println("Initializing new game.");
@@ -322,11 +331,10 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1);
         currentPlayer = p1;
 
-        gc = new GameController();
-        gc.initViewControllerInteractions(p1, activePlayer);
+        gc = GameController.getInstance();
         deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
-
+        gc.initViewControllerInteractions(p1, activePlayer);
         newGame = false; // Q: what's this for? A: see run method
     }
 

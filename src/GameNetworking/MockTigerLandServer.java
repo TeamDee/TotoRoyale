@@ -36,10 +36,9 @@ public class MockTigerLandServer extends Thread{
             while(true) {
                 String opponentId = "5678";
                 String assignedPlayerId = "1234";
-                int rounds = 2;
+                int rounds = 1;
                 int challengeID = 1;
                 int GID = 1;
-                int PID = 1;
                 int score = 1;
                 int number = 1;
                 int time_move = 1;
@@ -93,18 +92,19 @@ public class MockTigerLandServer extends Thread{
                     }
                     for(int moveNumb = 1; moveNumb <= 48; moveNumb++) {
                         String tile = randomHex() + "+" + randomHex();
-                        out.writeUTF("MAKE YOUR MOVE IN GAME " + GID + " WITHIN " + time_move + " SECOND: MOVE " + moveNumb + " "+ tile);
+                        out.writeUTF("MAKE YOUR MOVE IN GAME " + GID + " WITHIN " + time_move + " SECOND: MOVE " + moveNumb + " PLACE "+ tile);
 
                         message = in.readUTF();
                         System.out.println("Echo received: " + message);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
                     //end of game
-                    out.writeUTF("GAME " + GID + " OVER PLAYER " + PID + " " + score + " PLAYER " + PID + " " + score);
+                    out.writeUTF("GAME " + GID + " OVER PLAYER " + assignedPlayerId + " " + score + " PLAYER " + opponentId + " " + score);
 
                     out.writeUTF("END OF ROUND " + RID + " OF " + rounds);
                 }
@@ -126,7 +126,7 @@ public class MockTigerLandServer extends Thread{
 
     private String randomHex(){
         String result = "";
-        int randomInt = ((int) Math.random() * 40) / 10;
+        int randomInt = ((int)( Math.random() * 40)) / 10;
         switch (randomInt){
             case 0:
                 result = "GRASS"; break;
