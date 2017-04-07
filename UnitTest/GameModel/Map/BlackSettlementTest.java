@@ -30,7 +30,7 @@ public class BlackSettlementTest {
         @Test
         public void check_terrain(){
             map=new GameMap();
-            blackPlayer=new BlackPlayer();
+            blackPlayer=new BlackPlayer("Black Player", map, null);
             ArrayList<HexTile>tiles=map.getVisible();
             for(HexTile ht:tiles){
                 if(ht.terrainType()==TerrainType.VOLCANO)

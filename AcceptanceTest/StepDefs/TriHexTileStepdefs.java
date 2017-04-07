@@ -71,7 +71,7 @@ public class TriHexTileStepdefs {
     @When("^a user places a TriHexTile with intentions to build a new level$")
     public void build_new_level(){
         map = new GameMap();
-        player = new Player(map);
+        player = new Player(map, null);
         placements = map.getLegalMapPlacements(tht);
         //map.implementPlacement( placements.get(0));
     }

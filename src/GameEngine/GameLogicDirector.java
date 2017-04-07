@@ -8,6 +8,7 @@ import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Deck;
 import GameModel.Map.TriHexTile;
 import GameNetworking.FrequentlyUsedPatterns;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -23,6 +24,7 @@ public class GameLogicDirector implements Runnable{
     private boolean AIvsHuman = false;
     private boolean HumanVsHuman = false;
     private int myId, opponentId;
+    private boolean isGameOver = false;
 
     //Game specific objects
     Player p1,p2;
@@ -51,8 +53,12 @@ public class GameLogicDirector implements Runnable{
     public String tournamentMove(String tileAssigned){
         String ActionMessage = "PLACE " + tileAssigned + " AT ";
         TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
-        currentPlayer.takeTurn(myMap, tht);
+        ActionMessage += currentPlayer.takeTurn(myMap, tht);
         nextPlayer();
+        paint();
+        endRoundChecks();
+        if(winner != null)
+            setGameOver();
         return ActionMessage;
     }
 
@@ -86,6 +92,7 @@ public class GameLogicDirector implements Runnable{
             y = Integer.parseInt(placementMatcher.group(3));
             z = Integer.parseInt(placementMatcher.group(4));
             orientation = Integer.parseInt(placementMatcher.group(5));
+            //TODO: Add code actually place the tile
         }
     }
 
@@ -97,7 +104,7 @@ public class GameLogicDirector implements Runnable{
             x = Integer.parseInt(buildMatcher.group(2));
             y = Integer.parseInt(buildMatcher.group(3));
             z = Integer.parseInt(buildMatcher.group(4));
-            
+            //TODO: Add code actually carry out the build action
         }
     }
 
@@ -118,10 +125,15 @@ public class GameLogicDirector implements Runnable{
         else
             currentPlayer =p1;
     }
+
+    public void run(){
+        while(!isGameOver){ }
+    }
+
     /*
       NEVER CALL THIS - DAVE
      */
-    public void run() {
+    public void run2() {
         while (winner == null) {
                 if (newGame) {
                     System.out.println("Initializing new game.");
@@ -320,13 +332,16 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1);
         currentPlayer = p1;
 
-        GameController gameController = new GameController();
-        gameController.initViewControllerInteractions(p1, activePlayer);
+        gc = GameController.getInstance();
         deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
-
+        gc.initViewControllerInteractions(p1, activePlayer);
         newGame = false; // Q: what's this for? A: see run method
-        gc = new GameController();
     }
 
+    public boolean isGameOver(){
+        return isGameOver;
+    }
+
+    public void setGameOver() { isGameOver = true; }
 }

@@ -19,7 +19,7 @@ public class FrequentlyUsedPatterns {
 
     static Pattern NewMatchMssgPattern = Pattern.compile("^NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER ([\\d]*)$");
 
-    static Pattern MoveServerPromptMssgPattern = Pattern.compile("^MAKE YOUR MOVE IN GAME ([\\d]*) WITHIN ([\\d.]*) SECOND[S]*: MOVE ([\\d]*) PLACE ([\\w]*)$");
+    static Pattern MoveServerPromptMssgPattern = Pattern.compile("^MAKE YOUR MOVE IN GAME ([\\d]*) WITHIN ([\\d.]*) SECOND[S]*: MOVE ([\\d]*) PLACE ([\\w+]*)$");
     static Pattern GameMovePlayerMssgPattern = Pattern.compile("^GAME ([\\d]*) MOVE ([\\d]*) PLAYER ([\\d]*) ([\\w\\d ]*)$");
     static Pattern GameForfeitedMssgPattern = Pattern.compile("^GAME ([\\d]*) MOVE ([\\d]*) PLAYER ([\\d]*) FORFEITED:([\\w ]*)$");
     static Pattern GameLostMssgPattern = Pattern.compile("^GAME ([\\d]*) MOVE ([\\d]*) PLAYER ([\\d]*) LOST:([\\w ]*)$");

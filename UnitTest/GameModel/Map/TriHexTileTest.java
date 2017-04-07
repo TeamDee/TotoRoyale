@@ -30,7 +30,7 @@ public class TriHexTileTest {
     @Test
         public void create_levels() {
         map = new GameMap();
-        player = new Player(map);
+        player = new Player(map, null);
         placements = map.getLegalMapPlacements(tht);
     }
 

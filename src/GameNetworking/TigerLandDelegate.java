@@ -36,6 +36,8 @@ public class TigerLandDelegate {
         System.out.println("Game Delegate successfully created.");
     }
 
+    public TigerLandClient getClient() { return client; }
+
     public void TournamentProtocol(){
         String serverMessage = "";
         DataInputStream dataInputStream = client.getDataInputStream();
@@ -86,6 +88,7 @@ public class TigerLandDelegate {
             }
             else
                 throw new IOException();
+            System.out.println("Delegate: Authentication is successful!");
         }catch(IOException ex){
             unexpectedError = "AuthenticationProtocol: " + ex.getMessage();
             System.out.println("Failed to AuthenticationProtocol with server.");
@@ -115,6 +118,7 @@ public class TigerLandDelegate {
                     nextGame = false;
                 }
             }
+            System.out.println("Delegate: End of Challenge Protocol!");
         }catch(IOException ex){
             unexpectedError = "ChallengeProtocol: " + ex.getMessage();
             System.out.println("Failed to obtain message from server.");
@@ -128,20 +132,49 @@ public class TigerLandDelegate {
             System.out.println("SERVER: " + serverMessage);
 
             if(FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
-                MatchProtocol(in, out);
+                MockMatchProtocol(in, out);
                 serverMessage = in.readUTF();
                 System.out.println("SERVER: " + serverMessage);
             }
+            System.out.println("Delegate: End of Round Protocol!");
         } catch (IOException ex){
             unexpectedError = "RoundProtocol: " + ex.getMessage();
             System.out.println("Failed to obtain message from server.");
         }
     }
 
+    public void MockMatchProtocol(DataInputStream in, DataOutputStream out){
+        String serverMessage = "", clientMessage = "";
+        int opponentId;
+        try{
+            //match start message
+            serverMessage = in.readUTF();
+            System.out.println("SERVER: " + serverMessage);
+            Matcher NewMatchMatcher = FrequentlyUsedPatterns.NewMatchMssgPattern.matcher(serverMessage);
+            if(NewMatchMatcher.matches()) {
+                opponentId = Integer.parseInt(NewMatchMatcher.group(1));
+                game1 = new GameLogicDirector(playerId, opponentId);
+
+                game1Id = -1;
+
+                game1.begin();
+
+                for (int i = 0; (!game1.isGameOver()) && i < 48; i++) {
+                    MoveProtocol(in, out);
+                }
+                //game1 score
+                serverMessage = in.readUTF();
+                System.out.println("SERVER: " + serverMessage);
+            }
+            System.out.println("Delegate: End of Match Protocol!");
+        }catch (IOException ex){
+            unexpectedError = "MatchProtocol: " + ex.getMessage();
+            System.out.println("Failed to obtain message from server.");
+        }
+    }
+
     public void MatchProtocol(DataInputStream in, DataOutputStream out){
         String serverMessage = "", clientMessage = "";
-        boolean gameOneOver = false;
-        boolean gameTwoOver = false;
         int opponentId = -1;
 
         try{
@@ -159,13 +192,8 @@ public class TigerLandDelegate {
                 game1.begin();
                 game2.begin();
 
-                for (int i = 0; (!gameOneOver || !gameTwoOver) && i < 48; i++) {
-                    serverMessage = in.readUTF();
-                    System.out.println("SERVER: " + serverMessage);
-
+                for (int i = 0; (!game1.isGameOver() || !game2.isGameOver()) && i < 48; i++) {
                     MoveProtocol(in, out);
-
-
                 }
                 //game1 score
                 serverMessage = in.readUTF();
@@ -174,7 +202,7 @@ public class TigerLandDelegate {
                 serverMessage = in.readUTF();
                 System.out.println("SERVER: " + serverMessage);
             }
-
+            System.out.println("Delegate: End of Match Protocol!");
         }catch (IOException ex){
             unexpectedError = "MatchProtocol: " + ex.getMessage();
             System.out.println("Failed to obtain message from server.");
@@ -185,7 +213,7 @@ public class TigerLandDelegate {
         String serverMessage = "", clientMessage = "", placedAndBuildMssg = "";
         int gameId, moveNumber, pId;
         String tileAssigned;
-        int messageCountExpeted = 3;
+        int messageCountExpeted = 1;
 
         try{
             while(messageCountExpeted>0){
@@ -194,6 +222,8 @@ public class TigerLandDelegate {
                 messageCountExpeted--;
                 Matcher serverPromptMatcher = FrequentlyUsedPatterns.MoveServerPromptMssgPattern.matcher(serverMessage);
                 Matcher gameMovePlayerMatcher = FrequentlyUsedPatterns.GameMovePlayerMssgPattern.matcher(serverMessage);
+                Matcher gameForfeitedMatcher = FrequentlyUsedPatterns.GameForfeitedMssgPattern.matcher(serverMessage);
+                Matcher gameLostMatcher = FrequentlyUsedPatterns.GameLostMssgPattern.matcher(serverMessage);
                 if(serverPromptMatcher.matches()){
                     gameId = Integer.parseInt(serverPromptMatcher.group(1));
                     if(game1Id == -1){
@@ -211,7 +241,7 @@ public class TigerLandDelegate {
                         placedAndBuildMssg = game2.tournamentMove(tileAssigned);
                     }
 
-                    clientMessage = "GAME " + gameId + " MOVE " + moveNumber + " PLAYER " + playerId + " ";
+                    clientMessage = "GAME " + gameId + " MOVE " + moveNumber + " ";
                     clientMessage += placedAndBuildMssg;
                     out.writeUTF(clientMessage);
                     System.out.println("Client: " + clientMessage);
@@ -228,12 +258,30 @@ public class TigerLandDelegate {
                             game2.opponentPlayerMove(opponentMoveMssg);
                         }
                     }
+                } else if(gameForfeitedMatcher.matches()){
+                    gameId = Integer.parseInt(gameMovePlayerMatcher.group(1));
+                    pId = Integer.parseInt(gameMovePlayerMatcher.group(3));
+                    String opponentForfeitedMssg = gameMovePlayerMatcher.group(4);
+                    if (gameId == game1Id) {
+                        game1.setGameOver();
+                    } else {
+                        game2.setGameOver();
+                    }
+                } else if(gameLostMatcher.matches()){
+                    gameId = Integer.parseInt(gameMovePlayerMatcher.group(1));
+                    pId = Integer.parseInt(gameMovePlayerMatcher.group(3));
+                    String opponentLostMssg = gameMovePlayerMatcher.group(4);
+                    if (gameId == game1Id) {
+                        game1.setGameOver();
+                    } else {
+                        game2.setGameOver();
+                    }
                 }
             }
+            System.out.println("Delegate: End of Move Protocol!");
         } catch (IOException ex){
             unexpectedError = "MoveProtocol: " + ex.getMessage();
             System.out.println("Failed to obtain message from server.");
         }
     }
-
 }

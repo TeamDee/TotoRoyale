@@ -43,7 +43,7 @@ public class BoardSpaceStepDefs {
 
     @When("^I place a  TriHexTile adjacent to an exisiting TriHexTile$")
     public void place_Tile() {
-        player = new Player(map);
+        player = new Player(map, null);
         placement = map.getAllLegalPlacements(tht);
         player.placeTile(map, placement.get(0));
     }
@@ -66,7 +66,7 @@ public class BoardSpaceStepDefs {
 
     @When("^I do not place a  TriHexTile adjacent to an existing TriHexTile$")
     public void illegaly_place_Tile() {
-        player = new Player(map);
+        player = new Player(map, null);
         placement = map.getAllLegalPlacements(tht);
     }
 
@@ -79,7 +79,7 @@ public class BoardSpaceStepDefs {
     @Given("^I have a game running for a while$")
     public void simulatedGame() {
         map = new GameMap();
-        player = new Player(map);
+        player = new Player(map, null);
         Deck deck = new Deck();
         int index = 10;
         while (index-- > 0) {

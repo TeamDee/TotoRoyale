@@ -3,21 +3,15 @@ package StepDefs;
 import GameControl.Player.BlackPlayer;
 import GameControl.Player.WhitePlayer;
 import GameModel.Map.BoardSpace;
-import GameModel.Map.Coordinates.AxialCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
-
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
-
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import GameControl.Player.Player;
-import sun.security.provider.certpath.BuildStep;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -29,12 +23,12 @@ public class SettlementStepDefs {
     private BoardSpace boardspace;
     private WhitePlayer whitePlayer;
     private BlackPlayer blackPlayer;
-    private static AxialCoordinate location;
+    private static OffsetCoordinate location;
 //WHITE MEEPLE SETTLEMENT
     @Given("^I have a game map initalized$")
         public void Game_map_is_init() {
         map = new GameMap();
-        location = new AxialCoordinate(0, 0);
+        location = new OffsetCoordinate(0, 0);
 
     }
 
@@ -48,7 +42,7 @@ public class SettlementStepDefs {
     @Then("^a white player must be placed on a non-volcano terrain$")
         public void check_terrain() {
         map = new GameMap();
-        whitePlayer = new WhitePlayer();
+        whitePlayer = new WhitePlayer("White Player", map, null);
         ArrayList<HexTile> tiles = map.getVisible();
         for (HexTile ht : tiles) {
             if (ht.terrainType() == TerrainType.VOLCANO)
@@ -65,7 +59,7 @@ public class SettlementStepDefs {
         @Given("^my game map  is initalized$")
         public void Game_map_init(){
             map = new GameMap();
-            location = new AxialCoordinate(0, 0);
+            location = new OffsetCoordinate(0, 0);
 
         }
 
@@ -79,7 +73,7 @@ public class SettlementStepDefs {
         @Then("^a black player must be placed on a non-volcano terrain$")
         public void check_terrain_for_placement() {
             map = new GameMap();
-            blackPlayer = new BlackPlayer();
+            blackPlayer = new BlackPlayer("Black Player", map, null);
             ArrayList<HexTile> tiles = map.getVisible();
             for(HexTile ht :tiles){
                 if(ht.terrainType() == TerrainType.VOLCANO)
