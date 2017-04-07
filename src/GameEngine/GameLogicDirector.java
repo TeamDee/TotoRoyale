@@ -197,6 +197,7 @@ public class GameLogicDirector implements Runnable{
 
 
 
+
     private Player gameEndCheckWinner(){
         Player winner = compareScores();
         if(winner==null){
