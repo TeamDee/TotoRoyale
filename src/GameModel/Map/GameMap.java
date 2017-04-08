@@ -501,7 +501,6 @@ public class GameMap {
         }
         this.playedTriHexTiles.add(p.getBoardSpaces().get(0).topTile().getTriHexTile());
         p.getBoardSpaces().get(0).topTile().resetOwner();
-
     }
 
     private Placement tempPlacement;

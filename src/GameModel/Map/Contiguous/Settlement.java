@@ -54,13 +54,14 @@ public class Settlement{
             potentialPlacements = getAdjacentTerrainTiles(check);
             for(TerrainTile scan: potentialPlacements)
             {
-                if(!adjacentTerrainTiles.contains(scan)) {
+                if(!adjacentTerrainTiles.contains(scan) && !settlement.contains(scan)) {
                     adjacentTerrainTiles.add(scan);
                 }
             }
         }
         return adjacentTerrainTiles;
     }
+
     public ArrayList<TerrainTile> getLegalTotoroTiles()
     {
         if(this.getSettlementSize() <5) {
@@ -149,14 +150,21 @@ public class Settlement{
     public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
     public void addToSettlement(TerrainTile tile){
         settlement.add(tile);
-        tile.getBoardSpace().topTile().isPartOfSettlement = true;
-        tile.getBoardSpace().topTile().settlementSize = settlement.size(); //both used for AI purposes
+        tile.isPartOfSettlement = true;
+        for (TerrainTile settlementTile : settlement) {
+            settlementTile.settlementSize = settlement.size(); //both used for AI purposes
+        }
+    }
+
+    public void temporarilyAddToSettlement(TerrainTile tt) {
+        settlement.add(tt);
     }
 
     public ArrayList<TerrainTile> getSettlement()
     {
         return settlement;
     }
+
     public boolean isContiguous(TerrainTile tile) {
         for (TerrainTile contiguousTile : settlement) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
@@ -164,6 +172,7 @@ public class Settlement{
         }
         return false;
     }
+
     public ArrayList<TerrainTile> getExpansionTiles(ArrayList<TerrainTile> ExpandSettlement,TerrainType terrainType)
     {
         ArrayList<TerrainTile> expand = new ArrayList<TerrainTile>();
@@ -190,6 +199,7 @@ public class Settlement{
             }
         }
     }
+
     public ArrayList<Settlement> combineAdacentSettlementsforMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
     {
         ArrayList<Settlement> ss = PlayerSettlements;
@@ -411,7 +421,7 @@ public class Settlement{
     }
 
     public ArrayList<Settlement> getSplitSettlementsAfterNuke(TerrainTile nukedTile) {
-        ArrayList<TerrainTile> ungroupedTiles = (ArrayList<TerrainTile>) settlement.clone();
+        ArrayList<TerrainTile> ungroupedTiles = new ArrayList<TerrainTile>(settlement);
         ungroupedTiles.remove(nukedTile);
         ArrayList<Settlement> splitSettlements = new ArrayList<Settlement>();
 

@@ -3,7 +3,9 @@ package GameControl.Player;
 import GameControl.Placement;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Contiguous.Settlement;
+import GameModel.Map.Contiguous.SettlementExpansion;
 import GameModel.Map.Coordinates.OffsetCoordinate;
+import GameModel.Map.Direction;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
@@ -74,9 +76,10 @@ public class Player {
         if(settlements.size() == 0){
             return false;
         }
+        /*
         int whichsettle = random.nextInt(settlements.size());
         Integer expansionWorth = new Integer(0);
-        ArrayList<TerrainTile> expansion = expandSettlement(settlements.get(whichsettle), expansionWorth);
+        ArrayList<TerrainTile> expansion = getBestExpansionForSettlement(settlements.get(whichsettle));
         if (expansionWorth >= 50) {
             for (TerrainTile add : expansion) {
                 placeMeeples(add);
@@ -87,6 +90,8 @@ public class Player {
             return true;
         }
         return false;
+        */
+        return true;
     }
 
     //todo test this
@@ -654,6 +659,7 @@ public class Player {
 
         }
     }
+
     public ArrayList<TerrainTile> expandSettlementToMaximizeMeeplePlacement(Settlement settlement1, Integer value) {
         value = 0;
         int excheck = 0;
@@ -702,75 +708,87 @@ public class Player {
     }
 
     public boolean expandSettlement() {
-        Integer tempValue = new Integer(0);
+        SettlementExpansion bestExpansion = new SettlementExpansion(null, 0, settlements.get(0));
         for(int i = 0; i!= settlements.size();++i){
             Settlement s = settlements.get(i);
-            ArrayList<TerrainTile> expansion = expandSettlement(s, tempValue);
-            if (tempValue >= 50) {
-                executeExpansion(expansion, settlements.get(i));
-                //System.out.println("Player Settlement Size Before: " + settlements.size());
-                settlements = s.combineAdacentSettlementsforMultTiles(expansion,settlements,s);
-                //System.out.println("Player Settlement Size After: " + settlements.size());
-                buildMessage = "EXPAND SETTLEMENT AT " + s.getSettlement().get(0).getBoardSpace().getLocation().toString();
-                return true;
+            SettlementExpansion bestCurrentSettlementExpansion = getBestExpansionForSettlement(s);
+            if (bestCurrentSettlementExpansion.getValue() > bestExpansion.getValue()) {
+                bestExpansion = bestCurrentSettlementExpansion;
             }
+        }
+        if (bestExpansion.getValue() >= 10) {
+            executeExpansion(bestExpansion.getTiles(), bestExpansion.getSettlement());
+            //System.out.println("Player Settlement Size Before: " + settlements.size());
+            settlements = bestExpansion.getSettlement().combineAdacentSettlementsforMultTiles(bestExpansion.getTiles(), settlements, bestExpansion.getSettlement());
+            //System.out.println("Player Settlement Size After: " + settlements.size());
+            buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().toString();
+            return true;
         }
         return false;
     }
 
-    public ArrayList<TerrainTile> expandSettlement(Settlement settlement1, Integer value) {
-        value = 0;
-        int excheck = 0;
-        ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
+    public SettlementExpansion getBestExpansionForSettlement(Settlement settlement1) {
+        SettlementExpansion bestExpansion = new SettlementExpansion(null, 0, settlement1);
+        ArrayList<ArrayList<TerrainTile>> allExpansions = new ArrayList<ArrayList<TerrainTile>>();
         ArrayList<TerrainTile> expansion1 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.GRASS);
         ArrayList<TerrainTile> expansion2 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.JUNGLE);
         ArrayList<TerrainTile> expansion3 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.LAKE);
         ArrayList<TerrainTile> expansion4 = settlement1.getExpansionTiles(settlement1.getSettlement(), TerrainType.ROCK);
         //System.out.println("Expand test: " + expansion1.size() + " " + expansion2.size() + " " + expansion3.size() + " " + expansion4.size());
-        allexpand.add(expansion1);
-        allexpand.add(expansion2);
-        allexpand.add(expansion3);
-        allexpand.add(expansion4);
-        for(int i = 0; i < allexpand.size(); i ++)
+        allExpansions.add(expansion1);
+        allExpansions.add(expansion2);
+        allExpansions.add(expansion3);
+        allExpansions.add(expansion4);
+        for (int i = 0; i < allExpansions.size(); i ++)
         {
-            int tmpValue = settlement1.getSettlementSize()*10; //ten points per tile
-
-
-            for(TerrainTile checkpoint: allexpand.get(i))
-            {
-                //temporarily place meeples TODO
+            int currentExpansionValue = 0;
+            ArrayList<TerrainTile> currentExpansionTiles = allExpansions.get(i);
+            Settlement settlementAfterExpansion = new Settlement();
+            for (TerrainTile tt : settlement1.getSettlement()) {
+                settlementAfterExpansion.temporarilyAddToSettlement(tt);
             }
-            for(TerrainTile checkpoint: allexpand.get(i))
-            {
+            for (TerrainTile tt : currentExpansionTiles) {
+                settlementAfterExpansion.temporarilyAddToSettlement(tt);
+            }
+            if (settlement1.hasTotoro()) {
+                settlementAfterExpansion.placedTotoro();
+            }
+            if (settlement1.hasTiger()) {
+                settlementAfterExpansion.placedTiger();
+            }
 
-                //todo maybe use a neural net here -- ignore this one if you're not Jason
-                //TODO FIX THIS TO USE TEMP MEEPLES
-                tmpValue += 10;
-                tmpValue += checkpoint.getLevel()^2; //todo how much do we value high levels
-                if(checkpoint.getBoardSpace().hasEmptyAdjacentLevel3()) {
-                    tmpValue += 20; //todo make this number more accurately reflect the value of an adjacent level 3 when expanding
+            //merge adjacent settlements with settlement after expansion
+            for (TerrainTile tt : settlementAfterExpansion.getSettlement()) {
+                for (Direction d : Direction.values()) {
+                    if (tt.hasNeighborInDirection(d)) {
+                        if (tt.getNeighborInDirection(d).getOwner() == this && !settlementAfterExpansion.contains(tt)) {
+                            Settlement adjacentSettlementAfterExpansion = getSettlementContaining(tt);
+                            for (TerrainTile adjacentSettlementTt : adjacentSettlementAfterExpansion.getSettlement()) {
+                                settlementAfterExpansion.temporarilyAddToSettlement(adjacentSettlementTt);
+                            }
+                            if (adjacentSettlementAfterExpansion.hasTotoro()) {
+                                settlementAfterExpansion.placedTotoro();
+                            }
+                            if (adjacentSettlementAfterExpansion.hasTiger()) {
+                                settlementAfterExpansion.placedTiger();
+                            }
+                        }
+                    }
                 }
-
-            }
-            if(allexpand.get(i).size() + settlement1.getSettlementSize() >= 5){
-                tmpValue += 50;
-            }
-            if(allexpand.get(i).size() >= 2){
-                tmpValue += 50;
             }
 
-            for(TerrainTile checkpoint: allexpand.get(i)) {
-                //remove all temporary meeples TODO
-            }
-            if(tmpValue > value)
+            currentExpansionValue += allExpansions.get(i).size()*10; //ten points per tile
+            if (canPlaceTotoro(settlementAfterExpansion))
+                currentExpansionValue += 50;
+            if (canPlaceTiger(settlementAfterExpansion))
+                currentExpansionValue += 20;
+
+            if(currentExpansionValue > bestExpansion.getValue())
             {
-                value = tmpValue;
-                excheck = i;
+                bestExpansion = new SettlementExpansion(currentExpansionTiles, currentExpansionValue, settlement1);
             }
-            tmpValue = 0;
         }
-        ArrayList<TerrainTile> expansion = allexpand.get(excheck);
-        return  expansion;
+        return bestExpansion;
     }
 
 
@@ -1058,6 +1076,7 @@ public class Player {
         ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTile);
         settlements.remove(settlementToNuke);
         settlements.addAll(newSettlements);
+        nukedTile.nuke();
     }
 
     public Settlement getSettlementContaining(TerrainTile tt) {

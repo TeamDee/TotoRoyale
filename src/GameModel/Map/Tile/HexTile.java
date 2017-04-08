@@ -188,7 +188,7 @@ public abstract class HexTile extends Tile {
     public boolean hasNeighborInDirection(Direction d) {
         switch (d) {
             case NORTH      : return getNorth() != null;
-            case NORTHEAST  : return getNorthWest() != null;
+            case NORTHEAST  : return getNorthEast() != null;
             case SOUTHEAST  : return getSouthEast() != null;
             case SOUTH      : return getSouth() != null;
             case SOUTHWEST  : return getSouthWest() != null;
@@ -200,12 +200,20 @@ public abstract class HexTile extends Tile {
     public HexTile getNeighborInDirection(Direction d) {
         switch (d) {
             case NORTH      : return getNorth();
-            case NORTHEAST  : return getNorthWest();
+            case NORTHEAST  : return getNorthEast();
             case SOUTHEAST  : return getSouthEast();
             case SOUTH      : return getSouth();
             case SOUTHWEST  : return getSouthWest();
             case NORTHWEST  : return getNorthWest();
             default         : return null;
         }
+    }
+
+    public void nuke() {
+        meepleCount = 0;
+        hasTotoro = false;
+        hasTiger = false;
+        isPartOfSettlement = false;
+        settlementSize = 0;
     }
 }
