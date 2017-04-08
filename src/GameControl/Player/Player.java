@@ -430,12 +430,12 @@ public class Player {
                 if (value >= 30) {
                     return returnMe;
                 }
-                /*else if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
+                /*if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
                 {
                     value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1));
                     returnMe = t;
                 }
-                else if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2)))
+                if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2)))
                 {
                     value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2));
                     returnMe = t;
@@ -497,6 +497,76 @@ public class Player {
         }
         return legalTilesToSettle;
 
+    }
+
+    public int scoreAdjacenttoLevel1Tiles(TerrainTile tt)
+    {
+        int value = 0;
+        BoardSpace bs = tt.getBoardSpace();
+        if(bs.getNorth() != null)
+        {
+            BoardSpace temp = bs.getNorth();
+            if(temp.getLevel() >= 3)
+            {
+               return 50;
+            }
+        }
+        if(bs.getNorthWest() != null)
+        {
+            BoardSpace temp = bs.getNorthWest();
+            if(temp.getLevel() > 0)
+            {
+                if(temp.getLevel() >= 3)
+                {
+                    return 50;
+                }
+            }
+        }
+        if(bs.getNorthEast() != null)
+        {
+            BoardSpace temp = bs.getNorthEast();
+            if(temp.getLevel() > 0)
+            {
+                if(temp.getLevel() >= 3)
+                {
+                    return 50;
+                }
+            }
+        }
+        if(bs.getSouth() != null)
+        {
+            BoardSpace temp = bs.getSouth();
+            if(temp.getLevel() > 0)
+            {
+                if(temp.getLevel() >= 3)
+                {
+                    return 50;
+                }
+            }
+        }
+        if(bs.getSouthEast() != null)
+        {
+            BoardSpace temp = bs.getSouthEast();
+            if(temp.getLevel() > 0)
+            {
+                if(temp.getLevel() >= 3)
+                {
+                    return 50;
+                }
+            }
+        }
+        if(bs.getSouthWest() != null)
+        {
+            BoardSpace temp = bs.getSouthWest();
+            if(temp.getLevel() > 0)
+            {
+                if(temp.getLevel() >= 3)
+                {
+                    return 50;
+                }
+            }
+        }
+        return value;
     }
 
     private TerrainTile getBestNewSettlement(ArrayList<TerrainTile> settlements){
@@ -772,6 +842,7 @@ public class Player {
 
     //TODO this
     private int howGoodIsSettlement(TerrainTile tt, Player p){
+        int value = scoreAdjacenttoLevel1Tiles(tt);
         return 1; //TODO either add logic here or find a better place to do AI stuff
         //ideas
         //get contiguos terrains of a type to see if we could expand there next turn
@@ -896,10 +967,12 @@ public class Player {
         for(Settlement s: legalTigerSettlments) {
             ArrayList<TerrainTile> potentialPlacements =  s.getLegalTigerTiles();
             for(TerrainTile t: potentialPlacements) {
-                if(scoreTigerPlacement(t) > bestScore) {
+                /*if(scoreTigerPlacement(t) > bestScore) {
                     bestSettlement = s;
                     tigerPlacementTile = t;
-                }
+                }*/
+                bestSettlement = s;
+                tigerPlacementTile = t;
             }
         }
         if(activeSettlement ==null || tigerPlacementTile ==null) {

@@ -70,7 +70,7 @@ public class Settlement{
         ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied() && doubleCheckAdjaacent(t)){
+            if(!t.isOccupied() && doubleCheckAdjaacent(t) && this.getSettlementSize() >= 5){
                 returnMe.add(t);
             }
         }
@@ -82,7 +82,6 @@ public class Settlement{
     {
         BoardSpace bs = t.getBoardSpace();
         BoardSpace temp = null;
-        TerrainTile tile = null;
         HexTile check = null;
         if (bs.getNorth().getLevel() > 0) {
             temp = bs.getNorth();
