@@ -178,7 +178,7 @@ public class Player {
         }
         return pscore;
     }
-    public int scoreAdjacentBoardSpaces(BoardSpace bs, Settlement s)
+    public int scoreAdjacentBoardSpaces(Placement p,BoardSpace bs, Settlement s)
     {
         int value = 0;
         if(bs.getNorth() != null)
@@ -189,7 +189,7 @@ public class Player {
                 ArrayList<TerrainTile> ts = s.getSettlement();
                 if(ts.contains(temp.topTile()))
                 {
-                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    value = 20 + scoreTilePlacement(p);
                     return value;
                 }
             }
@@ -202,7 +202,7 @@ public class Player {
                 ArrayList<TerrainTile> ts = s.getSettlement();
                 if(ts.contains(temp.topTile()))
                 {
-                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    value = 20 + scoreTilePlacement(p);
                     return value;
                 }
             }
@@ -215,7 +215,7 @@ public class Player {
                 ArrayList<TerrainTile> ts = s.getSettlement();
                 if(ts.contains(temp.topTile()))
                 {
-                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    value = 20 + scoreTilePlacement(p);
                     return value;
                 }
             }
@@ -228,7 +228,7 @@ public class Player {
                 ArrayList<TerrainTile> ts = s.getSettlement();
                 if(ts.contains(temp.topTile()))
                 {
-                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    value = 20 + scoreTilePlacement(p);
                     return value;
                 }
             }
@@ -241,7 +241,7 @@ public class Player {
                 ArrayList<TerrainTile> ts = s.getSettlement();
                 if(ts.contains(temp.topTile()))
                 {
-                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    value = 20 + scoreTilePlacement(p);
                     return value;
                 }
             }
@@ -254,7 +254,7 @@ public class Player {
                 ArrayList<TerrainTile> ts = s.getSettlement();
                 if(ts.contains(temp.topTile()))
                 {
-                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    value = 20 + scoreTilePlacement(p);
                     return value;
                 }
             }
@@ -282,14 +282,14 @@ public class Player {
                     }
                     else
                     {
-                        value = scoreAdjacentBoardSpaces(BSLoactions.get(1),s);
+                        value = scoreAdjacentBoardSpaces(t,BSLoactions.get(1),s);
                     }
                     if(BSLoactions.get(2).getLevel() > 0) {
                         temp2 = BSLoactions.get(2).topTile();
                     }
                     else
                     {
-                        value = scoreAdjacentBoardSpaces(BSLoactions.get(2),s);
+                        value = scoreAdjacentBoardSpaces(t,BSLoactions.get(2),s);
                     }
                     for (TerrainTile tt : currentSettlement) {
                         ArrayList<TerrainTile> AdjacentTiles = s.getAdjacentTerrainTiles(tt);
