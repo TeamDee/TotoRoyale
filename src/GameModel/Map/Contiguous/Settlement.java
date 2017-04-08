@@ -8,6 +8,7 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.Stack;
 
 import static GameModel.Map.Tile.TerrainType.VOLCANO;
@@ -69,19 +70,77 @@ public class Settlement{
         ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied()){
+            if(!t.isOccupied() && doubleCheckAdjaacent(t)){
                 returnMe.add(t);
             }
         }
         return returnMe;
 
     }
+
+    public boolean doubleCheckAdjaacent(TerrainTile t)
+    {
+        BoardSpace bs = t.getBoardSpace();
+        BoardSpace temp = null;
+        TerrainTile tile = null;
+        HexTile check = null;
+        if (bs.getNorth().getLevel() > 0) {
+            temp = bs.getNorth();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getNorthEast().getLevel() > 0) {
+            temp = bs.getNorthEast();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getNorthWest().getLevel() > 0) {
+            temp = bs.getNorthWest();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getSouth().getLevel() > 0) {
+            temp = bs.getSouth();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getSouthEast().getLevel() > 0) {
+            temp = bs.getSouthEast();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getSouthWest().getLevel() > 0) {
+            temp = bs.getSouthWest();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<TerrainTile> getLegalTigerTiles()
     {
         ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTigerPlaceMent){
-            if(t.getLevel() >= 3 && !t.isOccupied()){
+            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjaacent(t)){
                 returnMe.add(t);
             }
         }
@@ -157,6 +216,7 @@ public class Settlement{
         BoardSpace temp = null;
         HexTile check = null;
         ArrayList<Settlement> tempSettlements = PlayerSettlements;
+        Settlement tempsettlement = BeingEdit;
         ArrayList<TerrainTile> adjacentHexTiles = new ArrayList<TerrainTile>();
         if (bs.getNorth().getLevel() > 0) {
             temp = bs.getNorth();
@@ -285,6 +345,11 @@ public class Settlement{
             }
         }
         BeingEdit.getSettlement().addAll(adjacentHexTiles);
+        if(PlayerSettlements.contains(tempsettlement)) {
+            PlayerSettlements.remove(tempsettlement);
+            System.out.println("Hola como estas");
+        }
+        PlayerSettlements.add(BeingEdit);
         return PlayerSettlements;
     }
 

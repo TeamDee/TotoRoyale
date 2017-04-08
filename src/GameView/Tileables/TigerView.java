@@ -19,12 +19,15 @@ public class TigerView implements TileableView{
     public BufferedImage myImage;
     public BufferedImage tiger;
 
+    Player player;
+    public Image TigerGif;
     int width = Constants.TILE_WIDTH;
     int height = Constants.TILE_HEIGHT;
 
-    private Locale myLocation;
+    private Point myLocation;
 
     public TigerView( Player player) {
+        this.player = player;
         try {
             myImage = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT,BufferedImage.TYPE_INT_ARGB);
             if(player.isWhite())
@@ -35,6 +38,7 @@ public class TigerView implements TileableView{
             graphics.drawImage(tiger,  0, 0,
                     Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
             System.out.println("TigerView File CREATED");
+            makeGif();
         }
         catch (IOException e) {
             System.out.println("TigerView File NOT FOUND");
@@ -46,25 +50,22 @@ public class TigerView implements TileableView{
         return 0;
     }
 
-    public BufferedImage getImage(){
-        return myImage;
+    public Image getImage(){
+        return TigerGif;
     }
 
-
-
-    public void drawToGraphics(Graphics g, JPanel parent){
-        Frame frame = new Frame();
-
-        ImageIcon loading = new ImageIcon(ImagePaths.TIGER_WHITE_G);
-        //frame.add(loading);
-        frame.add(new JLabel("loading... ", loading, JLabel.CENTER));
-
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
-        frame.setVisible(true);
-        //frame.setLocation();
-        //parent.add(frame);
+    public void makeGif(){
+        if(player.isWhite())
+            TigerGif = Toolkit.getDefaultToolkit().createImage(ImagePaths.TIGER_WHITE_G);
+        else
+            TigerGif = Toolkit.getDefaultToolkit().createImage(ImagePaths.TIGER_BLACK_G);
+        TigerGif = TigerGif.getScaledInstance(Constants.TILE_WIDTH,Constants.TILE_HEIGHT, 5);
     }
+
+    public void setLocation(Point p){
+        this.myLocation = p;
+    }
+
     public ImageIcon getGif(){
         return null; //todo
     }

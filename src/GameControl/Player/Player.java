@@ -158,30 +158,69 @@ public class Player {
         return volcanolocation.toString();
     }
     public int scoreTilePlacement(Placement placement) {
-        int pscore = 0;
-        //score = (int) (100 * Math.random());
-        //TODO score placements nonrandomly
+        int score = 0;
         for (int i = 0; i < 2; i++){
-            BoardSpace hex = placement.getBoardSpaces().get(i);
+            BoardSpace hex = placement.getBoardSpaces().get(i); //Each individual hex tile at its top level
             //Level Consideration
-            if (hex.getLevel() == 0) //Empty space
-                pscore += 15;
+            if (hex.getLevel() == 0) { //Empty space
+                score += 15;
+                //return score;
+            }
             if (hex.getLevel() == 1) //Nuke and potential for a tiger
-                pscore += 20;
+                score += 20;
             if (hex.getLevel() == 2) //Causes a tiger to be place-able, high priority
-                pscore += 50;
+                score += 50;
             if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
-                pscore += 10;
+                score += 10;
             //Enemy Occupant
-            /*if (myPlayer.isWhite() && hex.topTile().isOwnedByBlack()) { //Enemy owns place
-                if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5)
-                    score += 0;
-                else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
-                    score += 20;*/
-
+            if (hex.getLevel() >= 1){
+                if ((this.isWhite() && hex.topTile().isOwnedByBlack()) || (!this.isWhite() && hex.topTile().isOwnedByWhite())) { //Enemy owns place
+                    if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {//Don't want to make it easier for the opponent
+                        if (hasAdjacentTotoro(hex.topTile()))
+                            return 0;
+                        else
+                            score -= 100;
+                    }
+                    else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
+                        score += 20;
+                }
+                //Own settlement (includes separation for having more totoros)
+                if ((this.isWhite() && hex.topTile().isOwnedByWhite()) || (!this.isWhite() && hex.topTile().isOwnedByBlack())) { //Friendly settlement
+                    if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {
+                        if (hasAdjacentTotoro(hex.topTile())) //Best point to separate a settlement at
+                            score += 100;
+                        else
+                            score += 20;
+                    }
+                    if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5) {
+                        if (hasAdjacentTotoro(hex.topTile())) //Still important, but requires more work to have enough for a totoro
+                            score += 50;
+                        else
+                            score += 10;
+                    }
+                }
+            }
         }
-        return pscore;
+        return score;
     }
+
+    public boolean hasAdjacentTotoro(HexTile hex){
+        if(hex.getNorth() != null)
+            return hex.getNorth().hasTotoro();
+        if (hex.getNorthWest() != null)
+            return hex.getNorthWest().hasTotoro();
+        if (hex.getSouthWest() != null)
+            return hex.getSouthWest().hasTotoro();
+        if (hex.getSouth() != null)
+            return hex.getSouth().hasTotoro();
+        if (hex.getSouthWest() != null)
+            return hex.getSouthWest().hasTotoro();
+        if (hex.getNorthWest() != null)
+            return hex.getNorthWest().hasTotoro();
+        else
+            return false;
+    }
+
     public int scoreAdjacentBoardSpaces(Placement p,BoardSpace bs, Settlement s)
     {
         int value = 0;
@@ -265,6 +304,71 @@ public class Player {
         }
         return value;
     }
+
+    public int scoreAdjacentBoardSpacesNotNearSettlement(Placement p,BoardSpace bs)
+    {
+        int value = 0;
+        if(bs.getNorth() != null)
+        {
+            BoardSpace temp = bs.getNorth();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+
+            }
+        }
+        if(bs.getNorthWest() != null)
+        {
+            BoardSpace temp = bs.getNorthWest();
+            if(temp.getLevel() > 0)
+            {
+
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getNorthEast() != null)
+        {
+            BoardSpace temp = bs.getNorthEast();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getSouth() != null)
+        {
+            BoardSpace temp = bs.getSouth();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getSouthEast() != null)
+        {
+            BoardSpace temp = bs.getSouthEast();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getSouthWest() != null)
+        {
+            BoardSpace temp = bs.getSouthWest();
+            if(temp.getLevel() > 0)
+            {
+
+                value = 20 + scoreTilePlacement(p);
+                return value;
+
+            }
+        }
+        return value;
+    }
+
     public Placement TigerFocusAI(ArrayList<Placement> Placements)
     {
         int value = 0;
@@ -287,6 +391,7 @@ public class Player {
                     else
                     {
                         value = scoreAdjacentBoardSpaces(t,BSLoactions.get(1),s);
+                        returnMe = t;
                     }
                     if(BSLoactions.get(2).getLevel() > 0) {
                         temp2 = BSLoactions.get(2).topTile();
@@ -294,6 +399,7 @@ public class Player {
                     else
                     {
                         value = scoreAdjacentBoardSpaces(t,BSLoactions.get(2),s);
+                        returnMe = t;
                     }
                     for (TerrainTile tt : currentSettlement) {
                         ArrayList<TerrainTile> AdjacentTiles = s.getAdjacentTerrainTiles(tt);
@@ -329,6 +435,16 @@ public class Player {
                 if (value >= 30) {
                     return returnMe;
                 }
+                /*else if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
+                {
+                    value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1));
+                    returnMe = t;
+                }
+                else if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2)))
+                {
+                    value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2));
+                    returnMe = t;
+                }*/
             }
             if (value >= 30) {
                 return returnMe;
@@ -636,6 +752,7 @@ public class Player {
     private String buildPhase(GameMap gameMap){
         ArrayList<HexTile> tiles = gameMap.getVisible();
         String finalMessage = "";
+
         if(outOfTotoroOrTigers()){
             getRidOfMeeples();
             finalMessage = buildMessage;
