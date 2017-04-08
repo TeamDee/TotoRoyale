@@ -299,6 +299,71 @@ public class Player {
         }
         return value;
     }
+
+    public int scoreAdjacentBoardSpacesNotNearSettlement(Placement p,BoardSpace bs)
+    {
+        int value = 0;
+        if(bs.getNorth() != null)
+        {
+            BoardSpace temp = bs.getNorth();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+
+            }
+        }
+        if(bs.getNorthWest() != null)
+        {
+            BoardSpace temp = bs.getNorthWest();
+            if(temp.getLevel() > 0)
+            {
+
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getNorthEast() != null)
+        {
+            BoardSpace temp = bs.getNorthEast();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getSouth() != null)
+        {
+            BoardSpace temp = bs.getSouth();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getSouthEast() != null)
+        {
+            BoardSpace temp = bs.getSouthEast();
+            if(temp.getLevel() > 0)
+            {
+                value = 20 + scoreTilePlacement(p);
+                return value;
+            }
+        }
+        if(bs.getSouthWest() != null)
+        {
+            BoardSpace temp = bs.getSouthWest();
+            if(temp.getLevel() > 0)
+            {
+
+                value = 20 + scoreTilePlacement(p);
+                return value;
+
+            }
+        }
+        return value;
+    }
+
     public Placement TigerFocusAI(ArrayList<Placement> Placements)
     {
         int value = 0;
@@ -321,6 +386,7 @@ public class Player {
                     else
                     {
                         value = scoreAdjacentBoardSpaces(t,BSLoactions.get(1),s);
+                        returnMe = t;
                     }
                     if(BSLoactions.get(2).getLevel() > 0) {
                         temp2 = BSLoactions.get(2).topTile();
@@ -328,6 +394,7 @@ public class Player {
                     else
                     {
                         value = scoreAdjacentBoardSpaces(t,BSLoactions.get(2),s);
+                        returnMe = t;
                     }
                     for (TerrainTile tt : currentSettlement) {
                         ArrayList<TerrainTile> AdjacentTiles = s.getAdjacentTerrainTiles(tt);
@@ -363,6 +430,16 @@ public class Player {
                 if (value >= 30) {
                     return returnMe;
                 }
+                /*else if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
+                {
+                    value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1));
+                    returnMe = t;
+                }
+                else if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2)))
+                {
+                    value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2));
+                    returnMe = t;
+                }*/
             }
             if (value >= 30) {
                 return returnMe;
