@@ -54,13 +54,14 @@ public class Settlement{
             potentialPlacements = getAdjacentTerrainTiles(check);
             for(TerrainTile scan: potentialPlacements)
             {
-                if(!adjacentTerrainTiles.contains(scan)) {
+                if(!adjacentTerrainTiles.contains(scan) && !settlement.contains(scan)) {
                     adjacentTerrainTiles.add(scan);
                 }
             }
         }
         return adjacentTerrainTiles;
     }
+
     public ArrayList<TerrainTile> getLegalTotoroTiles()
     {
         if(this.getSettlementSize() <5) {
@@ -421,7 +422,7 @@ public class Settlement{
     }
 
     public ArrayList<Settlement> getSplitSettlementsAfterNuke(TerrainTile nukedTile) {
-        ArrayList<TerrainTile> ungroupedTiles = (ArrayList<TerrainTile>) settlement.clone();
+        ArrayList<TerrainTile> ungroupedTiles = new ArrayList<TerrainTile>(settlement);
         ungroupedTiles.remove(nukedTile);
         ArrayList<Settlement> splitSettlements = new ArrayList<Settlement>();
 

@@ -127,7 +127,7 @@ public class Placement {
         oldC.removeTopTile();
     }
 
-    public void nukeAnySettlements() {
+    private void nukeAnySettlements() {
         HexTile ht;
         for (BoardSpace b: getBoardSpaces()) {
             ht = b.topTile();
