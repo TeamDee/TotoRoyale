@@ -51,16 +51,18 @@ public class GameMap {
 
     private void placeStartingTile(){
         VolcanoTile volcano = new VolcanoTile();
-        TriHexTile topPart = new TriHexTile(new Jungle(), new Lake(), volcano);
-        TriHexTile bottomPart = new TriHexTile(new Grass(), new Rock(), volcano);
+        TriHexTile topPart = new TriHexTile(new Jungle(), new Rock(), volcano);
+        TriHexTile bottomPart = new TriHexTile(new Grass(), new Lake(), volcano);
+        topPart.getTileOne().setTriHexTile(bottomPart);
+        topPart.getTileTwo().setTriHexTile(bottomPart);
 
         BoardSpace center = gameBoard2.get(new OffsetCoordinate(0, 0));
         BoardSpace northWest = gameBoard2.get(new OffsetCoordinate(-1, -1));
-        BoardSpace northEast = gameBoard2.get(new OffsetCoordinate(-1, 1));
-        BoardSpace southWest = gameBoard2.get(new OffsetCoordinate(1, -1));
+        BoardSpace southWest = gameBoard2.get(new OffsetCoordinate(-1, 1));
+        BoardSpace northEast = gameBoard2.get(new OffsetCoordinate(1, -1));
         BoardSpace southEast = gameBoard2.get(new OffsetCoordinate(1, 1));
-        Placement topPlacement = new Placement(northWest, northEast, center, topPart.getTileOne(), topPart.getTileTwo(), volcano);
-        Placement bottomPlacement = new Placement(southEast, southWest, center, bottomPart.getTileOne(), bottomPart.getTileTwo(), volcano);
+        Placement topPlacement = new Placement(northWest, southWest, center, topPart.getTileOne(), topPart.getTileTwo(), volcano);
+        Placement bottomPlacement = new Placement(southEast, northEast, center, bottomPart.getTileOne(), bottomPart.getTileTwo(), volcano);
         implementPlacement(topPlacement);
         implementPlacement(bottomPlacement);
         center.removeTopTile();
