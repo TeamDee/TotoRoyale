@@ -1,5 +1,6 @@
 package GameEngine;
 
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.TriHexTile;
 
@@ -14,7 +15,24 @@ public class Main {
 //        map.placeFirstTile(tht);
 //        map.printInfoAboutMap();
 
+//        OffsetCoordinate oc = new OffsetCoordinate(1,-3);
+//        System.out.println(oc);
+//        System.out.println(oc.getCubicCoordinate());
+//
+//        oc = new OffsetCoordinate(2, -4);
+//        System.out.println(oc);
+//        System.out.println(oc.getCubicCoordinate());
+//
+//        oc = new OffsetCoordinate(0, 6);
+//        System.out.println(oc);
+//        System.out.println(oc.getCubicCoordinate());
+//
+//        oc = new OffsetCoordinate(-1, 5);
+//        System.out.println(oc);
+//        System.out.println(oc.getCubicCoordinate());
+
         GameLogicDirector.getInstance().begin();
+
     }
 
     public void RunGame() {

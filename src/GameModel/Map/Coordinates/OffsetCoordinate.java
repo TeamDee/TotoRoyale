@@ -80,7 +80,7 @@ public class OffsetCoordinate {
 
     @Override
     public String toString(){
-        return "" + x + " " + y + " ";
+        return "x: " + x + " y: " + y + "\n";
     }
 
     public boolean compare(OffsetCoordinate other){
@@ -89,6 +89,17 @@ public class OffsetCoordinate {
             result = true;
         }
         return result;
+    }
+
+    public CubicCoordinate getCubicCoordinate(){
+        int offsetY = this.y;
+        int offsetX = this.x;
+
+        int x = offsetX;
+        int y = (-x - offsetY)/2;
+        int z = -y-x;
+
+        return new CubicCoordinate(x,y,z);
     }
 
 }

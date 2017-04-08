@@ -62,7 +62,7 @@ public class TigerView implements TileableView{
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
         frame.setVisible(true);
-        frame.setLocation();
+        //frame.setLocation();
         //parent.add(frame);
     }
     public ImageIcon getGif(){

@@ -126,6 +126,10 @@ public class GameLogicDirector implements Runnable{
             currentPlayer =p1;
     }
 
+    public void run2(){
+        run();
+    }
+
     /*
       NEVER CALL THIS - DAVE
      */

@@ -12,10 +12,19 @@ public class CubicCoordinate {
     }
 
 
-    public OffsetCoordinate getAxialCoordinate(){
-        int qAxial = x;
-        int rAxial = z;
-        OffsetCoordinate ac = new OffsetCoordinate(qAxial,rAxial);
+    public OffsetCoordinate getOffsetCoordinate(){
+        int xOffset = 0;
+        int yOffset = 0;
+
+        yOffset = y - z;
+        xOffset = x;
+
+        OffsetCoordinate ac = new OffsetCoordinate(xOffset,yOffset);
         return ac;
+    }
+
+    @Override
+    public String toString(){
+        return "x: " +x+ " y: "+y+" z: "+z+"\n";
     }
 }
