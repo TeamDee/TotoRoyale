@@ -1,8 +1,8 @@
 package GameView.Map;
 
-import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
 import GameView.Tileables.MeepleView;
+import GameView.Tileables.TileableView;
 
 /**
  * Created by jowens on 3/8/17.

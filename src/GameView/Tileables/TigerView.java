@@ -3,13 +3,14 @@ package GameView.Tileables;
 import GameControl.Player.Player;
 import GameView.ImagePaths;
 import GameView.Map.Constants;
-import GameView.Map.TileableView;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import javax.swing.*;
 
 /**
  * Created by jowens on 4/3/17.
@@ -20,6 +21,8 @@ public class TigerView implements TileableView{
 
     int width = Constants.TILE_WIDTH;
     int height = Constants.TILE_HEIGHT;
+
+    private Locale myLocation;
 
     public TigerView( Player player) {
         try {
@@ -45,5 +48,24 @@ public class TigerView implements TileableView{
 
     public BufferedImage getImage(){
         return myImage;
+    }
+
+
+
+    public void drawToGraphics(Graphics g, JPanel parent){
+        Frame frame = new Frame();
+
+        ImageIcon loading = new ImageIcon(ImagePaths.TIGER_WHITE_G);
+        //frame.add(loading);
+        frame.add(new JLabel("loading... ", loading, JLabel.CENTER));
+
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
+        frame.setVisible(true);
+        //frame.setLocation();
+        //parent.add(frame);
+    }
+    public ImageIcon getGif(){
+        return null; //todo
     }
 }

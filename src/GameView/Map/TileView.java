@@ -9,17 +9,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
-import java.io.File;
-import java.io.IOException;
-import GameView.ImagePaths;
 import GameModel.Map.Tile.Tile;
+import GameView.Tileables.TileableView;
+import GameView.Viewports.Viewport;
 public abstract class TileView{
     private int age;
     private boolean hasBeenSeen;
@@ -30,12 +23,22 @@ public abstract class TileView{
     BufferedImage myImage;
     BufferedImage drawMe;
 
+    private Viewport myViewport;
 
     public TileView(Tile mine) {
         age = 0;
         hasBeenSeen = false;
         tileableViews = new ArrayList<TileableView>();
         myTile = mine;
+
+    }
+
+    public void setViewport(Viewport viewport){
+        this.myViewport = viewport;
+    }
+
+    public boolean hasViewport(){
+        return myViewport != null;
     }
 
     public List<TileableView> getList() {
@@ -63,6 +66,7 @@ public abstract class TileView{
         //tileables
         for(TileableView tv: tileableViews){
             g.drawImage(tv.getImage(), 0, 0, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
+            tv.drawToGraphics(g, myViewport);
         }
 
         switch (myTile.getLevel()){

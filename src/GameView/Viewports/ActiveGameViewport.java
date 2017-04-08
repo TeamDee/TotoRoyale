@@ -113,6 +113,8 @@ public class ActiveGameViewport extends Viewport {
         for (HexTile t : tiles) {
                 p = new HexCoordinate(t.getLocation()).getPixelCoordinate().getPoint(); //law of demeter violation
                 TileView tileView = t.getTileView();
+                if(!tileView.hasViewport())
+                    tileView.setViewport(this);
                 g.drawImage(tileView.getImage(), p.x + dx, p.y + dy, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
         }
     }
