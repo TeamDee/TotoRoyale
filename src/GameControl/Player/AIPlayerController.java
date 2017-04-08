@@ -41,28 +41,52 @@ public class AIPlayerController extends PlayerController{
 
     public int scoreTilePlacement(Placement placement) {
         int score = 0;
-        //score = (int) (100 * Math.random());
-        //TODO score placements nonrandomly
         for (int i = 0; i < 2; i++){
-            BoardSpace hex = placement.getBoardSpaces().get(i);
+            HexTile hex = placement.getBoardSpaces().get(i).topTile(); //Each individual hex tile at its top level
             //Level Consideration
-            if (hex.topTile().getLevel() == 0) //Empty space
+            if (hex.getLevel() == 0) //Empty space
                 score += 15;
-            if (hex.topTile().getLevel() == 1) //Nuke and potential for a tiger
+            if (hex.getLevel() == 1) //Nuke and potential for a tiger
                 score += 20;
-            if (hex.topTile().getLevel() == 2) //Causes a tiger to be place-able, high priority
+            if (hex.getLevel() == 2) //Causes a tiger to be place-able, high priority
                 score += 50;
-            if (hex.topTile().getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
+            if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
                 score += 10;
             //Enemy Occupant
-            if (myPlayer.isWhite() && hex.topTile().isOwnedByBlack()) { //Enemy owns place
-                if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5)
-                    score += 0;
-                else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
+            if ((myPlayer.isWhite() && hex.isOwnedByBlack()) || (!myPlayer.isWhite() && hex.isOwnedByWhite())) { //Enemy owns place
+                if (hex.isPartOfSettlement && hex.settlementSize >= 5) {//Don't want to make it easier for the opponent
+                    if (hasAdjacentTotoro(hex)) {
+                        score = 0;
+                        return score;
+                    }
+                    else
+                        score -= 100;
+                }
+                else if (hex.isPartOfSettlement && hex.settlementSize < 5)
                     score += 20;
+            }
+            //Own settlement (includes separation for having more totoros)
+            if ((myPlayer.isWhite() && hex.isOwnedByWhite()) || (!myPlayer.isWhite() && hex.isOwnedByBlack())){ //Friendly settlement
+                if (hex.isPartOfSettlement && hex.settlementSize >= 5){
+                    if (hasAdjacentTotoro(hex)) //Best point to separate a settlement at
+                        score += 100;
+                    else
+                        score += 20;
+                }
+                if (hex.isPartOfSettlement && hex.settlementSize < 5){
+                    if (hasAdjacentTotoro(hex)) //Still important, but requires more work to have enough for a totoro
+                        score += 50;
+                    else
+                        score += 10;
+                }
             }
         }
         return score;
+    }
+
+    public boolean hasAdjacentTotoro(HexTile hex){
+        return (hex.getNorth().hasTotoro() || hex.getNorthEast().hasTotoro() || hex.getSouthEast().hasTotoro()
+                || hex.getSouth().hasTotoro() || hex.getSouthWest().hasTotoro() || hex.getNorthWest().hasTotoro());
     }
 
     public void takeBuildAction() {
