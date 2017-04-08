@@ -408,41 +408,49 @@ public class GameMap {
         boolean areAdjacent = OffsetCoordinate.areAdjacent(ht1.getLocation(),ht2.getLocation()) && OffsetCoordinate.areAdjacent(ht2.getLocation(),ht3.getLocation())
                 && OffsetCoordinate.areAdjacent(ht1.getLocation(),ht3.getLocation());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && !ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
-        boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
-        return areSameLevel && areNotInSameTriHexTile && areAdjacent && doNotContainSize1Settlements && doNotContainTotorosOrTigers;
+        boolean doNotContainEntireSettlements = !containEntireSettlements(ht2, ht3);
+        return areSameLevel && areNotInSameTriHexTile && areAdjacent && doNotContainEntireSettlements && doNotContainTotorosOrTigers;
     }
 
-    public boolean containsSize1Settlement(HexTile ht) {
-        if (!ht.isOccupied()) {
-            return false;
-        } else {
-            BoardSpace myBoardSpace = ht.getBoardSpace();
-            BoardSpace[] neighborBoardSpaces = new BoardSpace[6];
-            neighborBoardSpaces[0] = myBoardSpace.getNorth();
-            neighborBoardSpaces[1] = myBoardSpace.getNorthEast();
-            neighborBoardSpaces[2] = myBoardSpace.getSouthEast();
-            neighborBoardSpaces[3] = myBoardSpace.getSouth();
-            neighborBoardSpaces[4] = myBoardSpace.getSouthWest();
-            neighborBoardSpaces[5] = myBoardSpace.getNorthWest();
-            if (ht.isOwnedByWhite()) {
-                for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
-                    if (neighborBoardSpace.hasTile()) {
-                        HexTile neighborHexTile = neighborBoardSpace.topTile();
-                        if (neighborHexTile.isOwnedByWhite())
-                            return false;
-                    }
-                }
-            } else {//black
-                for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
-                    if (neighborBoardSpace.hasTile()) {
-                        HexTile neighborHexTile = neighborBoardSpace.topTile();
-                        if (neighborHexTile.isOwnedByBlack())
-                            return false;
+    private boolean containEntireSettlements(HexTile ht1, HexTile ht2) {
+        if (!ht1.isOccupied() && !ht2.isOccupied()) {
+            return true;
+        }
+        else if (ht1.isOccupied() && !ht2.isOccupied()) {
+            return containsSize1Settlement((TerrainTile) ht1);
+        }
+        else if (!ht1.isOccupied() && ht2.isOccupied()) {
+            return containsSize1Settlement((TerrainTile) ht2);
+        }
+        else {
+            return containSize2Settlement((TerrainTile) ht1, (TerrainTile) ht2);
+        }
+    }
+
+    public boolean containsSize1Settlement(TerrainTile tt) {
+        int numberOfFriendlyNeighbors = getNumberOfFriendlyNeighbors(tt);
+        return numberOfFriendlyNeighbors == 0;
+    }
+
+    private boolean containSize2Settlement(TerrainTile tt1, TerrainTile tt2) {
+        int numberOfTt1FriendlyNeighbors = getNumberOfFriendlyNeighbors(tt1);
+        int numberOfTt2FriendlyNeighbors = getNumberOfFriendlyNeighbors(tt2);
+        return numberOfTt1FriendlyNeighbors == 1 && numberOfTt2FriendlyNeighbors == 1;
+    }
+
+    private int getNumberOfFriendlyNeighbors(TerrainTile tt) {
+        int numberOfFriendlyNeighbors = 0;
+        for (Direction d : Direction.values()) {
+            if (tt.hasNeighborInDirection(d)) {
+                if (tt.getNeighborInDirection(d) instanceof TerrainTile) {
+                    TerrainTile neighbor = (TerrainTile) tt.getNeighborInDirection(d);
+                    if (neighbor.isOccupied() && neighbor.getOwner() == tt.getOwner()) {
+                        ++numberOfFriendlyNeighbors;
                     }
                 }
             }
-            return true;
         }
+        return numberOfFriendlyNeighbors;
     }
 
     /**
