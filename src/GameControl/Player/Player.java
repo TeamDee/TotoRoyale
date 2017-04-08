@@ -14,7 +14,6 @@ import GameView.Map.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Created by jowens on 3/8/17.
@@ -68,7 +67,7 @@ public class Player {
             awardPoints(add.getLevel() ^ 2);
             System.out.println("Expansion added to settlment " + toBeAddedTo);
         }
-        buildMessage = "EXPANDED SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().toString();
+        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().toString();
     }
 
     private boolean legalExpansionVisible(){
@@ -426,7 +425,7 @@ public class Player {
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(placeTotoroHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
-            buildMessage = "BUILT TOTORO SANCTUARY AT " + placeTotoroHere.getBoardSpace().getLocation().toString();
+            buildMessage = "BUILD TOTORO SANCTUARY AT " + placeTotoroHere.getBoardSpace().getLocation().toString();
             return true;
         }
         return false;
@@ -455,7 +454,7 @@ public class Player {
             settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(placeTigerHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
             this.awardPoints(75);
-            buildMessage = "BUILT TIGER PLAYGROUND AT " + placeTigerHere.getBoardSpace().getLocation().toString();
+            buildMessage = "BUILD TIGER PLAYGROUND AT " + placeTigerHere.getBoardSpace().getLocation().toString();
             return true;
         }
         return false;
@@ -526,7 +525,7 @@ public class Player {
                 //System.out.println("Player Settlement Size Before: " + settlements.size());
                 settlements = s.combineAdacentSettlementsforMultTiles(expansion,settlements,s);
                 //System.out.println("Player Settlement Size After: " + settlements.size());
-                buildMessage = "EXPANDED SETTLEMENT AT " + s.getSettlement().get(0).getBoardSpace().getLocation().toString();
+                buildMessage = "EXPAND SETTLEMENT AT " + s.getSettlement().get(0).getBoardSpace().getLocation().toString();
                 return true;
             }
         }
@@ -600,7 +599,7 @@ public class Player {
         buildSettlement(bestPlaceToSettle);
         activeSettlement = settlements.get(settlements.size()-1);
         settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(bestPlaceToSettle,settlements,activeSettlement);
-        buildMessage = "FOUNDED SETTLEMENT AT " + bestPlaceToSettle.getBoardSpace().getLocation().toString();
+        buildMessage = "FOUND SETTLEMENT AT " + bestPlaceToSettle.getBoardSpace().getLocation().toString();
         return true; //todo should there be a false?
     }
 
