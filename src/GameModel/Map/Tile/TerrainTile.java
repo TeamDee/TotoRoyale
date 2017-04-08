@@ -56,7 +56,7 @@ public abstract class TerrainTile extends HexTile {
             this.owner = owner;
             hasTotoro = true;
             myView.addToList(new TotoroView(owner));
-            System.out.println("\n\n\n\n\n\n\n\n\nA TOTORO HAS BEEN SUCCESSFULLY PLACE\n\n\n\n\n\n\n\n");
+            System.out.println("\n\n\n\n\n\n\n\n\nA TOTORO HAS BEEN SUCCESSFULLY PLACED\n\n\n\n\n\n\n\n");
             return true;
         }
     }

@@ -618,6 +618,7 @@ public class Player {
     private String buildPhase(GameMap gameMap){
         ArrayList<HexTile> tiles = gameMap.getVisible();
         String finalMessage = "";
+
         if(outOfTotoroOrTigers()){
             getRidOfMeeples();
             finalMessage = buildMessage;

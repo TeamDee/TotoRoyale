@@ -23,6 +23,8 @@ public class MeepleView implements TileableView{
 
     int width = Constants.TILE_WIDTH;
     int height = Constants.TILE_HEIGHT;
+
+    private Point location;
     public MeepleView(int numMeeples, Player player) {
         try {
             myImage = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT,BufferedImage.TYPE_INT_ARGB);
@@ -88,5 +90,9 @@ public class MeepleView implements TileableView{
     }
     public void drawToGraphics(Graphics g, JPanel parent){
         //do nothing because I'm lazy and am using OOP wrong
+    }
+
+    public void setLocation(Point p){
+        location = p;
     }
 }

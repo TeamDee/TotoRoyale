@@ -1,10 +1,13 @@
 package GameModel.Map.Tile;
 
+import GameModel.Map.Coordinates.OffsetCoordinate;
+
 /**
  * Created by jowens on 3/8/17.
  */
-public class Tile {
+public abstract class Tile {
     int level = 0;
+
 
     public Tile(){
         //default constructor
@@ -17,4 +20,6 @@ public class Tile {
     public int getLevel(){
         return level;
     }
+
+    public abstract OffsetCoordinate getLocation();
 }

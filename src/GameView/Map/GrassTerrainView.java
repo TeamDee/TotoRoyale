@@ -7,6 +7,7 @@ package GameView.Map;
         import java.io.IOException;
 
         import javax.imageio.ImageIO;
+        import javax.swing.*;
 
         //import view.tools.ImagePaths;
 import GameModel.Map.Tile.Grass;

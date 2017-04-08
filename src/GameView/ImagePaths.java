@@ -12,6 +12,7 @@ public class ImagePaths {
     public static final String ROCK_TERRAIN = IMG_DIR + "quarry.png";
     public static final String VOLCANO_TERRAIN = IMG_DIR + "volcano.png";
     public static final String JUNGLE_TERRAIN = IMG_DIR + "jungle.png";
+    public static final int NUMBER_VOLCANOS = 1; //change this if you add volcanos
 
     //Meeple sprites
     public static final String MEEPLE_WHITE = IMG_DIR + "Meeple_white.png";
@@ -24,7 +25,8 @@ public class ImagePaths {
     //"Tigers"
     public static final String TIGER_WHITE = IMG_DIR  + "Gator.png";
     public static final String TIGER_BLACK = IMG_DIR + "Tiger.png";
-    public static final String TIGER_WHITE_G = IMG_DIR + "tiger.gif";
+    public static final String TIGER_BLACK_G = IMG_DIR + "tiger2.gif";
+    public static final String TIGER_WHITE_G = IMG_DIR + "tiger3.gif";
 
     //random
     public static final String MAGIC_CAT = IMG_DIR + "magicCat.png";

@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 //Tileables are objects that can be placed on tiles
 public interface TileableView {
     int getPriority();
-    BufferedImage getImage();
-    void drawToGraphics(Graphics g, JPanel parent);
+    Image getImage();
+    //void drawToGraphics(Graphics g, JPanel parent);
+    void setLocation(Point p);
 }

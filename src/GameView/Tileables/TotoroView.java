@@ -23,6 +23,8 @@ public class TotoroView implements TileableView{
     int width = Constants.TILE_WIDTH;
     int height = Constants.TILE_HEIGHT;
 
+    private Point location;
+
     public TotoroView( Player player) {
         try {
             myImage = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT,BufferedImage.TYPE_INT_ARGB);
@@ -51,5 +53,9 @@ public class TotoroView implements TileableView{
 
     public void drawToGraphics(Graphics g, JPanel parent) {
         //g.drawImage(getImage())
+    }
+
+    public void setLocation(Point p){
+        location = p;
     }
 }
