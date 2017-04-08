@@ -1,6 +1,7 @@
 package GameControl.Player;
 
 import GameControl.Placement;
+import GameModel.Map.BoardSpace;
 import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
@@ -13,6 +14,7 @@ import GameView.Map.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by jowens on 3/8/17.
@@ -28,6 +30,7 @@ public class Player {
     private List<OffsetCoordinate> totoroPlacements;
     private ArrayList<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
+    private AIPlayerController AI;
 
     public Player enemyPlayer;
 
@@ -50,6 +53,8 @@ public class Player {
         enemyPlayer = enemy;
     }
 
+    public ArrayList<Settlement> getPlayerSettlements()
+    {return settlements;}
     //returns true iff there are no legal build moves for the current player on the given map
     public boolean noLegalBuildMoves(GameMap map){
         // no settlements, legal totoro, or expansions
@@ -136,8 +141,9 @@ public class Player {
             placements.addAll(gameMap.getLegalTablePlacements(tile)); //note this only gets level 0 placements
             System.out.println("NO LEGAL LEVEL >1 PLACEMENTS");
         }
-
-        Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
+        //placementAI
+        Placement stupidPlacement = placementAI(placements);
+        //Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
 
         OffsetCoordinate volcanolocation = stupidPlacement.getVolcanoLocation();
 
@@ -146,6 +152,211 @@ public class Player {
         }
         placeTile(gameMap, stupidPlacement);
         return volcanolocation.toString();
+    }
+    public int scoreTilePlacement(Placement placement) {
+        int pscore = 0;
+        //score = (int) (100 * Math.random());
+        //TODO score placements nonrandomly
+        for (int i = 0; i < 2; i++){
+            BoardSpace hex = placement.getBoardSpaces().get(i);
+            //Level Consideration
+            if (hex.getLevel() == 0) //Empty space
+                pscore += 15;
+            if (hex.getLevel() == 1) //Nuke and potential for a tiger
+                pscore += 20;
+            if (hex.getLevel() == 2) //Causes a tiger to be place-able, high priority
+                pscore += 50;
+            if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
+                pscore += 10;
+            //Enemy Occupant
+            /*if (myPlayer.isWhite() && hex.topTile().isOwnedByBlack()) { //Enemy owns place
+                if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5)
+                    score += 0;
+                else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
+                    score += 20;*/
+
+        }
+        return pscore;
+    }
+    public int scoreAdjacentBoardSpaces(BoardSpace bs, Settlement s)
+    {
+        int value = 0;
+        if(bs.getNorth() != null)
+        {
+            BoardSpace temp = bs.getNorth();
+            if(temp.getLevel() > 0)
+            {
+                ArrayList<TerrainTile> ts = s.getSettlement();
+                if(ts.contains(temp.topTile()))
+                {
+                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    return value;
+                }
+            }
+        }
+        if(bs.getNorthWest() != null)
+        {
+            BoardSpace temp = bs.getNorthWest();
+            if(temp.getLevel() > 0)
+            {
+                ArrayList<TerrainTile> ts = s.getSettlement();
+                if(ts.contains(temp.topTile()))
+                {
+                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    return value;
+                }
+            }
+        }
+        if(bs.getNorthEast() != null)
+        {
+            BoardSpace temp = bs.getNorthEast();
+            if(temp.getLevel() > 0)
+            {
+                ArrayList<TerrainTile> ts = s.getSettlement();
+                if(ts.contains(temp.topTile()))
+                {
+                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    return value;
+                }
+            }
+        }
+        if(bs.getSouth() != null)
+        {
+            BoardSpace temp = bs.getSouth();
+            if(temp.getLevel() > 0)
+            {
+                ArrayList<TerrainTile> ts = s.getSettlement();
+                if(ts.contains(temp.topTile()))
+                {
+                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    return value;
+                }
+            }
+        }
+        if(bs.getSouthEast() != null)
+        {
+            BoardSpace temp = bs.getSouthEast();
+            if(temp.getLevel() > 0)
+            {
+                ArrayList<TerrainTile> ts = s.getSettlement();
+                if(ts.contains(temp.topTile()))
+                {
+                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    return value;
+                }
+            }
+        }
+        if(bs.getSouthWest() != null)
+        {
+            BoardSpace temp = bs.getSouthWest();
+            if(temp.getLevel() > 0)
+            {
+                ArrayList<TerrainTile> ts = s.getSettlement();
+                if(ts.contains(temp.topTile()))
+                {
+                    value = 20 + scoreTigerPlacement((TerrainTile)temp.topTile());
+                    return value;
+                }
+            }
+        }
+        return value;
+    }
+    public Placement TigerFocusAI(ArrayList<Placement> Placements)
+    {
+        int value = 0;
+        Placement returnMe = null;
+        if(tigerCount == 0)
+        {
+            return returnMe;
+        }
+        else {
+            for (Placement t : Placements) {
+                ArrayList<BoardSpace> BSLoactions = t.getBoardSpaces();
+                for (Settlement s : settlements) {
+                    //BSLocations 0 is a volcano Tile
+                    ArrayList<TerrainTile> currentSettlement = s.getSettlement();
+                    HexTile temp1 = null;
+                    HexTile temp2 = null;
+                    if(BSLoactions.get(1).getLevel() > 0) {
+                        temp1 = BSLoactions.get(1).topTile();
+                    }
+                    else
+                    {
+                        value = scoreAdjacentBoardSpaces(BSLoactions.get(1),s);
+                    }
+                    if(BSLoactions.get(2).getLevel() > 0) {
+                        temp2 = BSLoactions.get(2).topTile();
+                    }
+                    else
+                    {
+                        value = scoreAdjacentBoardSpaces(BSLoactions.get(2),s);
+                    }
+                    for (TerrainTile tt : currentSettlement) {
+                        ArrayList<TerrainTile> AdjacentTiles = s.getAdjacentTerrainTiles(tt);
+                        if(temp1 != null) {
+                            if (temp1.terrainType() != TerrainType.VOLCANO) {
+                                if (AdjacentTiles.contains((TerrainTile) temp1)) {
+                                    if (value < scoreTilePlacement(t)) {
+                                        value = 20 + scoreTilePlacement(t);
+                                        returnMe = t;
+                                        if (value >= 50) {
+                                            //boolean place tiger
+                                            return returnMe;
+                                        }
+                                    }
+                                }
+                            }
+                        }else if(temp2 != null) {
+                            if (temp2.terrainType() != TerrainType.VOLCANO) {
+                                if (AdjacentTiles.contains((TerrainTile) temp2)) {
+                                    if (value < scoreTilePlacement(t)) {
+                                        value = 20 + scoreTilePlacement(t);
+                                        returnMe = t;
+                                        if (value >= 50) {
+                                            //boolean place tiger
+                                            return returnMe;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (value >= 30) {
+                    return returnMe;
+                }
+            }
+            if (value >= 30) {
+                return returnMe;
+            }
+        }
+        return returnMe;
+    }
+    public Placement placementAI(ArrayList<Placement> Placements)
+    {
+        Placement returnMe = null;
+        int value = 0;
+        returnMe = TigerFocusAI(Placements);
+        if(returnMe != null) {
+            return returnMe;
+        }
+        else
+        {
+            for(Placement p: Placements)
+            {
+                int temp = scoreTilePlacement(p);
+                if(temp == 15)
+                {
+                    returnMe = p;
+                    return returnMe;
+                }
+            }
+        }
+        if(returnMe == null)
+        {
+            returnMe =  Placements.get(random.nextInt(Placements.size()));
+        }
+        return returnMe;
     }
 
     public ArrayList<TerrainTile> getLegalNewSettlements(GameMap gameMap){
@@ -427,6 +638,7 @@ public class Player {
             else if (buildSettlement(gameMap)) {
                 finalMessage = buildMessage;
             }
+
         }
         else {
             buildSettlement(gameMap);
