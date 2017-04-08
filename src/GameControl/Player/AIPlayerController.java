@@ -44,8 +44,10 @@ public class AIPlayerController extends PlayerController{
         for (int i = 0; i < 2; i++){
             HexTile hex = placement.getBoardSpaces().get(i).topTile(); //Each individual hex tile at its top level
             //Level Consideration
-            if (hex.getLevel() == 0) //Empty space
+            if (hex.getLevel() == 0) { //Empty space
                 score += 15;
+                return score;
+            }
             if (hex.getLevel() == 1) //Nuke and potential for a tiger
                 score += 20;
             if (hex.getLevel() == 2) //Causes a tiger to be place-able, high priority
