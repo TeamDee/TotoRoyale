@@ -414,7 +414,7 @@ public class GameMap {
 
     private boolean containEntireSettlements(HexTile ht1, HexTile ht2) {
         if (!ht1.isOccupied() && !ht2.isOccupied()) {
-            return true;
+            return false;
         }
         else if (ht1.isOccupied() && !ht2.isOccupied()) {
             return containsSize1Settlement((TerrainTile) ht1);
@@ -423,11 +423,14 @@ public class GameMap {
             return containsSize1Settlement((TerrainTile) ht2);
         }
         else {
-            return containSize2Settlement((TerrainTile) ht1, (TerrainTile) ht2);
+            if (ht1.getOwner() == ht2.getOwner())
+                return containSize2Settlement((TerrainTile) ht1, (TerrainTile) ht2);
+            else
+                return containsSize1Settlement((TerrainTile) ht1) || containsSize1Settlement((TerrainTile) ht2);
         }
     }
 
-    public boolean containsSize1Settlement(TerrainTile tt) {
+    private boolean containsSize1Settlement(TerrainTile tt) {
         int numberOfFriendlyNeighbors = getNumberOfFriendlyNeighbors(tt);
         return numberOfFriendlyNeighbors == 0;
     }
