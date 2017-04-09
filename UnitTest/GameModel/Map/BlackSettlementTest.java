@@ -19,7 +19,7 @@ public class BlackSettlementTest {
 
         //WHITE MEEPLE SETTLEMENT
         @Before
-        public void Game_map_is_init() {
+        public void Game_map_is_init_black() {
                 map = new GameMap();
                 location = new OffsetCoordinate(0, 0);
                 BoardSpace boardspace = new BoardSpace(location, map);
@@ -28,12 +28,12 @@ public class BlackSettlementTest {
                 }
 
         @Test
-        public void check_terrain(){
+        public void check_terrain_black(){
             map=new GameMap();
             blackPlayer=new BlackPlayer("Black Player", map, null);
             ArrayList<HexTile>tiles=map.getVisible();
             for(HexTile ht:tiles){
-                if(ht.terrainType()==TerrainType.VOLCANO)
+                if(ht.terrainType() !=TerrainType.VOLCANO)
                 // new WhitePlayer().buildSettlement((TerrainTile)ht);
                 blackPlayer.buildSettlement((TerrainTile)ht);
                 break;
