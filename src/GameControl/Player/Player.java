@@ -402,7 +402,7 @@ public class Player {
         if(bs.getNorth() != null)
         {
             BoardSpace temp = bs.getNorth();
-            if(temp.getLevel() > 0)
+            if(temp.getLevel() > 1 && temp.getLevel() < 4)
             {
                 value = 20 + scoreTilePlacement(p);
                 return value;
@@ -412,7 +412,7 @@ public class Player {
         if(bs.getNorthWest() != null)
         {
             BoardSpace temp = bs.getNorthWest();
-            if(temp.getLevel() > 0)
+            if(temp.getLevel() > 1 && temp.getLevel() < 4)
             {
 
                 value = 20 + scoreTilePlacement(p);
@@ -422,7 +422,7 @@ public class Player {
         if(bs.getNorthEast() != null)
         {
             BoardSpace temp = bs.getNorthEast();
-            if(temp.getLevel() > 0)
+            if(temp.getLevel() > 1 && temp.getLevel() < 4)
             {
                 value = 20 + scoreTilePlacement(p);
                 return value;
@@ -431,7 +431,7 @@ public class Player {
         if(bs.getSouth() != null)
         {
             BoardSpace temp = bs.getSouth();
-            if(temp.getLevel() > 0)
+            if(temp.getLevel() > 1 && temp.getLevel() < 4)
             {
                 value = 20 + scoreTilePlacement(p);
                 return value;
@@ -440,7 +440,7 @@ public class Player {
         if(bs.getSouthEast() != null)
         {
             BoardSpace temp = bs.getSouthEast();
-            if(temp.getLevel() > 0)
+            if(temp.getLevel() > 1 && temp.getLevel() < 4)
             {
                 value = 20 + scoreTilePlacement(p);
                 return value;
@@ -449,7 +449,7 @@ public class Player {
         if(bs.getSouthWest() != null)
         {
             BoardSpace temp = bs.getSouthWest();
-            if(temp.getLevel() > 0)
+            if(temp.getLevel() > 1 && temp.getLevel() < 4)
             {
 
                 value = 20 + scoreTilePlacement(p);
@@ -526,7 +526,7 @@ public class Player {
                 if (value >= 30) {
                     return returnMe;
                 }
-                /*if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
+                if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
                 {
                     value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1));
                     returnMe = t;
@@ -535,7 +535,7 @@ public class Player {
                 {
                     value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2));
                     returnMe = t;
-                }*/
+                }
             }
             if (value >= 30) {
                 return returnMe;
