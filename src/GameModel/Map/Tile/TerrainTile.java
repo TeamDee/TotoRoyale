@@ -39,9 +39,8 @@ public abstract class TerrainTile extends HexTile {
                 p.awardPoints(getLevel() * getLevel());
                 meepleCount = getLevel();
                 myView.addToList(new MeepleView(getLevel(),p));
-                this.owner = p;
-                myView.visit(this);
                 owner = p;
+                myView.visit(this);
             }
             else
                 return false;

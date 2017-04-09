@@ -64,9 +64,8 @@ public class Player {
 
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
         for (TerrainTile add : expansion) {
-            placeMeeples(add);
+            add.placeMeeple(this);
             toBeAddedTo.addToSettlement(add);
-            awardPoints(add.getLevel() ^ 2);
             System.out.println("Expansion added to settlment " + toBeAddedTo);
         }
         buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().toString();
@@ -967,6 +966,7 @@ public class Player {
     public void placeMeeples(TerrainTile tt) {
         tt.placeMeeple(this);
         removeMeeples(tt.getLevel());
+        awardPoints(tt.getLevel() ^ 2);
     }
 
     public void buildSettlement(TerrainTile tt) {
@@ -975,7 +975,6 @@ public class Player {
             Settlement settlement = new Settlement();
             settlement.createSettlement(tt);
             settlements.add(settlement);
-            awardPoints(1);
         }
     }
 
