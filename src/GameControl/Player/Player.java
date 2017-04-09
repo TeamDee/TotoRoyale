@@ -869,6 +869,17 @@ public class Player {
                 }
             }
 
+            int meepleCount = 0;
+            for (TerrainTile tt : currentExpansionTiles) {
+                meepleCount += tt.getLevel();
+            }
+            if (outOfTotoroOrTigers()) {
+                currentExpansionValue += meepleCount * 30;
+            }
+            else {
+                currentExpansionValue -= meepleCount * 5;
+            }
+
             currentExpansionValue += allExpansions.get(i).size()*10; //ten points per tile
             if (canPlaceTotoro(settlementAfterExpansion))
                 currentExpansionValue += 50;
@@ -908,7 +919,7 @@ public class Player {
             buildSettlement(this.myMap);
         }
         else
-            this.expandSettlementToMaximizeMeepleUsage();
+            this.expandSettlement();
     }
 
     private String buildPhase(GameMap gameMap){
