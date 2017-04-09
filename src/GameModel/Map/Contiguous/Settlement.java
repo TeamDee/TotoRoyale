@@ -8,7 +8,6 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.Stack;
 
 import static GameModel.Map.Tile.TerrainType.VOLCANO;

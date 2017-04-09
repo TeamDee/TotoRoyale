@@ -2,6 +2,7 @@ package GameModel.Map.Tile;
 import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
+import GameModel.Map.Direction;
 import GameModel.Map.TriHexTile;
 import GameView.Map.TerrainView;
 import GameView.Tileables.MeepleView;
@@ -38,9 +39,8 @@ public abstract class TerrainTile extends HexTile {
                 p.awardPoints(getLevel() * getLevel());
                 meepleCount = getLevel();
                 myView.addToList(new MeepleView(getLevel(),p));
-                this.owner = p;
-                myView.visit(this);
                 owner = p;
+                myView.visit(this);
             }
             else
                 return false;
@@ -103,6 +103,24 @@ public abstract class TerrainTile extends HexTile {
     @Override
     public TerrainView getTileView(){
         return myView;
+    }
+
+    public int getNumberOfFriendlyNeighbors() {
+        int numberOfFriendlyNeighbors = 0;
+        if (!isOccupied()) {
+            return 0;
+        }
+        for (Direction d : Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                if (getNeighborInDirection(d).terrainType() != TerrainType.VOLCANO) {
+                    TerrainTile neighbor = (TerrainTile) getNeighborInDirection(d);
+                    if (neighbor.isOccupied() && neighbor.getOwner() == getOwner()) {
+                        ++numberOfFriendlyNeighbors;
+                    }
+                }
+            }
+        }
+        return numberOfFriendlyNeighbors;
     }
 }
 

@@ -426,7 +426,7 @@ public class GameMap {
         return areSameLevel && areNotInSameTriHexTile && areAdjacent && doNotContainEntireSettlements && doNotContainTotorosOrTigers;
     }
 
-    private boolean containEntireSettlements(HexTile ht1, HexTile ht2) {
+    public boolean containEntireSettlements(HexTile ht1, HexTile ht2) {
         if (!ht1.isOccupied() && !ht2.isOccupied()) {
             return false;
         }
@@ -445,29 +445,14 @@ public class GameMap {
     }
 
     private boolean containsSize1Settlement(TerrainTile tt) {
-        int numberOfFriendlyNeighbors = getNumberOfFriendlyNeighbors(tt);
+        int numberOfFriendlyNeighbors = tt.getNumberOfFriendlyNeighbors();
         return numberOfFriendlyNeighbors == 0;
     }
 
     private boolean containSize2Settlement(TerrainTile tt1, TerrainTile tt2) {
-        int numberOfTt1FriendlyNeighbors = getNumberOfFriendlyNeighbors(tt1);
-        int numberOfTt2FriendlyNeighbors = getNumberOfFriendlyNeighbors(tt2);
+        int numberOfTt1FriendlyNeighbors = tt1.getNumberOfFriendlyNeighbors();
+        int numberOfTt2FriendlyNeighbors = tt2.getNumberOfFriendlyNeighbors();
         return numberOfTt1FriendlyNeighbors == 1 && numberOfTt2FriendlyNeighbors == 1;
-    }
-
-    private int getNumberOfFriendlyNeighbors(TerrainTile tt) {
-        int numberOfFriendlyNeighbors = 0;
-        for (Direction d : Direction.values()) {
-            if (tt.hasNeighborInDirection(d)) {
-                if (tt.getNeighborInDirection(d) instanceof TerrainTile) {
-                    TerrainTile neighbor = (TerrainTile) tt.getNeighborInDirection(d);
-                    if (neighbor.isOccupied() && neighbor.getOwner() == tt.getOwner()) {
-                        ++numberOfFriendlyNeighbors;
-                    }
-                }
-            }
-        }
-        return numberOfFriendlyNeighbors;
     }
 
     /**

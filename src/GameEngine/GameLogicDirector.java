@@ -77,10 +77,11 @@ public class GameLogicDirector implements Runnable{
         String placeMssg = moveMssg.substring(0, cutPoint);
         String buildMssg = moveMssg.substring(cutPoint);
 
-//        opponentPlayerPlace(placeMssg);
-//        opponentPlayerBuild(buildMssg);
+        opponentPlayerPlace(placeMssg);
+        opponentPlayerBuild(buildMssg);
         System.out.println("Opponent placement: " + placeMssg);
         System.out.println("Opponent built: " + buildMssg);
+        nextPlayer();
     }
 
     public void opponentPlayerPlace(String placement){
@@ -100,13 +101,22 @@ public class GameLogicDirector implements Runnable{
 
     public void opponentPlayerBuild(String build){
         int x,y,z;
-        String terrainType;
         Matcher buildMatcher = FrequentlyUsedPatterns.BuildPattern.matcher(build);
         if(buildMatcher.matches()){
             x = Integer.parseInt(buildMatcher.group(2));
             y = Integer.parseInt(buildMatcher.group(3));
             z = Integer.parseInt(buildMatcher.group(4));
-            //TODO: Add code actually carry out the build action
+            OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
+            if(build.contains("FOUNDED")){
+                currentPlayer.opponentNewSettlement(location);
+            } else if(build.contains("EXPANDED")){
+                String terrainType = buildMatcher.group(5);
+                currentPlayer.opponentExpand(location, terrainType);
+            } else if(build.contains("TOTORO")){
+                currentPlayer.opponentNewTotoro(location);
+            } else if(build.contains("TIGER")){
+                currentPlayer.opponentNewTiger(location);
+            }
         }
     }
 
