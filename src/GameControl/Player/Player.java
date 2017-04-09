@@ -67,7 +67,7 @@ public class Player {
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
         for (TerrainTile add : expansion) {
             add.placeMeeple(this);
-            placeMeeples(add);
+            //placeMeeples(add);
             toBeAddedTo.addToSettlement(add);
             System.out.println("Expansion added to settlment " + toBeAddedTo);
         }
@@ -925,7 +925,7 @@ public class Player {
             if (addTotoro()) {
                 finalMessage = buildMessage;
             }
-            if (addTiger()) { //can't add totoro, add tiger
+            else if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
             }
             else if (expandSettlement()) {
@@ -982,7 +982,7 @@ public class Player {
     public void buildSettlement(TerrainTile tt) {
         if(tt.getMeepleCount() == 0) {
             tt.placeMeeple(this);
-            placeMeeples(tt);
+           // placeMeeples(tt);
             Settlement settlement = new Settlement();
             settlement.createSettlement(tt);
             settlements.add(settlement);
