@@ -169,6 +169,81 @@ public class Player {
         BoardSpace south = myMap.getBoardSpaceAt(location.getSouth());
         BoardSpace southeast = myMap.getBoardSpaceAt(location.getSouthEast());
         BoardSpace southwest = myMap.getBoardSpaceAt(location.getSouthWest());
+        HexTile tileOne = tht.getTileOne();
+        HexTile tileTwo = tht.getTileTwo();
+        HexTile tileThree = tht.getTileThree();
+        BoardSpace bs1, bs2;
+        switch (orientation){
+            case 1:
+                bs1 = north;  bs2 = northeast;
+                break;
+            case 2:
+                bs1 = northeast; bs2 = southeast;
+                break;
+            case 3:
+                bs1 = southeast; bs2 = south;
+                break;
+            case 4:
+                bs1 = south; bs2 = southwest;
+                break;
+            case 5:
+                bs1 = southwest; bs2 = northwest;
+                break;
+            case 6:
+                bs1 = northwest; bs2 = north;
+                break;
+        }
+        Placement placement = new Placement(north, northeast, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
+        myMap.implementPlacement(placement);
+    }
+
+    public void opponentNewSettlement(OffsetCoordinate location){
+        TerrainTile toBeFoundSettlement = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
+        buildSettlement(toBeFoundSettlement);
+        activeSettlement = settlements.get(settlements.size()-1);
+        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeFoundSettlement,settlements,activeSettlement);
+    }
+
+    public void opponentExpand(OffsetCoordinate location, String terrainType){
+        TerrainTile toBeExpanded = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
+        ArrayList<TerrainTile> expansionTiles = null;
+        Settlement targetSettlement = null;
+        for(int i=0; i<settlements.size(); i++){
+            if(settlements.get(i).contains(toBeExpanded)){
+                targetSettlement = settlements.get(i);
+                break;
+            }
+        }
+
+        if(terrainType.compareTo("GRASS") == 0){
+            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.GRASS);
+        } else if(terrainType.compareTo("JUNGLE") == 0){
+            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.JUNGLE);
+        } else if(terrainType.compareTo("LAKE") == 0){
+            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.LAKE);
+        } else if(terrainType.compareTo("ROCK") == 0){
+            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.ROCK);
+        }
+
+        executeExpansion(expansionTiles, targetSettlement);
+    }
+
+    public void opponentNewTotoro(OffsetCoordinate location){
+        TerrainTile toBeBuiltTotoro = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
+        placeTotoro(toBeBuiltTotoro);
+        activeSettlement.addToSettlement(toBeBuiltTotoro);
+        activeSettlement.placedTotoro();
+        this.awardPoints(200);
+        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTotoro,settlements,activeSettlement);
+    }
+
+    public void opponentNewTiger(OffsetCoordinate location){
+        TerrainTile toBeBuiltTiger = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
+        placeTiger(toBeBuiltTiger);
+        activeSettlement.addToSettlement(toBeBuiltTiger);
+        activeSettlement.placedTiger();
+        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTiger,settlements,activeSettlement);
+        this.awardPoints(75);
     }
 
     public int scoreTilePlacement(Placement placement) {
@@ -714,7 +789,6 @@ public class Player {
                 value = tmpValue;
                 excheck = i;
             }
-            tmpValue = 0;
         }
         ArrayList<TerrainTile> expansion = allexpand.get(excheck);
         return  expansion;
@@ -904,7 +978,6 @@ public class Player {
             awardPoints(1);
         }
     }
-
 
     /*
         Calls settlement and contiguous UnoccuppiedTerrainTyesTiles but DOES NOT places meeples on legal tiles of same terrain
