@@ -1,5 +1,6 @@
 package GameModel.Map;
 
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.*;
 
 /**
@@ -113,5 +114,9 @@ public class TriHexTile extends Tile {
 
     public String toString(){
         return "TileOne: "+tileOne.toString()+" TileTwo: "+tileTwo.toString()+" TileThree: "+tileThree.toString();
+    }
+
+    public OffsetCoordinate getLocation(){
+        return null;
     }
 }

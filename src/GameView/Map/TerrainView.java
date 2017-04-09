@@ -4,6 +4,8 @@ import GameModel.Map.Tile.TerrainTile;
 import GameView.Tileables.MeepleView;
 import GameView.Tileables.TileableView;
 
+import javax.swing.*;
+import java.awt.Point;
 /**
  * Created by jowens on 3/8/17.
  */
@@ -16,7 +18,7 @@ public abstract class TerrainView extends HexTileView {
         if(tt.getMeepleCount()>0){
             TileableView meepleView = new MeepleView(tt.getMeepleCount(), tt.getOwner());
             super.addTileableView(meepleView);
-            super.makeNewImage();
+            super.makeNewImage(new Point(tt.getLocation().x,tt.getLocation().y));
         }
     }
 

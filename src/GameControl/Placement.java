@@ -120,13 +120,13 @@ public class Placement {
         oldC.removeTopTile();
     }
 
-    public void nukeAnySettlements() {
-        HexTile h;
+    private void nukeAnySettlements() {
+        HexTile ht;
         for (BoardSpace b: getBoardSpaces()) {
-            h = b.topTile();
-            if (h.isOccupied()) {
-                Player owner = h.getOwner();
-                owner.nukeSettlements((TerrainTile) h);
+            ht = b.topTile();
+            if (ht.isOccupied()) {
+                Player owner = ht.getOwner();
+                owner.nukeSettlements((TerrainTile) ht);
             }
         }
     }

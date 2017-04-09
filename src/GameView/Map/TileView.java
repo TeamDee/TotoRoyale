@@ -11,8 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import GameModel.Map.Tile.Tile;
+import GameView.Tileables.TigerView;
 import GameView.Tileables.TileableView;
 import GameView.Viewports.Viewport;
+
+import javax.swing.*;
+import java.awt.*;
+
 public abstract class TileView{
     private int age;
     private boolean hasBeenSeen;
@@ -21,7 +26,9 @@ public abstract class TileView{
     protected Tile myTile;
 
     BufferedImage myImage;
-    BufferedImage drawMe;
+    Image drawMe;
+
+    private JPanel myPanel;
 
     private Viewport myViewport;
 
@@ -54,8 +61,8 @@ public abstract class TileView{
     }
 
 
-    protected BufferedImage makeNewImage(){
-        BufferedImage combined = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+    protected Image makeNewImage(Point location){
+        Image combined = new BufferedImage(Constants.TILE_WIDTH, Constants.TILE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
         // paint both images, preserving the alpha channels
         Graphics g = combined.getGraphics();
@@ -65,8 +72,10 @@ public abstract class TileView{
 
         //tileables
         for(TileableView tv: tileableViews){
-            g.drawImage(tv.getImage(), 0, 0, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
-            tv.drawToGraphics(g, myViewport);
+
+            g.drawImage(tv.getImage(), 0, 0, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, myPanel);
+            tv.setLocation(location);
+            //tv.drawToGraphics(g, myViewport);
         }
 
         switch (myTile.getLevel()){
@@ -115,9 +124,10 @@ public abstract class TileView{
         tileableViews.add(current);
     }
 
-    public BufferedImage getImage(){
+    public Image getImage(JPanel myPanel){
+        this.myPanel = myPanel;
         if(drawMe ==null)
-            makeNewImage();
+            makeNewImage(new Point(myTile.getLocation().x, myTile.getLocation().y));
         return drawMe;
     }
 
@@ -136,4 +146,10 @@ public abstract class TileView{
         tileableViews.add(tv);
     }
 
+    public void drawSelf(JPanel panel, Graphics g, int x, int y){
+        g.drawImage(getImage(panel),x,y,panel);
+        for(TileableView tv: tileableViews){
+            g.drawImage(tv.getImage(),x,y,panel);
+        }
+    }
 }

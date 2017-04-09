@@ -115,7 +115,12 @@ public class ActiveGameViewport extends Viewport {
                 TileView tileView = t.getTileView();
                 if(!tileView.hasViewport())
                     tileView.setViewport(this);
-                g.drawImage(tileView.getImage(), p.x + dx, p.y + dy, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, null);
+                Image image = tileView.getImage(this);
+                if(image != null)
+                    tileView.drawSelf(this, g, p.x + dx, p.y+dy);
+                    //g.drawImage(tileView.getImage(this), p.x + dx, p.y + dy, Constants.TILE_WIDTH, Constants.TILE_HEIGHT, this);
+                else
+                    System.out.println("null image");
         }
     }
 
