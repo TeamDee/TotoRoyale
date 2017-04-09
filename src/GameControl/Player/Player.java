@@ -116,7 +116,7 @@ public class Player {
 
     public String placementPhase(GameMap gameMap, TriHexTile tile){
         ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
-
+        ArrayList<Placement> placementsThatFixesBuild = new ArrayList<Placement>();
         Placement mapPlacementThatFixesNoBuildOptionsProblem = null;
         if(noLegalBuildMoves(gameMap)){
             //todo
@@ -128,6 +128,7 @@ public class Player {
                 }
                 else{
                     mapPlacementThatFixesNoBuildOptionsProblem = p;
+                    placementsThatFixesBuild.add(p);
                 }
                     myMap.revokeLastPlacement();
             }
@@ -144,14 +145,27 @@ public class Player {
         Placement stupidPlacement = placementAI(placements);
         //Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
 
-        OffsetCoordinate volcanolocation = stupidPlacement.getVolcanoLocation();
+        OffsetCoordinate volcanoLocation = stupidPlacement.getVolcanoLocation();
 
-        if(mapPlacementThatFixesNoBuildOptionsProblem != null){
-            placeTile(gameMap, mapPlacementThatFixesNoBuildOptionsProblem);
-        }
+//        if(mapPlacementThatFixesNoBuildOptionsProblem != null){
+//            placeTile(gameMap, mapPlacementThatFixesNoBuildOptionsProblem);
+//        } else {
+//            placeTile(gameMap, stupidPlacement);
+//        }
         placeTile(gameMap, stupidPlacement);
-        return volcanolocation.toString();
+        return volcanoLocation.getCubicCoordinate().toString() + " " + stupidPlacement.getOrientation();
     }
+
+    public void placeOpponent(TriHexTile tht, OffsetCoordinate location, int orientation){
+        BoardSpace toBePlacedOn = myMap.getBoardSpaceAt(location);
+        BoardSpace north = myMap.getBoardSpaceAt(location.getNorth());
+        BoardSpace northeast = myMap.getBoardSpaceAt(location.getNorthEast());
+        BoardSpace northwest = myMap.getBoardSpaceAt(location.getNorthWest());
+        BoardSpace south = myMap.getBoardSpaceAt(location.getSouth());
+        BoardSpace southeast = myMap.getBoardSpaceAt(location.getSouthEast());
+        BoardSpace southwest = myMap.getBoardSpaceAt(location.getSouthWest());
+    }
+
     public int scoreTilePlacement(Placement placement) {
         int pscore = 0;
         //score = (int) (100 * Math.random());
@@ -425,7 +439,7 @@ public class Player {
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(placeTotoroHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
-            buildMessage = "BUILD TOTORO SANCTUARY AT " + placeTotoroHere.getBoardSpace().getLocation().toString();
+            buildMessage = "BUILD TOTORO SANCTUARY AT " + placeTotoroHere.getBoardSpace().getLocation().getCubicCoordinate().toString();
             return true;
         }
         return false;
@@ -454,7 +468,7 @@ public class Player {
             settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(placeTigerHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
             this.awardPoints(75);
-            buildMessage = "BUILD TIGER PLAYGROUND AT " + placeTigerHere.getBoardSpace().getLocation().toString();
+            buildMessage = "BUILD TIGER PLAYGROUND AT " + placeTigerHere.getBoardSpace().getLocation().getCubicCoordinate().toString();
             return true;
         }
         return false;
@@ -465,7 +479,6 @@ public class Player {
         for(int i = 0; i!= settlements.size();++i){
             ArrayList<TerrainTile> expansion = expandSettlementToMaximizeMeeplePlacement(settlements.get(i), tempValue);
             executeExpansion(expansion, settlements.get(i));
-
         }
     }
     public ArrayList<TerrainTile> expandSettlementToMaximizeMeeplePlacement(Settlement settlement1, Integer value) {
@@ -525,7 +538,7 @@ public class Player {
                 //System.out.println("Player Settlement Size Before: " + settlements.size());
                 settlements = s.combineAdacentSettlementsforMultTiles(expansion,settlements,s);
                 //System.out.println("Player Settlement Size After: " + settlements.size());
-                buildMessage = "EXPAND SETTLEMENT AT " + s.getSettlement().get(0).getBoardSpace().getLocation().toString();
+                buildMessage = "EXPAND SETTLEMENT AT " + s.getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
                 return true;
             }
         }
@@ -599,7 +612,7 @@ public class Player {
         buildSettlement(bestPlaceToSettle);
         activeSettlement = settlements.get(settlements.size()-1);
         settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(bestPlaceToSettle,settlements,activeSettlement);
-        buildMessage = "FOUND SETTLEMENT AT " + bestPlaceToSettle.getBoardSpace().getLocation().toString();
+        buildMessage = "FOUND SETTLEMENT AT " + bestPlaceToSettle.getBoardSpace().getLocation().getCubicCoordinate().toString();
         return true; //todo should there be a false?
     }
 

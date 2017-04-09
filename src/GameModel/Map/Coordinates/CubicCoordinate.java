@@ -11,20 +11,21 @@ public class CubicCoordinate {
         this.z = z;
     }
 
-
     public OffsetCoordinate getOffsetCoordinate(){
         int xOffset = 0;
         int yOffset = 0;
 
-        yOffset = y - z;
+        yOffset = (y - z) * -1;
         xOffset = x;
 
         OffsetCoordinate ac = new OffsetCoordinate(xOffset,yOffset);
         return ac;
     }
 
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getZ() { return z; }
+
     @Override
-    public String toString(){
-        return "x: " +x+ " y: "+y+" z: "+z+"\n";
-    }
+    public String toString(){ return "" + x + " " + y + " " + z; }
 }

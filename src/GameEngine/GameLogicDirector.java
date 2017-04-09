@@ -4,6 +4,8 @@ import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.PlayerController;
 import GameControl.Player.WhitePlayer;
+import GameModel.Map.Coordinates.CubicCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Deck;
 import GameModel.Map.TriHexTile;
@@ -64,23 +66,21 @@ public class GameLogicDirector implements Runnable{
 
     public void opponentPlayerMove(String moveMssg){
         //TODO: interpret Opponent Player's Placement and Build action
-        if(moveMssg.contains("FORFEITED") || moveMssg.contains("LOST")){
-
-        } else{
-            int cutPoint = 0;
-            if(moveMssg.contains("FOUND")){
-                cutPoint = moveMssg.indexOf("FOUND");
-            } else if(moveMssg.contains("EXPAND")){
-                cutPoint = moveMssg.indexOf("EXPAND");
-            } else if(moveMssg.contains("BUILD")){
-                cutPoint = moveMssg.indexOf("BUILD");
-            }
-            String placeMssg = moveMssg.substring(0, cutPoint);
-            String buildMssg = moveMssg.substring(cutPoint);
-
-            opponentPlayerPlace(placeMssg);
-            opponentPlayerBuild(buildMssg);
+        int cutPoint = 0;
+        if(moveMssg.contains("FOUNDED")){
+            cutPoint = moveMssg.indexOf("FOUNDED");
+        } else if(moveMssg.contains("EXPANDED")){
+            cutPoint = moveMssg.indexOf("EXPANDED");
+        } else if(moveMssg.contains("BUILT")){
+            cutPoint = moveMssg.indexOf("BUILT");
         }
+        String placeMssg = moveMssg.substring(0, cutPoint);
+        String buildMssg = moveMssg.substring(cutPoint);
+
+//        opponentPlayerPlace(placeMssg);
+//        opponentPlayerBuild(buildMssg);
+        System.out.println("Opponent placement: " + placeMssg);
+        System.out.println("Opponent built: " + buildMssg);
     }
 
     public void opponentPlayerPlace(String placement){
@@ -92,7 +92,9 @@ public class GameLogicDirector implements Runnable{
             y = Integer.parseInt(placementMatcher.group(3));
             z = Integer.parseInt(placementMatcher.group(4));
             orientation = Integer.parseInt(placementMatcher.group(5));
+            OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
             //TODO: Add code actually place the tile
+            currentPlayer.placeOpponent(tht, location, orientation);
         }
     }
 
@@ -127,7 +129,7 @@ public class GameLogicDirector implements Runnable{
     }
 
     public void run2(){
-        run();
+        while(!isGameOver){ }
     }
 
     /*
@@ -135,26 +137,26 @@ public class GameLogicDirector implements Runnable{
      */
     public void run() {
         while (winner == null) {
-                if (newGame) {
-                    initializeNewGame("Whitety", "Blackey");
+            if (newGame) {
+                initializeNewGame("Whitety", "Blackey");
+            }
+            else {
+                //game logic
+                System.out.println("cards left" + deck.cardsLeft());
+                if (deck.cardsLeft() > 0) {
+                    if (AIgame) {
+                        AIvsAIGameTurn();
+                    } else if (AIvsHuman) {
+                        AIvsHumanGameTurn();
+                    }
+                    endRoundChecks();
                 }
-                else {
-                    //game logic
-                    System.out.println("cards left" + deck.cardsLeft());
-                    if (deck.cardsLeft() > 0) {
-                        if (AIgame) {
-                            AIvsAIGameTurn();
-                        } else if (AIvsHuman) {
-                            AIvsHumanGameTurn();
-                        }
-                        endRoundChecks();
-                    }
-                    else { //game over
-                        gameOver();
-                    }
+                else { //game over
+                    gameOver();
                 }
             }
         }
+    }
 
 
 
@@ -249,15 +251,16 @@ public class GameLogicDirector implements Runnable{
         System.out.println("Score " + currentPlayer.getScore());
 
         for(Player p: players){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
+            }
             AItakeTurn();
             nextPlayer();
             paint();
             //TODO: for the official game tournament, this block should be removed
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
+
         }
     }
 
