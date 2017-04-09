@@ -795,6 +795,7 @@ public class Player {
 
     public boolean expandSettlement() {
         SettlementExpansion bestExpansion = new SettlementExpansion(null, 0, settlements.get(0));
+
         for(int i = 0; i!= settlements.size();++i){
             Settlement s = settlements.get(i);
             SettlementExpansion bestCurrentSettlementExpansion = getBestExpansionForSettlement(s);
@@ -802,7 +803,8 @@ public class Player {
                 bestExpansion = bestCurrentSettlementExpansion;
             }
         }
-        if (bestExpansion.getValue() >= 10) {
+
+        if (bestExpansion.getValue() >= 50) {
             executeExpansion(bestExpansion.getTiles(), bestExpansion.getSettlement());
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = bestExpansion.getSettlement().combineAdacentSettlementsforMultTiles(bestExpansion.getTiles(), settlements, bestExpansion.getSettlement());
@@ -810,6 +812,7 @@ public class Player {
             buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().toString();
             return true;
         }
+
         return false;
     }
 
@@ -874,6 +877,7 @@ public class Player {
                 bestExpansion = new SettlementExpansion(currentExpansionTiles, currentExpansionValue, settlement1);
             }
         }
+
         return bestExpansion;
     }
 
