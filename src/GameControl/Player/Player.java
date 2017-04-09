@@ -32,6 +32,7 @@ public class Player {
     private ArrayList<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
     private AIPlayerController AI;
+    private int expansionWorth;
 
     public Player enemyPlayer;
 
@@ -52,6 +53,7 @@ public class Player {
         settlements = new ArrayList<Settlement>();
         myMap = thisPlayersMap;
         enemyPlayer = enemy;
+        expansionWorth = 0;
     }
 
     public ArrayList<Settlement> getPlayerSettlements()
@@ -65,6 +67,7 @@ public class Player {
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
         for (TerrainTile add : expansion) {
             add.placeMeeple(this);
+            placeMeeples(add);
             toBeAddedTo.addToSettlement(add);
             System.out.println("Expansion added to settlment " + toBeAddedTo);
         }
@@ -134,7 +137,7 @@ public class Player {
                     mapPlacementThatFixesNoBuildOptionsProblem = p;
                     placementsThatFixesBuild.add(p);
                 }
-                    myMap.revokeLastPlacement();
+                myMap.revokeLastPlacement();
             }
             if(mapPlacementThatFixesNoBuildOptionsProblem == null){
                 placements = new ArrayList<Placement>();
@@ -601,7 +604,7 @@ public class Player {
             BoardSpace temp = bs.getNorth();
             if(temp.getLevel() >= 3)
             {
-               return 50;
+                return 50;
             }
         }
         if(bs.getNorthWest() != null)
@@ -881,7 +884,6 @@ public class Player {
         return bestExpansion;
     }
 
-
     public boolean buildSettlement(GameMap gameMap){
         //choose the best available settlement
         //if we settle... currently the only option
@@ -923,7 +925,7 @@ public class Player {
             if (addTotoro()) {
                 finalMessage = buildMessage;
             }
-            else if (addTiger()) { //can't add totoro, add tiger
+            if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
             }
             else if (expandSettlement()) {
@@ -950,8 +952,12 @@ public class Player {
 
     //TODO this
     private int howGoodIsSettlement(TerrainTile tt, Player p){
-        int value = scoreAdjacenttoLevel1Tiles(tt);
-        return 1; //TODO either add logic here or find a better place to do AI stuff
+        int value = 1;
+        if(value < scoreAdjacenttoLevel1Tiles(tt))
+        {
+            value = scoreAdjacenttoLevel1Tiles(tt);
+        }
+        return value; //TODO either add logic here or find a better place to do AI stuff
         //ideas
         //get contiguos terrains of a type to see if we could expand there next turn
         //devalue these terrains if the opponent is also adjacent to them, as they may steal them from us
@@ -976,6 +982,7 @@ public class Player {
     public void buildSettlement(TerrainTile tt) {
         if(tt.getMeepleCount() == 0) {
             tt.placeMeeple(this);
+            placeMeeples(tt);
             Settlement settlement = new Settlement();
             settlement.createSettlement(tt);
             settlements.add(settlement);

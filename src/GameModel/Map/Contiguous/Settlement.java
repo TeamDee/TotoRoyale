@@ -70,7 +70,7 @@ public class Settlement{
         ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied() && doubleCheckAdjaacent(t) && this.getSettlementSize() >= 5){
+            if(!t.isOccupied() && doubleCheckAdjaacent(t)){
                 returnMe.add(t);
             }
         }
@@ -91,7 +91,7 @@ public class Settlement{
                 return true;
             }
         }
-        else if (bs.getNorthEast().getLevel() > 0) {
+        if (bs.getNorthEast().getLevel() > 0) {
             temp = bs.getNorthEast();
             check = temp.topTile();
             if (settlement.contains(check))
@@ -99,7 +99,7 @@ public class Settlement{
                 return true;
             }
         }
-        else if (bs.getNorthWest().getLevel() > 0) {
+        if (bs.getNorthWest().getLevel() > 0) {
             temp = bs.getNorthWest();
             check = temp.topTile();
             if (settlement.contains(check))
@@ -107,7 +107,7 @@ public class Settlement{
                 return true;
             }
         }
-        else if (bs.getSouth().getLevel() > 0) {
+        if (bs.getSouth().getLevel() > 0) {
             temp = bs.getSouth();
             check = temp.topTile();
             if (settlement.contains(check))
@@ -115,7 +115,7 @@ public class Settlement{
                 return true;
             }
         }
-        else if (bs.getSouthEast().getLevel() > 0) {
+        if (bs.getSouthEast().getLevel() > 0) {
             temp = bs.getSouthEast();
             check = temp.topTile();
             if (settlement.contains(check))
@@ -123,7 +123,7 @@ public class Settlement{
                 return true;
             }
         }
-        else if (bs.getSouthWest().getLevel() > 0) {
+        if (bs.getSouthWest().getLevel() > 0) {
             temp = bs.getSouthWest();
             check = temp.topTile();
             if (settlement.contains(check))
@@ -343,7 +343,13 @@ public class Settlement{
                 }
             }
         }
-        BeingEdit.getSettlement().addAll(adjacentHexTiles);
+        for(TerrainTile t: adjacentHexTiles)
+        {
+            if(!BeingEdit.getSettlement().contains(t))
+            {
+                BeingEdit.getSettlement().add(t);
+            }
+        }
         if(PlayerSettlements.contains(tempsettlement)) {
             PlayerSettlements.remove(tempsettlement);
             System.out.println("Hola como estas");
