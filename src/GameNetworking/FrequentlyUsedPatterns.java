@@ -27,7 +27,7 @@ public class FrequentlyUsedPatterns {
 
     static Pattern ExitMssgPattern = Pattern.compile("^THANK YOU FOR PLAYING! GOODBYE$");
 
-    public static Pattern PlacementMssgPattern = Pattern.compile("^PLACE ([\\w]*) AT ([\\d]*) ([\\d]*) ([\\d]*) ([\\d ]*)$");
+    public static Pattern PlacementMssgPattern = Pattern.compile("^PLACED ([\\w]*) AT ([\\d]*) ([\\d]*) ([\\d]*) ([\\d ]*)$");
     public static Pattern BuildPattern = Pattern.compile("^([\\w ]*) AT ([\\d]*) ([\\d]*) ([\\d]*)([\\w ]*)$");
 }
 

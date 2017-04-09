@@ -90,12 +90,25 @@ public class MockTigerLandServer extends Thread{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    boolean flag1 = false, flag2 = false;
                     for(int moveNumb = 1; moveNumb <= 48; moveNumb++) {
                         String tile = randomHex() + "+" + randomHex();
                         out.writeUTF("MAKE YOUR MOVE IN GAME " + GID + " WITHIN " + time_move + " SECOND: MOVE " + moveNumb + " PLACE "+ tile);
 
                         message = in.readUTF();
                         System.out.println("Echo received: " + message);
+
+                        if(!flag1){
+                            out.writeUTF("GAME 1 MOVE 2 PLAYER 5678 PLACED AT 1 1 1 1 FOUNDED SETTLEMENT AT 0 0 0");
+                            flag1 = true;
+                        } else{
+                            if(!flag2){
+                                out.writeUTF("GAME 1 MOVE 2 PLAYER 5678 FORFEITED: ILLEGAL TILE PLACEMENT");
+                                flag2 = true;
+                            } else{
+//                                out.writeUTF("GAME 1 MOVE 2 PLAYER 1234 PLACED AT -1 1 0 ");
+                            }
+                        }
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {

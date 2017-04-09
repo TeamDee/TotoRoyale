@@ -145,36 +145,36 @@ public class BoardSpace {
     }
     public BoardSpace getNorth(){
         if(north == null){
-            System.out.println("Warning: returning a null reference to a boardspace");
+            //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return north;
     }
     public BoardSpace getNorthEast(){
         if(northeast == null){
-            System.out.println("Warning: returning a null reference to a boardspace");
+            //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return northeast;
     }
     public BoardSpace getNorthWest(){
         if(northwest == null){
-            System.out.println("Warning: returning a null reference to a boardspace");
+            //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return northwest;
     }
     public BoardSpace getSouth(){
         if(south == null){
-            System.out.println("Warning: returning a null reference to a boardspace");
+            //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return south;}
     public BoardSpace getSouthEast(){
         if(southeast == null){
-            System.out.println("Warning: returning a null reference to a boardspace");
+            //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return southeast;
     }
     public BoardSpace getSouthWest(){
         if(southwest == null){
-            System.out.println("Warning: returning a null reference to a boardspace");
+            //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return southwest;
     }

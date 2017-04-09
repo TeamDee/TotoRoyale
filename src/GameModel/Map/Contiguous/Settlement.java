@@ -8,6 +8,7 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.Stack;
 
 import static GameModel.Map.Tile.TerrainType.VOLCANO;
@@ -53,13 +54,14 @@ public class Settlement{
             potentialPlacements = getAdjacentTerrainTiles(check);
             for(TerrainTile scan: potentialPlacements)
             {
-                if(!adjacentTerrainTiles.contains(scan)) {
+                if(!adjacentTerrainTiles.contains(scan) && !settlement.contains(scan)) {
                     adjacentTerrainTiles.add(scan);
                 }
             }
         }
         return adjacentTerrainTiles;
     }
+
     public ArrayList<TerrainTile> getLegalTotoroTiles()
     {
         if(this.getSettlementSize() <5) {
@@ -69,19 +71,76 @@ public class Settlement{
         ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied()){
+            if(!t.isOccupied() && doubleCheckAdjaacent(t) && this.getSettlementSize() >= 5){
                 returnMe.add(t);
             }
         }
         return returnMe;
 
     }
+
+    public boolean doubleCheckAdjaacent(TerrainTile t)
+    {
+        BoardSpace bs = t.getBoardSpace();
+        BoardSpace temp = null;
+        HexTile check = null;
+        if (bs.getNorth().getLevel() > 0) {
+            temp = bs.getNorth();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getNorthEast().getLevel() > 0) {
+            temp = bs.getNorthEast();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getNorthWest().getLevel() > 0) {
+            temp = bs.getNorthWest();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getSouth().getLevel() > 0) {
+            temp = bs.getSouth();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getSouthEast().getLevel() > 0) {
+            temp = bs.getSouthEast();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        else if (bs.getSouthWest().getLevel() > 0) {
+            temp = bs.getSouthWest();
+            check = temp.topTile();
+            if (settlement.contains(check))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<TerrainTile> getLegalTigerTiles()
     {
         ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTigerPlaceMent){
-            if(t.getLevel() >= 3 && !t.isOccupied()){
+            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjaacent(t)){
                 returnMe.add(t);
             }
         }
@@ -91,14 +150,21 @@ public class Settlement{
     public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
     public void addToSettlement(TerrainTile tile){
         settlement.add(tile);
-        tile.getBoardSpace().topTile().isPartOfSettlement = true;
-        tile.getBoardSpace().topTile().settlementSize = settlement.size(); //both used for AI purposes
+        tile.isPartOfSettlement = true;
+        for (TerrainTile settlementTile : settlement) {
+            settlementTile.settlementSize = settlement.size(); //both used for AI purposes
+        }
+    }
+
+    public void temporarilyAddToSettlement(TerrainTile tt) {
+        settlement.add(tt);
     }
 
     public ArrayList<TerrainTile> getSettlement()
     {
         return settlement;
     }
+
     public boolean isContiguous(TerrainTile tile) {
         for (TerrainTile contiguousTile : settlement) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
@@ -106,6 +172,7 @@ public class Settlement{
         }
         return false;
     }
+
     public ArrayList<TerrainTile> getExpansionTiles(ArrayList<TerrainTile> ExpandSettlement,TerrainType terrainType)
     {
         ArrayList<TerrainTile> expand = new ArrayList<TerrainTile>();
@@ -132,6 +199,7 @@ public class Settlement{
             }
         }
     }
+
     public ArrayList<Settlement> combineAdacentSettlementsforMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
     {
         ArrayList<Settlement> ss = PlayerSettlements;
@@ -148,6 +216,7 @@ public class Settlement{
         BoardSpace temp = null;
         HexTile check = null;
         ArrayList<Settlement> tempSettlements = PlayerSettlements;
+        Settlement tempsettlement = BeingEdit;
         ArrayList<TerrainTile> adjacentHexTiles = new ArrayList<TerrainTile>();
         if (bs.getNorth().getLevel() > 0) {
             temp = bs.getNorth();
@@ -276,6 +345,11 @@ public class Settlement{
             }
         }
         BeingEdit.getSettlement().addAll(adjacentHexTiles);
+        if(PlayerSettlements.contains(tempsettlement)) {
+            PlayerSettlements.remove(tempsettlement);
+            System.out.println("Hola como estas");
+        }
+        PlayerSettlements.add(BeingEdit);
         return PlayerSettlements;
     }
 
@@ -347,7 +421,7 @@ public class Settlement{
     }
 
     public ArrayList<Settlement> getSplitSettlementsAfterNuke(TerrainTile nukedTile) {
-        ArrayList<TerrainTile> ungroupedTiles = (ArrayList<TerrainTile>) settlement.clone();
+        ArrayList<TerrainTile> ungroupedTiles = new ArrayList<TerrainTile>(settlement);
         ungroupedTiles.remove(nukedTile);
         ArrayList<Settlement> splitSettlements = new ArrayList<Settlement>();
 

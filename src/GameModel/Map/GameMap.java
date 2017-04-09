@@ -53,14 +53,16 @@ public class GameMap {
         VolcanoTile volcano = new VolcanoTile();
         TriHexTile topPart = new TriHexTile(new Jungle(), new Lake(), volcano);
         TriHexTile bottomPart = new TriHexTile(new Grass(), new Rock(), volcano);
+        topPart.getTileOne().setTriHexTile(bottomPart);
+        topPart.getTileTwo().setTriHexTile(bottomPart);
 
         BoardSpace center = gameBoard2.get(new OffsetCoordinate(0, 0));
-        BoardSpace northWest = gameBoard2.get(new OffsetCoordinate(-1, -1));
-        BoardSpace northEast = gameBoard2.get(new OffsetCoordinate(-1, 1));
-        BoardSpace southWest = gameBoard2.get(new OffsetCoordinate(1, -1));
-        BoardSpace southEast = gameBoard2.get(new OffsetCoordinate(1, 1));
-        Placement topPlacement = new Placement(northWest, northEast, center, topPart.getTileOne(), topPart.getTileTwo(), volcano);
-        Placement bottomPlacement = new Placement(southEast, southWest, center, bottomPart.getTileOne(), bottomPart.getTileTwo(), volcano);
+        BoardSpace northWest = gameBoard2.get(new OffsetCoordinate(0, -2));
+        BoardSpace southWest = gameBoard2.get(new OffsetCoordinate(-1, 1));
+        BoardSpace northEast = gameBoard2.get(new OffsetCoordinate(1, -1));
+        BoardSpace southEast = gameBoard2.get(new OffsetCoordinate(0, 2));
+        Placement topPlacement = new Placement(northWest, northEast, center, topPart.getTileOne(), topPart.getTileTwo(), volcano, 1);
+        Placement bottomPlacement = new Placement(southEast, southWest, center, bottomPart.getTileOne(), bottomPart.getTileTwo(), volcano, 4);
         implementPlacement(topPlacement);
         implementPlacement(bottomPlacement);
         center.removeTopTile();
@@ -248,6 +250,8 @@ public class GameMap {
         }
     }
 
+    public BoardSpace getBoardSpaceAt(OffsetCoordinate location) { return gameBoard2.get(location); }
+
     /*
      CALL THIS INSTEAD OF DIRECTLY MODIFYING GAMEBOARD2
      */
@@ -301,22 +305,22 @@ public class GameMap {
 
 
                 if (northLegal && northEastLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, north, northeast, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, north, northeast, ht1, ht2, ht3, 1));
                 }
                 if (northEastLegal && southEastLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northeast, southeast, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northeast, southeast, ht1, ht2, ht3, 2));
                 }
                 if (southEastLegal && southLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southeast, south, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southeast, south, ht1, ht2, ht3, 3));
                 }
                 if (southLegal && southWestLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, south, southwest, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, south, southwest, ht1, ht2, ht3, 4));
                 }
                 if (southWestLegal && northWestLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southwest, northwest, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, southwest, northwest, ht1, ht2, ht3, 5));
                 }
                 if (northWestLegal && northLegal) {
-                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northwest, north, ht1, ht2, ht3));
+                    returnMe.addAll(getAllPlacementsAtThreeBoardSpaces(bs, northwest, north, ht1, ht2, ht3, 6));
                 }
             }
         }
@@ -324,11 +328,21 @@ public class GameMap {
         return returnMe;
     }
 
-    public ArrayList<Placement> getAllPlacementsAtThreeBoardSpaces(BoardSpace b1, BoardSpace b2, BoardSpace b3, HexTile ht1, HexTile ht2, HexTile ht3) {
+    public ArrayList<Placement> getAllPlacementsAtThreeBoardSpaces(BoardSpace b1, BoardSpace b2, BoardSpace b3, HexTile ht1, HexTile ht2, HexTile ht3, int orientation) {
         ArrayList<Placement> returnMe = new ArrayList<Placement>();
-        Placement p1 = new Placement(b1, b2, b3, ht1, ht2, ht3);
-        Placement p2 = new Placement(b3, b1, b2, ht1, ht2, ht3);
-        Placement p3 = new Placement(b2, b3, b1, ht1, ht2, ht3);
+        int orientation1 = orientation + 4;
+        int orientation2 = orientation + 2;
+        int orientation3 = orientation;
+        if(orientation1 > 6){
+            orientation1 -= 6;
+        }
+        if(orientation2 > 6){
+            orientation2 -= 6;
+        }
+        Placement p1 = new Placement(b1, b2, b3, ht1, ht2, ht3, orientation1); // orientation 1
+        Placement p2 = new Placement(b3, b1, b2, ht1, ht2, ht3, orientation2); // orientation 1
+        Placement p3 = new Placement(b2, b3, b1, ht1, ht2, ht3, orientation3); // oritentation 1
+
         returnMe.add(p1);
         returnMe.add(p2);
         returnMe.add(p3);
@@ -373,27 +387,27 @@ public class GameMap {
 
             if(north.hasTile() && northEast.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, north.topTile(), northEast.topTile()))
-                        returnMe.add(new Placement(mine, north, northEast, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+                        returnMe.add(new Placement(mine, north, northEast, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile, 1));
             }
             if(northEast.hasTile() && southEast.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, northEast.topTile(), southEast.topTile()))
-                    returnMe.add(new Placement(mine, northEast, southEast, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+                    returnMe.add(new Placement(mine, northEast, southEast, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile, 2 ));
             }
             if(southEast.hasTile() && south.topTile() != null) {
                 if(canPlaceOnHexTiles(placeAt, southEast.topTile(), south.topTile()))
-                    returnMe.add(new Placement(mine, southEast, south, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+                    returnMe.add(new Placement(mine, southEast, south, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile, 3));
             }
             if(south.hasTile() && southWest.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, south.topTile(), southWest.topTile()))
-                    returnMe.add(new Placement(mine, south, southWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+                    returnMe.add(new Placement(mine, south, southWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile, 4));
             }
             if(southWest.hasTile() && northWest.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, southWest.topTile(), northWest.topTile()))
-                    returnMe.add(new Placement(mine, southWest, northWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+                    returnMe.add(new Placement(mine, southWest, northWest, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile, 5));
             }
             if(northWest.hasTile() && north.hasTile()) {
                 if(canPlaceOnHexTiles(placeAt, northWest.topTile(), north.topTile()))
-                    returnMe.add(new Placement(mine, northWest, north, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile));
+                    returnMe.add(new Placement(mine, northWest, north, volcanoTile, clockwiseNonVolcanoTile, counterClockwiseNonVolcanoTile, 6));
             }
         } else { //only allow volcano tile placements on top of of other tiles
             return null;
@@ -408,41 +422,52 @@ public class GameMap {
         boolean areAdjacent = OffsetCoordinate.areAdjacent(ht1.getLocation(),ht2.getLocation()) && OffsetCoordinate.areAdjacent(ht2.getLocation(),ht3.getLocation())
                 && OffsetCoordinate.areAdjacent(ht1.getLocation(),ht3.getLocation());
         boolean doNotContainTotorosOrTigers = !ht1.hasTotoro() && !ht1.hasTiger() && !ht2.hasTotoro() && !ht2.hasTiger() && !ht3.hasTotoro() && !ht3.hasTiger();
-        boolean doNotContainSize1Settlements = !containsSize1Settlement(ht1) && !containsSize1Settlement(ht2) && !containsSize1Settlement(ht3);
-        return areSameLevel && areNotInSameTriHexTile && areAdjacent && doNotContainSize1Settlements && doNotContainTotorosOrTigers;
+        boolean doNotContainEntireSettlements = !containEntireSettlements(ht2, ht3);
+        return areSameLevel && areNotInSameTriHexTile && areAdjacent && doNotContainEntireSettlements && doNotContainTotorosOrTigers;
     }
 
-    public boolean containsSize1Settlement(HexTile ht) {
-        if (!ht.isOccupied()) {
+    private boolean containEntireSettlements(HexTile ht1, HexTile ht2) {
+        if (!ht1.isOccupied() && !ht2.isOccupied()) {
             return false;
-        } else {
-            BoardSpace myBoardSpace = ht.getBoardSpace();
-            BoardSpace[] neighborBoardSpaces = new BoardSpace[6];
-            neighborBoardSpaces[0] = myBoardSpace.getNorth();
-            neighborBoardSpaces[1] = myBoardSpace.getNorthEast();
-            neighborBoardSpaces[2] = myBoardSpace.getSouthEast();
-            neighborBoardSpaces[3] = myBoardSpace.getSouth();
-            neighborBoardSpaces[4] = myBoardSpace.getSouthWest();
-            neighborBoardSpaces[5] = myBoardSpace.getNorthWest();
-            if (ht.isOwnedByWhite()) {
-                for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
-                    if (neighborBoardSpace.hasTile()) {
-                        HexTile neighborHexTile = neighborBoardSpace.topTile();
-                        if (neighborHexTile.isOwnedByWhite())
-                            return false;
-                    }
-                }
-            } else {//black
-                for (BoardSpace neighborBoardSpace : neighborBoardSpaces) {
-                    if (neighborBoardSpace.hasTile()) {
-                        HexTile neighborHexTile = neighborBoardSpace.topTile();
-                        if (neighborHexTile.isOwnedByBlack())
-                            return false;
+        }
+        else if (ht1.isOccupied() && !ht2.isOccupied()) {
+            return containsSize1Settlement((TerrainTile) ht1);
+        }
+        else if (!ht1.isOccupied() && ht2.isOccupied()) {
+            return containsSize1Settlement((TerrainTile) ht2);
+        }
+        else {
+            if (ht1.getOwner() == ht2.getOwner())
+                return containSize2Settlement((TerrainTile) ht1, (TerrainTile) ht2);
+            else
+                return containsSize1Settlement((TerrainTile) ht1) || containsSize1Settlement((TerrainTile) ht2);
+        }
+    }
+
+    private boolean containsSize1Settlement(TerrainTile tt) {
+        int numberOfFriendlyNeighbors = getNumberOfFriendlyNeighbors(tt);
+        return numberOfFriendlyNeighbors == 0;
+    }
+
+    private boolean containSize2Settlement(TerrainTile tt1, TerrainTile tt2) {
+        int numberOfTt1FriendlyNeighbors = getNumberOfFriendlyNeighbors(tt1);
+        int numberOfTt2FriendlyNeighbors = getNumberOfFriendlyNeighbors(tt2);
+        return numberOfTt1FriendlyNeighbors == 1 && numberOfTt2FriendlyNeighbors == 1;
+    }
+
+    private int getNumberOfFriendlyNeighbors(TerrainTile tt) {
+        int numberOfFriendlyNeighbors = 0;
+        for (Direction d : Direction.values()) {
+            if (tt.hasNeighborInDirection(d)) {
+                if (tt.getNeighborInDirection(d) instanceof TerrainTile) {
+                    TerrainTile neighbor = (TerrainTile) tt.getNeighborInDirection(d);
+                    if (neighbor.isOccupied() && neighbor.getOwner() == tt.getOwner()) {
+                        ++numberOfFriendlyNeighbors;
                     }
                 }
             }
-            return true;
         }
+        return numberOfFriendlyNeighbors;
     }
 
     /**
@@ -488,7 +513,6 @@ public class GameMap {
         }
         this.playedTriHexTiles.add(p.getBoardSpaces().get(0).topTile().getTriHexTile());
         p.getBoardSpaces().get(0).topTile().resetOwner();
-
     }
 
     private Placement tempPlacement;

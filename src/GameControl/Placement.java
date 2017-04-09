@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public class Placement {
     int value = 0; //Used for AI purposes
+    int orientation;
 
     TriHexTile toBePlaced;
 
@@ -24,7 +25,8 @@ public class Placement {
     /*
      *
      */
-    public Placement(BoardSpace oldBS1, BoardSpace oldBS2, BoardSpace oldBS3, HexTile new1, HexTile new2, HexTile new3){
+    public Placement(BoardSpace oldBS1, BoardSpace oldBS2, BoardSpace oldBS3, HexTile new1, HexTile new2, HexTile new3, int orientation){
+        this.orientation = orientation;
 
         oldA = oldBS1;
         oldB = oldBS2;
@@ -93,15 +95,6 @@ public class Placement {
     public void place(){
         if(oldA == oldB || oldB == oldC){
             System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-            System.out.println("FATAL ERROR: Placement has two of the same board spaces");
-
         }
         oldA.addTile(newA);
         oldB.addTile(newB);
@@ -127,13 +120,13 @@ public class Placement {
         oldC.removeTopTile();
     }
 
-    public void nukeAnySettlements() {
-        HexTile h;
+    private void nukeAnySettlements() {
+        HexTile ht;
         for (BoardSpace b: getBoardSpaces()) {
-            h = b.topTile();
-            if (h.isOccupied()) {
-                Player owner = h.getOwner();
-                owner.nukeSettlements((TerrainTile) h);
+            ht = b.topTile();
+            if (ht.isOccupied()) {
+                Player owner = ht.getOwner();
+                owner.nukeSettlements((TerrainTile) ht);
             }
         }
     }
@@ -149,4 +142,6 @@ public class Placement {
         }
         return volcano.getLocation();
     }
+
+    public int getOrientation() { return orientation; }
 }

@@ -4,6 +4,8 @@ import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.PlayerController;
 import GameControl.Player.WhitePlayer;
+import GameModel.Map.Coordinates.CubicCoordinate;
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.GameMap;
 import GameModel.Map.Tile.Deck;
 import GameModel.Map.TriHexTile;
@@ -64,23 +66,21 @@ public class GameLogicDirector implements Runnable{
 
     public void opponentPlayerMove(String moveMssg){
         //TODO: interpret Opponent Player's Placement and Build action
-        if(moveMssg.contains("FORFEITED") || moveMssg.contains("LOST")){
-
-        } else{
-            int cutPoint = 0;
-            if(moveMssg.contains("FOUND")){
-                cutPoint = moveMssg.indexOf("FOUND");
-            } else if(moveMssg.contains("EXPAND")){
-                cutPoint = moveMssg.indexOf("EXPAND");
-            } else if(moveMssg.contains("BUILD")){
-                cutPoint = moveMssg.indexOf("BUILD");
-            }
-            String placeMssg = moveMssg.substring(0, cutPoint);
-            String buildMssg = moveMssg.substring(cutPoint);
-
-            opponentPlayerPlace(placeMssg);
-            opponentPlayerBuild(buildMssg);
+        int cutPoint = 0;
+        if(moveMssg.contains("FOUNDED")){
+            cutPoint = moveMssg.indexOf("FOUNDED");
+        } else if(moveMssg.contains("EXPANDED")){
+            cutPoint = moveMssg.indexOf("EXPANDED");
+        } else if(moveMssg.contains("BUILT")){
+            cutPoint = moveMssg.indexOf("BUILT");
         }
+        String placeMssg = moveMssg.substring(0, cutPoint);
+        String buildMssg = moveMssg.substring(cutPoint);
+
+//        opponentPlayerPlace(placeMssg);
+//        opponentPlayerBuild(buildMssg);
+        System.out.println("Opponent placement: " + placeMssg);
+        System.out.println("Opponent built: " + buildMssg);
     }
 
     public void opponentPlayerPlace(String placement){
@@ -92,7 +92,9 @@ public class GameLogicDirector implements Runnable{
             y = Integer.parseInt(placementMatcher.group(3));
             z = Integer.parseInt(placementMatcher.group(4));
             orientation = Integer.parseInt(placementMatcher.group(5));
+            OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
             //TODO: Add code actually place the tile
+            currentPlayer.placeOpponent(tht, location, orientation);
         }
     }
 
@@ -126,88 +128,78 @@ public class GameLogicDirector implements Runnable{
             currentPlayer =p1;
     }
 
-    public void run(){
+    public void run2(){
         while(!isGameOver){ }
     }
 
     /*
       NEVER CALL THIS - DAVE
      */
-    public void run2() {
+    public void run() {
         while (winner == null) {
-                if (newGame) {
-                    System.out.println("Initializing new game.");
-                    initializeNewGame("Whitety", "Blackey");
-                    winner = null;
-                    gc = GameController.getInstance();
-                    gc.initViewControllerInteractions(p1, activePlayer);
-                }
-                else {
-                    //game logic
-                    System.out.println("cards left" + deck.cardsLeft());
-                    if (deck.cardsLeft() > 0) {
-                        if (AIgame) {
-                            AIvsAIGameTurn();
-                        } else if (AIvsHuman) {
-                            AIvsHumanGameTurn();
-                        }
-                        endRoundChecks();
-
-                    } else { //game over
-                        System.out.println();
-                        System.out.println(myMap);
-                        for (Player p : players) {
-                            System.out.println("Round " + (48 - deck.cardsLeft()));
-                            System.out.println("cards left" + deck.cardsLeft());
-                            System.out.println(p.toString() + " Score: " + p.getScore());
-                            p.takeTurn(myMap, deck.draw());
-
-                            //check if the player has only one type of tokens left. If yes, end the game.
-                            if (p.checkOnlyOneTypeTokenIsLeft()) {
-                                winner = p;
-                                break;
-                            } else if (deck.cardsLeft() == 0) {
-                                break;
-                            }
-
-                            System.out.println("\n");
-                            gc.paint();
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException ie) {
-                                System.out.println(ie.getStackTrace());
-                            }
-                        }
-                        //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
-                        if (deck.cardsLeft() == 0) {
-                            winner = gameEndCheckWinner();
-                            gc.paint();
-                        }
-
-                        if (deck.cardsLeft() % 10 == 0) {
-                            gc.paint();
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException ie) {
-                                System.out.println(ie.getStackTrace());
-                            }
-                        }
-
-                    }
-                }
-                //System.out.println("Winner: " + winner.toString());
-                    //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
-                if (deck.cardsLeft() == 0) {
-                    winner = gameEndCheckWinner();
-                    gc.paint();
-                }
-
-
+            if (newGame) {
+                initializeNewGame("Whitety", "Blackey");
             }
-            //System.out.println("Winner: " + winner.toString());
+            else {
+                //game logic
+                System.out.println("cards left" + deck.cardsLeft());
+                if (deck.cardsLeft() > 0) {
+                    if (AIgame) {
+                        AIvsAIGameTurn();
+                    } else if (AIvsHuman) {
+                        AIvsHumanGameTurn();
+                    }
+                    endRoundChecks();
+                }
+                else { //game over
+                    gameOver();
+                }
+            }
+        }
+    }
+
+
+
+    private void gameOver(){
+        System.out.println();
+        System.out.println(myMap);
+        for (Player p : players) {
+            System.out.println("Round " + (48 - deck.cardsLeft()));
+            System.out.println("cards left" + deck.cardsLeft());
+            System.out.println(p.toString() + " Score: " + p.getScore());
+            p.takeTurn(myMap, deck.draw());
+
+            //check if the player has only one type of tokens left. If yes, end the game.
+            if (p.checkOnlyOneTypeTokenIsLeft()) {
+                winner = p;
+                break;
+            } else if (deck.cardsLeft() == 0) {
+                break;
+            }
+
+            System.out.println("\n");
+            gc.paint();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
+            }
+        }
+        //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
+        if (deck.cardsLeft() == 0) {
+            winner = gameEndCheckWinner();
+            gc.paint();
         }
 
-
+        if (deck.cardsLeft() % 10 == 0) {
+            gc.paint();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
+            }
+        }
+    }
 
     private Player gameEndCheckWinner(){
         Player winner = compareScores();
@@ -259,15 +251,16 @@ public class GameLogicDirector implements Runnable{
         System.out.println("Score " + currentPlayer.getScore());
 
         for(Player p: players){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                System.out.println(ie.getStackTrace());
+            }
             AItakeTurn();
             nextPlayer();
             paint();
             //TODO: for the official game tournament, this block should be removed
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
+
         }
     }
 
@@ -321,6 +314,8 @@ public class GameLogicDirector implements Runnable{
 
 
     private void initializeNewGame(String WhitePlayerName, String BlackPlayerName) {
+        System.out.println("Initializing new game.");
+
         p1 = new WhitePlayer(WhitePlayerName, myMap, null);
         p2 = new BlackPlayer(BlackPlayerName, myMap, p1);
         p1.setEnemyPlayer(p2);
@@ -336,11 +331,17 @@ public class GameLogicDirector implements Runnable{
 //        System.out.println(deck.cardsLeft());
         gc.initViewControllerInteractions(p1, activePlayer);
         newGame = false; // Q: what's this for? A: see run method
+
+        winner = null;
+        gc = GameController.getInstance();
+        gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     public boolean isGameOver(){
         return isGameOver;
     }
 
-    public void setGameOver() { isGameOver = true; }
+    public void setGameOver() {
+        isGameOver = true;
+    }
 }

@@ -15,14 +15,14 @@ import java.util.regex.Matcher;
 public class TigerLandDelegate {
     private boolean gameEnded;
     private TigerLandClient client;
-    private int playerId;
+    private int playerId, opponentId;
     private String tournamentPW;
     private String username;
     private String password;
     private GameLogicDirector game1;
     private GameLogicDirector game2;
-    private int game1Id;
-    private int game2Id;
+    private int game1Id, game2Id;
+    private int messageOptOut;
     private String unexpectedError;
     private Queue<ArrayList<RoundStats>> gameStats;
 
@@ -32,6 +32,7 @@ public class TigerLandDelegate {
         username = "TeamD";
         password = "Password";
         gameEnded = false;
+        messageOptOut = 2;
         unexpectedError = "";
         System.out.println("Game Delegate successfully created.");
     }
@@ -145,7 +146,6 @@ public class TigerLandDelegate {
 
     public void MockMatchProtocol(DataInputStream in, DataOutputStream out){
         String serverMessage = "", clientMessage = "";
-        int opponentId;
         try{
             //match start message
             serverMessage = in.readUTF();
@@ -175,7 +175,6 @@ public class TigerLandDelegate {
 
     public void MatchProtocol(DataInputStream in, DataOutputStream out){
         String serverMessage = "", clientMessage = "";
-        int opponentId = -1;
 
         try{
             //match start message
@@ -195,10 +194,10 @@ public class TigerLandDelegate {
                 for (int i = 0; (!game1.isGameOver() || !game2.isGameOver()) && i < 48; i++) {
                     MoveProtocol(in, out);
                 }
-                //game1 score
+                //game1 score Message
                 serverMessage = in.readUTF();
                 System.out.println("SERVER: " + serverMessage);
-                //game2 score
+                //game2 score Message
                 serverMessage = in.readUTF();
                 System.out.println("SERVER: " + serverMessage);
             }
@@ -213,7 +212,7 @@ public class TigerLandDelegate {
         String serverMessage = "", clientMessage = "", placedAndBuildMssg = "";
         int gameId, moveNumber, pId;
         String tileAssigned;
-        int messageCountExpeted = 1;
+        int messageCountExpeted = 3 - messageOptOut; //Tells how many messages expected from the Server
 
         try{
             while(messageCountExpeted>0){
@@ -246,35 +245,40 @@ public class TigerLandDelegate {
                     out.writeUTF(clientMessage);
                     System.out.println("Client: " + clientMessage);
 
+                } else if(gameForfeitedMatcher.matches()){
+                    gameId = Integer.parseInt(gameForfeitedMatcher.group(1));
+                    pId = Integer.parseInt(gameForfeitedMatcher.group(3));
+                    String opponentForfeitedMssg = gameForfeitedMatcher.group(4);
+                    if (gameId == game1Id) {
+                        game1.setGameOver();
+                    } else {
+                        game2.setGameOver();
+                    }
+                    messageOptOut++;
+                } else if(gameLostMatcher.matches()){
+                    gameId = Integer.parseInt(gameLostMatcher.group(1));
+                    pId = Integer.parseInt(gameLostMatcher.group(3));
+                    String opponentLostMssg = gameLostMatcher.group(4);
+                    if (gameId == game1Id) {
+                        game1.setGameOver();
+                    } else {
+                        game2.setGameOver();
+                    }
+                    messageOptOut++;
                 } else if(gameMovePlayerMatcher.matches()){
                     //TODO: add function to carry out opponent's move
                     gameId = Integer.parseInt(gameMovePlayerMatcher.group(1));
                     pId = Integer.parseInt(gameMovePlayerMatcher.group(3));
-                    String opponentMoveMssg = gameMovePlayerMatcher.group(4);
+                    String opponentMoveMssg = gameMovePlayerMatcher.group(4); //could be our move message, if so, ignored
                     if(pId != playerId) {
                         if (gameId == game1Id) {
                             game1.opponentPlayerMove(opponentMoveMssg);
                         } else {
                             game2.opponentPlayerMove(opponentMoveMssg);
                         }
-                    }
-                } else if(gameForfeitedMatcher.matches()){
-                    gameId = Integer.parseInt(gameMovePlayerMatcher.group(1));
-                    pId = Integer.parseInt(gameMovePlayerMatcher.group(3));
-                    String opponentForfeitedMssg = gameMovePlayerMatcher.group(4);
-                    if (gameId == game1Id) {
-                        game1.setGameOver();
-                    } else {
-                        game2.setGameOver();
-                    }
-                } else if(gameLostMatcher.matches()){
-                    gameId = Integer.parseInt(gameMovePlayerMatcher.group(1));
-                    pId = Integer.parseInt(gameMovePlayerMatcher.group(3));
-                    String opponentLostMssg = gameMovePlayerMatcher.group(4);
-                    if (gameId == game1Id) {
-                        game1.setGameOver();
-                    } else {
-                        game2.setGameOver();
+                        if(game1.isGameOver() ){//|| game2.isGameOver()
+                            messageCountExpeted = 0;
+                        }
                     }
                 }
             }
