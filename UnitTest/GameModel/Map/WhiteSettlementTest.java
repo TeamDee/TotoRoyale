@@ -33,19 +33,21 @@ public class WhiteSettlementTest {
             @Test
             public void check_terrain() {
                 map = new GameMap();
-                whitePlayer = new WhitePlayer("WhitePlayer", map, null);
+                whitePlayer = new WhitePlayer("White Player", map, null);
                 ArrayList<HexTile> tiles = map.getVisible();
                 for (HexTile ht : tiles) {
-                    if (ht.terrainType() == TerrainType.VOLCANO)
+                    if (ht.terrainType() != TerrainType.VOLCANO)
                         // new WhitePlayer().buildSettlement((TerrainTile)ht);
+
                         whitePlayer.buildSettlement((TerrainTile) ht);
+
                     break;
                 }
             }
 
             @After
             public void cleanUp() {
-                ;
+
             }
 
 }
