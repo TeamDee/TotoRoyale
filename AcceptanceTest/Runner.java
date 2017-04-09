@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
 
-    features = {"AcceptanceTest/Features/TestAllLegal.Feature"}
+    features = {"AcceptanceTest/Features/"}
 
 
 

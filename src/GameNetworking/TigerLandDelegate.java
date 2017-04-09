@@ -28,11 +28,11 @@ public class TigerLandDelegate {
 
     public TigerLandDelegate(String serverName, int port){
         client = new TigerLandClient(serverName, port);
-        tournamentPW = "password";
-        username = "TeamD";
-        password = "Password";
+        tournamentPW = "heygang";
+        username = "D";
+        password = "D";
         gameEnded = false;
-        messageOptOut = 2;
+        messageOptOut = 0;
         unexpectedError = "";
         System.out.println("Game Delegate successfully created.");
     }
@@ -141,7 +141,7 @@ public class TigerLandDelegate {
             System.out.println("SERVER: " + serverMessage);
 
             if(FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
-                MockMatchProtocol(in, out);
+                MatchProtocol(in, out);
                 serverMessage = in.readUTF();
                 System.out.println("SERVER: " + serverMessage);
             }
@@ -187,7 +187,7 @@ public class TigerLandDelegate {
 
     public void MatchProtocol(DataInputStream in, DataOutputStream out){
         String serverMessage = "", clientMessage = "";
-
+        messageOptOut = 0;
         try{
             // NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER <pid>
             serverMessage = in.readUTF();
@@ -224,7 +224,7 @@ public class TigerLandDelegate {
         String serverMessage = "", clientMessage = "", placedAndBuildMssg = "";
         int gameId, moveNumber, pId;
         String tileAssigned;
-        int messageCountExpeted = 2 - messageOptOut; //Tells how many messages expected from the Server
+        int messageCountExpeted = 3 - messageOptOut; //Tells how many messages expected from the Server
 
         try{
             while(messageCountExpeted>0){

@@ -138,14 +138,14 @@ public class GameLogicDirector implements Runnable{
             currentPlayer =p1;
     }
 
-    public void run2(){
+    public void run(){
         while(!isGameOver){ }
     }
 
     /*
       NEVER CALL THIS - DAVE
      */
-    public void run() {
+    public void run2() {
         while (winner == null) {
             if (newGame) {
                 initializeNewGame("Whitety", "Blackey");
