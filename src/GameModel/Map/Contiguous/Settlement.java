@@ -1,5 +1,6 @@
 package GameModel.Map.Contiguous;
 
+import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Direction;
@@ -21,6 +22,7 @@ public class Settlement{
     //public ArrayList<TerrainTile> Tplacement;
     public boolean HasTotoro;
     public boolean HasTiger;
+    private Player owner;
     public Settlement() {
         settlement = new ArrayList<TerrainTile>();
         exsettle = new ArrayList<TerrainTile>();
@@ -70,65 +72,23 @@ public class Settlement{
         ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied() && doubleCheckAdjaacent(t) && this.getSettlementSize() >= 5){
+            if(!t.isOccupied() && doubleCheckAdjacent(t)){
                 returnMe.add(t);
             }
         }
         return returnMe;
-
     }
 
-    public boolean doubleCheckAdjaacent(TerrainTile t)
+    public boolean doubleCheckAdjacent(TerrainTile tt)
     {
-        BoardSpace bs = t.getBoardSpace();
-        BoardSpace temp = null;
-        HexTile check = null;
-        if (bs.getNorth().getLevel() > 0) {
-            temp = bs.getNorth();
-            check = temp.topTile();
-            if (settlement.contains(check))
-            {
-                return true;
-            }
-        }
-        else if (bs.getNorthEast().getLevel() > 0) {
-            temp = bs.getNorthEast();
-            check = temp.topTile();
-            if (settlement.contains(check))
-            {
-                return true;
-            }
-        }
-        else if (bs.getNorthWest().getLevel() > 0) {
-            temp = bs.getNorthWest();
-            check = temp.topTile();
-            if (settlement.contains(check))
-            {
-                return true;
-            }
-        }
-        else if (bs.getSouth().getLevel() > 0) {
-            temp = bs.getSouth();
-            check = temp.topTile();
-            if (settlement.contains(check))
-            {
-                return true;
-            }
-        }
-        else if (bs.getSouthEast().getLevel() > 0) {
-            temp = bs.getSouthEast();
-            check = temp.topTile();
-            if (settlement.contains(check))
-            {
-                return true;
-            }
-        }
-        else if (bs.getSouthWest().getLevel() > 0) {
-            temp = bs.getSouthWest();
-            check = temp.topTile();
-            if (settlement.contains(check))
-            {
-                return true;
+        HexTile adjacentTile;
+        for(Direction d: Direction.values()) {
+            if (tt.hasNeighborInDirection(d)) {
+                adjacentTile = tt.getNeighborInDirection(d);
+                if (adjacentTile.terrainType() != VOLCANO) {
+                    if (settlement.contains((TerrainTile) adjacentTile))
+                        return true;
+                }
             }
         }
         return false;
@@ -139,14 +99,17 @@ public class Settlement{
         ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTigerPlaceMent){
-            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjaacent(t)){
+            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjacent(t)){
                 returnMe.add(t);
             }
         }
         return returnMe;
     }
 
-    public void createSettlement(TerrainTile starttile){settlement.add(starttile);}
+    public void createSettlement(TerrainTile starttile){
+        addToSettlement(starttile);
+    }
+
     public void addToSettlement(TerrainTile tile){
         settlement.add(tile);
         tile.isPartOfSettlement = true;
@@ -165,7 +128,7 @@ public class Settlement{
     }
 
     public boolean isContiguous(TerrainTile tile) {
-        for (TerrainTile contiguousTile : settlement) {
+        for (TerrainTile contiguousTile : exsettle) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }
@@ -199,17 +162,17 @@ public class Settlement{
         }
     }
 
-    public ArrayList<Settlement> combineAdacentSettlementsforMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
+    public ArrayList<Settlement> combineAdjacentSettlementsForMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
     {
         ArrayList<Settlement> ss = PlayerSettlements;
         for(TerrainTile t: ExpandedTile)
         {
-            ss = combineAdjacentSettlementsforSingleTile(t,PlayerSettlements,BeingEdit);
+            ss = combineAdjacentSettlementsForSingleTile(t,PlayerSettlements,BeingEdit);
         }
         return ss;
     }
 
-    public ArrayList<Settlement> combineAdjacentSettlementsforSingleTile(TerrainTile hexTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
+    public ArrayList<Settlement> combineAdjacentSettlementsForSingleTile(TerrainTile hexTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
     {
         BoardSpace bs = hexTile.getBoardSpace();
         BoardSpace temp = null;
@@ -343,7 +306,13 @@ public class Settlement{
                 }
             }
         }
-        BeingEdit.getSettlement().addAll(adjacentHexTiles);
+        for(TerrainTile t: adjacentHexTiles)
+        {
+            if(!BeingEdit.getSettlement().contains(t))
+            {
+                BeingEdit.getSettlement().add(t);
+            }
+        }
         if(PlayerSettlements.contains(tempsettlement)) {
             PlayerSettlements.remove(tempsettlement);
             System.out.println("Hola como estas");
@@ -419,9 +388,11 @@ public class Settlement{
         return settlement.size();
     }
 
-    public ArrayList<Settlement> getSplitSettlementsAfterNuke(TerrainTile nukedTile) {
+    public ArrayList<Settlement> getSplitSettlementsAfterNuke(ArrayList<TerrainTile> nukedTiles) {
         ArrayList<TerrainTile> ungroupedTiles = new ArrayList<TerrainTile>(settlement);
-        ungroupedTiles.remove(nukedTile);
+        for (TerrainTile tt : nukedTiles) {
+            ungroupedTiles.remove(tt);
+        }
         ArrayList<Settlement> splitSettlements = new ArrayList<Settlement>();
 
         while(!ungroupedTiles.isEmpty()) {
@@ -461,5 +432,9 @@ public class Settlement{
 
     public boolean contains(TerrainTile tt) {
         return settlement.contains(tt);
+    }
+
+    public Player getOwner() {
+        return settlement.get(0).getOwner();
     }
 }

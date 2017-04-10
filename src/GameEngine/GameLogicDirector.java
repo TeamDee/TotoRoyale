@@ -166,8 +166,6 @@ public class GameLogicDirector implements Runnable{
         }
     }
 
-
-
     private void gameOver(){
         System.out.println();
         System.out.println(myMap);
@@ -284,6 +282,7 @@ public class GameLogicDirector implements Runnable{
             System.out.println(ie.getStackTrace());
         }
     }
+
     private Player compareTotoroCount(){
         Player winner;
         if(p1.getTotoroCount() < p2.getTotoroCount()){
