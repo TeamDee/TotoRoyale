@@ -329,57 +329,16 @@ public class Settlement{
         TerrainTile tile = null;
         HexTile check = null;
         ArrayList<TerrainTile> adjacentHexTiles = new ArrayList<TerrainTile>();
-        if (bs.getNorth().getLevel() > 0) {
-            temp = bs.getNorth();
-            check = temp.topTile();
-            if (check.terrainType() != TerrainType.VOLCANO)
-            {
-                tile = (TerrainTile)check;
-                adjacentHexTiles.add(tile);
-            }
-        }
-        if (bs.getNorthEast().getLevel() > 0) {
-            temp = bs.getNorthEast();
-            check = temp.topTile();
-            if (check.terrainType() != VOLCANO) {
-                tile = (TerrainTile)check;
-                adjacentHexTiles.add(tile);
-            }
-        }
-        if (bs.getSouthEast().getLevel() > 0) {
-            temp = bs.getSouthEast();
-            check = temp.topTile();
-            if(check.terrainType() != VOLCANO) {
-                //System.out.println("Test3");
-                tile = (TerrainTile)check;
-                adjacentHexTiles.add(tile);
-            }
-        }
-        if (bs.getSouth().getLevel() > 0) {
-            temp = bs.getSouth();
-            check = temp.topTile();
-            if(check.terrainType() != VOLCANO) {
-                //System.out.println("Test4");
-                tile = (TerrainTile)check;
-                adjacentHexTiles.add(tile);
-            }
-        }
-        if (bs.getSouthWest().getLevel() > 0) {
-            temp = bs.getSouthWest();
-            check = temp.topTile();
-            if (check.terrainType() != VOLCANO) {
-                //System.out.println("Test5");
-                tile = (TerrainTile)check;
-                adjacentHexTiles.add(tile);
-            }
-        }
-        if (bs.getNorthWest().getLevel() > 0) {
-            temp = bs.getNorthWest();
-            check = temp.topTile();
-            if(check.terrainType() != VOLCANO) {
-                //System.out.println("Test6");
-                tile = (TerrainTile)check;
-                adjacentHexTiles.add(tile);
+
+        for(Direction d: Direction.values()) {
+            BoardSpace bs2 = bs.getBoardSpaceAtDirection(d);
+            if (bs2.getLevel() > 0) {
+                temp = bs2;
+                check = temp.topTile();
+                if (check.terrainType() != TerrainType.VOLCANO) {
+                    tile = (TerrainTile) check;
+                    adjacentHexTiles.add(tile);
+                }
             }
         }
         return adjacentHexTiles;
