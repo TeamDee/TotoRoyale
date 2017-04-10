@@ -1225,6 +1225,9 @@ public class Player {
         ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTiles);
 
         settlements.addAll(newSettlements);
+        if(newSettlements.size() > 2){
+            System.out.println("\n\n\n\nNEW SETTLEMENTS AFTER NUKE COUNT: " + newSettlements.size()+"\n\n\n\n");
+        }
         for (TerrainTile tt : nukedTiles) {
             tt.nuke();
         }
