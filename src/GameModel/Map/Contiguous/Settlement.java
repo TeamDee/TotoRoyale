@@ -22,6 +22,7 @@ public class Settlement{
     //public ArrayList<TerrainTile> Tplacement;
     public boolean HasTotoro;
     public boolean HasTiger;
+    private Player owner;
     public Settlement() {
         settlement = new ArrayList<TerrainTile>();
         exsettle = new ArrayList<TerrainTile>();
