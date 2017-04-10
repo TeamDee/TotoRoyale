@@ -175,7 +175,7 @@ public class Player {
         HexTile tileOne = tht.getTileOne();
         HexTile tileTwo = tht.getTileTwo();
         HexTile tileThree = tht.getTileThree();
-        BoardSpace bs1, bs2;
+        BoardSpace bs1 = null, bs2 = null;
         switch (orientation){
             case 1:
                 bs1 = north;  bs2 = northeast;
@@ -196,7 +196,7 @@ public class Player {
                 bs1 = northwest; bs2 = north;
                 break;
         }
-        Placement placement = new Placement(north, northeast, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
+        Placement placement = new Placement(bs1, bs2, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
         myMap.implementPlacement(placement);
     }
 
@@ -825,7 +825,9 @@ public class Player {
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             //settlements = bestOverallExpansion.getSettlement().combineAdjacentSettlementsForMultTiles(bestOverallExpansion.getTiles(), settlements, bestOverallExpansion.getSettlement());
             //System.out.println("Player Settlement Size After: " + settlements.size());
-            buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().toString();
+
+            buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+
             return true;
         }
 
@@ -1217,12 +1219,14 @@ public class Player {
         return returnMe;
     }
     
-    public void nukeSettlements(TerrainTile nukedTile) {
-        Settlement settlementToNuke = getSettlementContaining(nukedTile);
-        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTile);
+    public void nukeSettlements(ArrayList<TerrainTile> nukedTiles) {
+        Settlement settlementToNuke = getSettlementContaining(nukedTiles.get(0));
+        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTiles);
         settlements.remove(settlementToNuke);
         settlements.addAll(newSettlements);
-        nukedTile.nuke();
+        for (TerrainTile tt : nukedTiles) {
+            tt.nuke();
+        }
     }
 
     public Settlement getSettlementContaining(TerrainTile tt) {

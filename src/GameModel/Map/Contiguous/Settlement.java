@@ -390,9 +390,11 @@ public class Settlement{
         return settlement.size();
     }
 
-    public ArrayList<Settlement> getSplitSettlementsAfterNuke(TerrainTile nukedTile) {
+    public ArrayList<Settlement> getSplitSettlementsAfterNuke(ArrayList<TerrainTile> nukedTiles) {
         ArrayList<TerrainTile> ungroupedTiles = new ArrayList<TerrainTile>(settlement);
-        ungroupedTiles.remove(nukedTile);
+        for (TerrainTile tt : nukedTiles) {
+            ungroupedTiles.remove(tt);
+        }
         ArrayList<Settlement> splitSettlements = new ArrayList<Settlement>();
 
         while(!ungroupedTiles.isEmpty()) {

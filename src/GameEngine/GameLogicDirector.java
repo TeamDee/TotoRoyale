@@ -65,7 +65,6 @@ public class GameLogicDirector implements Runnable{
     }
 
     public void opponentPlayerMove(String moveMssg){
-        //TODO: interpret Opponent Player's Placement and Build action
         int cutPoint = 0;
         if(moveMssg.contains("FOUNDED")){
             cutPoint = moveMssg.indexOf("FOUNDED");
@@ -94,7 +93,6 @@ public class GameLogicDirector implements Runnable{
             z = Integer.parseInt(placementMatcher.group(4));
             orientation = Integer.parseInt(placementMatcher.group(5));
             OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
-            //TODO: Add code actually place the tile
             currentPlayer.placeOpponent(tht, location, orientation);
         }
     }
@@ -138,14 +136,14 @@ public class GameLogicDirector implements Runnable{
             currentPlayer =p1;
     }
 
-    public void run2(){
+    public void run(){
         while(!isGameOver){ }
     }
 
     /*
       NEVER CALL THIS - DAVE
      */
-    public void run() {
+    public void run2() {
         while (winner == null) {
             if (newGame) {
                 initializeNewGame("Whitety", "Blackey");
