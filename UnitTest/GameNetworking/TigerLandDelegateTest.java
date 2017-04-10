@@ -4,9 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -16,16 +14,16 @@ import java.net.Socket;
 public class TigerLandDelegateTest {
     TigerLandDelegate delegate;
     ServerSocket server;
-    DataInputStream clientIn, serverIn;
-    DataOutputStream clientOut, serverOut;
+    BufferedReader clientIn, serverIn;
+    PrintWriter clientOut, serverOut;
     @Before
     public void setUp(){
         try {
             server = new ServerSocket(6065);
             delegate = new TigerLandDelegate("localhost", 6065);
             Socket socket = server.accept();
-            serverIn = new DataInputStream(socket.getInputStream());
-            serverOut = new DataOutputStream(socket.getOutputStream());
+            serverIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            serverOut = new PrintWriter(socket.getOutputStream());
             clientIn = delegate.getClient().getDataInputStream();
             clientOut = delegate.getClient().getDataOutputStream();
         } catch (IOException ex){
@@ -35,14 +33,10 @@ public class TigerLandDelegateTest {
 
     @Test
     public void AuthenticationTest(){
-        try{
-            serverOut.writeUTF("TWO SHALL ENTER ONE SHALL LEAVE");
-            serverOut.writeUTF("WAIT FOR THE TOURNAMENT TO BEGIN " + "10101");
-            boolean outcome = delegate.AuthenticationProtocol(clientIn, clientOut);
-            Assert.assertTrue(outcome);
-        } catch (IOException ex){
-            Assert.fail();
-        }
+        serverOut.println("TWO SHALL ENTER ONE SHALL LEAVE");
+        serverOut.println("WAIT FOR THE TOURNAMENT TO BEGIN " + "10101");
+        boolean outcome = delegate.AuthenticationProtocol(clientIn, clientOut);
+        Assert.assertTrue(outcome);
     }
 
     @Test

@@ -807,7 +807,7 @@ public class Player {
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = bestExpansion.getSettlement().combineAdacentSettlementsforMultTiles(bestExpansion.getTiles(), settlements, bestExpansion.getSettlement());
             //System.out.println("Player Settlement Size After: " + settlements.size());
-            buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().toString();
+            buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
             return true;
         }
         return false;

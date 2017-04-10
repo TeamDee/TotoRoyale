@@ -1,8 +1,6 @@
 package GameNetworking;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -21,20 +19,20 @@ public class TigerLandClient {
         }
     }
 
-    public DataInputStream getDataInputStream(){
-        DataInputStream dataInputStream = null;
+    public BufferedReader getDataInputStream(){
+        BufferedReader dataInputStream = null;
         try{
-            dataInputStream = new DataInputStream(client.getInputStream());
+            dataInputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
         } catch(IOException ex){
             System.out.println("Failed to obtain a DataInputStream.");
         }
         return dataInputStream;
     }
 
-    public DataOutputStream getDataOutputStream(){
-        DataOutputStream dataOutputStream = null;
+    public PrintWriter getDataOutputStream(){
+        PrintWriter dataOutputStream = null;
         try{
-            dataOutputStream = new DataOutputStream(client.getOutputStream());
+            dataOutputStream = new PrintWriter(client.getOutputStream(), true);
         } catch(IOException ex){
             System.out.println("Failed to obtain a DataOutputStream.");
         }
