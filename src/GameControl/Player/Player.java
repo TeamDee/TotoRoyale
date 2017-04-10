@@ -837,6 +837,7 @@ public class Player {
     public SettlementExpansion getBestExpansionForSettlement(Settlement settlement) {
         SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement);
         ArrayList<ArrayList<TerrainTile>> allExpansions = new ArrayList<ArrayList<TerrainTile>>();
+
         ArrayList<TerrainTile> expansion1 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.GRASS);
         ArrayList<TerrainTile> expansion2 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.JUNGLE);
         ArrayList<TerrainTile> expansion3 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.LAKE);

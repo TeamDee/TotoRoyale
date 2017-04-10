@@ -137,7 +137,7 @@ public class GameLogicDirector implements Runnable{
     }
 
     public void run(){
-        while(!isGameOver){ }
+        while(!isGameOver){ run2();}
     }
 
     /*
