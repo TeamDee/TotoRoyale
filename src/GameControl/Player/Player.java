@@ -171,7 +171,7 @@ public class Player {
         HexTile tileOne = tht.getTileOne();
         HexTile tileTwo = tht.getTileTwo();
         HexTile tileThree = tht.getTileThree();
-        BoardSpace bs1, bs2;
+        BoardSpace bs1 = null, bs2 = null;
         switch (orientation){
             case 1:
                 bs1 = north;  bs2 = northeast;
@@ -192,7 +192,7 @@ public class Player {
                 bs1 = northwest; bs2 = north;
                 break;
         }
-        Placement placement = new Placement(north, northeast, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
+        Placement placement = new Placement(bs1, bs2, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
         myMap.implementPlacement(placement);
     }
 

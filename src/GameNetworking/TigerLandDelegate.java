@@ -139,8 +139,6 @@ public class TigerLandDelegate {
 
             if(FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
                 MatchProtocol(in, out);
-                serverMessage = in.readLine();
-                System.out.println("SERVER: " + serverMessage);
             }
             // END OF ROUND <rid> OF <rounds> or END OF ROUND <rid> OF <rounds> WAIT FOR THE NEXT MATCH
             serverMessage = in.readLine();
