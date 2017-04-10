@@ -1222,8 +1222,9 @@ public class Player {
     
     public void nukeSettlements(ArrayList<TerrainTile> nukedTiles) {
         Settlement settlementToNuke = getSettlementContaining(nukedTiles.get(0));
-        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTiles);
         settlements.remove(settlementToNuke);
+        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTiles);
+
         settlements.addAll(newSettlements);
         for (TerrainTile tt : nukedTiles) {
             tt.nuke();
