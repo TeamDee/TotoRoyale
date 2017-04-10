@@ -52,34 +52,34 @@ public class AIPlayerController extends PlayerController{
                 score += 20;
             if (hex.getLevel() == 2) //Causes a tiger to be place-able, high priority
                 score += 50;
-            if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
+            if (hex.getLevel() >= 3) //There is no real purpose after level 3, so not much priority
                 score += 10;
             //Enemy Occupant
-            if (hex.getLevel() >= 1) {
-                if ((myPlayer.isWhite() && hex.isOwnedByBlack()) || (!myPlayer.isWhite() && hex.isOwnedByWhite())) { //Enemy owns place
-                    if (hex.isPartOfSettlement && hex.settlementSize >= 5) {//Don't want to make it easier for the opponent
-                        if (hasAdjacentTotoro(hex)) {
-                            return 0;
+            if (hex.isOccupied()) {
+                if (hex.getLevel() >= 1) {
+                    if ((myPlayer.isWhite() && hex.isOwnedByBlack()) || (!myPlayer.isWhite() && hex.isOwnedByWhite())) { //Enemy owns place
+                        if (hex.isPartOfSettlement && hex.settlementSize >= 5) {//Don't want to make it easier for the opponent
+                            if (hasAdjacentTotoro(hex)) {
+                                return 0;
+                            } else
+                                score -= 100;
+                            } else if (hex.isPartOfSettlement && hex.settlementSize < 5)
+                                score += 20;
+                    }
+                    //Own settlement (includes separation for having more totoros)
+                    if ((myPlayer.isWhite() && hex.isOwnedByWhite()) || (!myPlayer.isWhite() && hex.isOwnedByBlack())) { //Friendly settlement
+                        if (hex.isPartOfSettlement && hex.settlementSize >= 5) {
+                            if (hasAdjacentTotoro(hex)) //Best point to separate a settlement at
+                                score += 100;
+                            else
+                                score += 20;
                         }
-                        else
-                            score -= 100;
-                    }
-                    else if (hex.isPartOfSettlement && hex.settlementSize < 5)
-                        score += 20;
-                }
-                //Own settlement (includes separation for having more totoros)
-                if ((myPlayer.isWhite() && hex.isOwnedByWhite()) || (!myPlayer.isWhite() && hex.isOwnedByBlack())) { //Friendly settlement
-                    if (hex.isPartOfSettlement && hex.settlementSize >= 5) {
-                        if (hasAdjacentTotoro(hex)) //Best point to separate a settlement at
-                            score += 100;
-                        else
-                            score += 20;
-                    }
-                    if (hex.isPartOfSettlement && hex.settlementSize < 5) {
-                        if (hasAdjacentTotoro(hex)) //Still important, but requires more work to have enough for a totoro
-                            score += 50;
-                        else
-                            score += 10;
+                        if (hex.isPartOfSettlement && hex.settlementSize < 5) {
+                            if (hasAdjacentTotoro(hex)) //Still important, but requires more work to have enough for a totoro
+                                score += 50;
+                            else
+                                score += 10;
+                        }
                     }
                 }
             }
