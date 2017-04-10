@@ -9,14 +9,14 @@ import java.util.ArrayList;
  */
 public class SettlementExpansion {
     private ArrayList<TerrainTile> tiles;
-    private int value;
     private Settlement settlement;
+    private int value;
     private int meepleCost;
 
-    public SettlementExpansion(ArrayList<TerrainTile> tiles, int value, Settlement settlement) {
+    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlement) {
         this.tiles = tiles;
-        this.value = value;
         this.settlement = settlement;
+        value = 0;
         meepleCost = 0;
         if (tiles != null) {
             for (TerrainTile tt : tiles) {
@@ -25,13 +25,15 @@ public class SettlementExpansion {
         }
     }
 
-
-    public ArrayList<TerrainTile> getTiles() {
-        return tiles;
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public int getValue() {
         return value;
+    }
+    public ArrayList<TerrainTile> getTiles() {
+        return tiles;
     }
 
     public Settlement getSettlement () {
