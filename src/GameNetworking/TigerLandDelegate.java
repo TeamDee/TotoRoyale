@@ -25,7 +25,7 @@ public class TigerLandDelegate {
 
     public TigerLandDelegate(String serverName, int port){
         client = new TigerLandClient(serverName, port);
-        tournamentPW = "heygang";
+        tournamentPW = "FurRealz";
         username = "D";
         password = "D";
         gameEnded = false;
@@ -45,7 +45,7 @@ public class TigerLandDelegate {
             do{
                 // WELCOME TO ANOTHER EDITION OF THUNDERDOME!
                 serverMessage = dataInputStream.readLine();
-                System.out.println("SERVER: " + serverMessage);
+                System.out.println("SERVER(Tournament): " + serverMessage);
             } while(!FrequentlyUsedPatterns.WelcomeMssgPattern.matcher(serverMessage).matches());
 
             while(!authenticated) {
@@ -56,7 +56,7 @@ public class TigerLandDelegate {
 
             //The exit message
             serverMessage = dataInputStream.readLine();
-            System.out.println("SERVER: " + serverMessage);
+            System.out.println("SERVER(Tournament): " + serverMessage);
         }catch(IOException ex){
             unexpectedError = "TournamentProtocol: " + ex.getMessage();
             System.out.println("Failed to obtain message from server.");
@@ -74,7 +74,7 @@ public class TigerLandDelegate {
 
             // TWO SHALL ENTER, ONE SHALL LEAVE
             inMessage = in.readLine();
-            System.out.println("SERVER: " + inMessage);
+            System.out.println("SERVER(Authenticate): " + inMessage);
 
             // I AM <username> <password>
             outMessage = "I AM " + username + " " + password;
@@ -83,7 +83,7 @@ public class TigerLandDelegate {
 
             // WAIT FOR THE TOURNAMENT TO BEGIN <pid>
             inMessage = in.readLine();
-            System.out.println("SERVER: " + inMessage);
+            System.out.println("SERVER(Authenticate): " + inMessage);
             Matcher PlayerIDMatcher = FrequentlyUsedPatterns.PlayerIDMssgPattern.matcher(inMessage);
             if(PlayerIDMatcher.matches()) {
                 playerId = Integer.parseInt(PlayerIDMatcher.group(1));
@@ -107,7 +107,7 @@ public class TigerLandDelegate {
             while(nextGame) {
                 // NEW CHALLENGE <cid> YOU WILL PLAY <rounds> MATCHES
                 serverMessage = in.readLine();
-                System.out.println("SERVER: " + serverMessage);
+                System.out.println("SERVER(Challenge): " + serverMessage);
                 Matcher ChallengeMatcher = FrequentlyUsedPatterns.ChallengeMssgPattern.matcher(serverMessage);
                 if (ChallengeMatcher.matches()) {
                     challengeId = Integer.parseInt(ChallengeMatcher.group(1));
@@ -118,7 +118,7 @@ public class TigerLandDelegate {
                 }
                 // END OF CHALLENGES or WAIT FOR THE NEXT CHALLENGE TO BEGIN
                 serverMessage = in.readLine();
-                System.out.println("SERVER: " + serverMessage);
+                System.out.println("SERVER(Challenge): " + serverMessage);
                 if (FrequentlyUsedPatterns.ChallengeOverMssgPattern.matcher(serverMessage).matches()) {
                     nextGame = false;
                 }
@@ -135,14 +135,18 @@ public class TigerLandDelegate {
         try{
             // BEGIN ROUND <rid> OF <rounds>
             serverMessage = in.readLine();
-            System.out.println("SERVER: " + serverMessage);
+            System.out.println("SERVER(Round): " + serverMessage);
 
-            if(FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
-                MatchProtocol(in, out);
+            while(!FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
+                serverMessage = in.readLine();
+                System.out.println("SERVER(Round): " + serverMessage);
             }
+
+            MatchProtocol(in, out);
+
             // END OF ROUND <rid> OF <rounds> or END OF ROUND <rid> OF <rounds> WAIT FOR THE NEXT MATCH
             serverMessage = in.readLine();
-            System.out.println("SERVER: " + serverMessage);
+            System.out.println("SERVER(Round): " + serverMessage);
             System.out.println("Delegate: End of Round Protocol!");
         } catch (IOException ex){
             unexpectedError = "RoundProtocol: " + ex.getMessage();
@@ -186,7 +190,7 @@ public class TigerLandDelegate {
         try{
             // NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER <pid>
             serverMessage = in.readLine();
-            System.out.println("SERVER: " + serverMessage);
+            System.out.println("SERVER(Match): " + serverMessage);
             Matcher NewMatchMatcher = FrequentlyUsedPatterns.NewMatchMssgPattern.matcher(serverMessage);
             if(NewMatchMatcher.matches()) {
                 opponentId = Integer.parseInt(NewMatchMatcher.group(1));
@@ -203,10 +207,10 @@ public class TigerLandDelegate {
                 }
                 //game1 score Message: GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
                 serverMessage = in.readLine();
-                System.out.println("SERVER: " + serverMessage);
+                System.out.println("SERVER(Match): " + serverMessage);
                 //game2 score Message: GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
                 serverMessage = in.readLine();
-                System.out.println("SERVER: " + serverMessage);
+                System.out.println("SERVER(Match): " + serverMessage);
             }
             System.out.println("Delegate: End of Match Protocol!");
         }catch (IOException ex){
@@ -259,7 +263,7 @@ public class TigerLandDelegate {
                     gameId = gameForfeitedMatcher.group(1);
                     pId = Integer.parseInt(gameForfeitedMatcher.group(3));
                     String opponentForfeitedMssg = gameForfeitedMatcher.group(4);
-                    if (gameId.equals(game1Id)) {
+                    if (gameId.equals(game1Id) && (!game1.isGameOver())) {
                         game1.setGameOver();
                     } else {
                         game2.setGameOver();
@@ -269,7 +273,7 @@ public class TigerLandDelegate {
                     gameId = gameLostMatcher.group(1);
                     pId = Integer.parseInt(gameLostMatcher.group(3));
                     String opponentLostMssg = gameLostMatcher.group(4);
-                    if (gameId.equals(game1Id)) {
+                    if (gameId.equals(game1Id) && (!game1.isGameOver())) {
                         game1.setGameOver();
                     } else {
                         game2.setGameOver();

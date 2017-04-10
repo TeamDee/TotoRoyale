@@ -1,8 +1,9 @@
 package GameNetworking;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -31,9 +32,10 @@ public class MockTigerLandServer extends Thread{
             Socket server = serverSocket.accept();
             System.out.println("Just connected to " + server.getRemoteSocketAddress());
 
-            DataInputStream in = new DataInputStream(server.getInputStream());
-            DataOutputStream out = new DataOutputStream(server.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
+            PrintWriter out = new PrintWriter(server.getOutputStream(), true);
             while(true) {
+                System.out.println("Start sending out messages...");
                 String opponentId = "5678";
                 String assignedPlayerId = "1234";
                 int rounds = 1;
@@ -43,25 +45,25 @@ public class MockTigerLandServer extends Thread{
                 int number = 1;
                 int time_move = 1;
 
-                out.writeUTF("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
+                out.println("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 //Read in Tournament Password
-                String message = in.readUTF();
+                String message = in.readLine();
                 System.out.println(message);
-                out.writeUTF("TWO SHALL ENTER ONE SHALL LEAVE");
+                out.println("TWO SHALL ENTER ONE SHALL LEAVE");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 //Read in Team Username and Password
-                message = in.readUTF();
+                message = in.readLine();
                 System.out.println("Echo received: " + message);
-                out.writeUTF("WAIT FOR THE TOURNAMENT TO BEGIN " + assignedPlayerId);
+                out.println("WAIT FOR THE TOURNAMENT TO BEGIN " + assignedPlayerId);
 
                 try {
                     Thread.sleep(1000);
@@ -69,7 +71,7 @@ public class MockTigerLandServer extends Thread{
                     e.printStackTrace();
                 }
                 //Challenge Protocol
-                out.writeUTF("NEW CHALLENGE " + challengeID + " YOU WILL PLAY " + rounds + " MATCHES");
+                out.println("NEW CHALLENGE " + challengeID + " YOU WILL PLAY " + rounds + " MATCHES");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -77,14 +79,14 @@ public class MockTigerLandServer extends Thread{
                 }
                 //Round Protocol
                 for(int RID = 1; RID <= rounds; RID ++) {
-                    out.writeUTF("BEGIN ROUND " + RID + " OF " + rounds);
+                    out.println("BEGIN ROUND " + RID + " OF " + rounds);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     //Match protocol
-                    out.writeUTF("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentId);
+                    out.println("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentId);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -94,21 +96,21 @@ public class MockTigerLandServer extends Thread{
                     for(int moveNumb = 1; (!flag1 || !flag2 || !flag3) && moveNumb <= 48; moveNumb++) {
                         if(!flag2) {
                             String tile = randomHex() + "+" + randomHex();
-                            out.writeUTF("MAKE YOUR MOVE IN GAME " + GID + " WITHIN " + time_move + " SECOND: MOVE " + moveNumb + " PLACE " + tile);
+                            out.println("MAKE YOUR MOVE IN GAME " + GID + " WITHIN " + time_move + " SECOND: MOVE " + moveNumb + " PLACE " + tile);
                         } else{
-                            out.writeUTF("GAME 1 OVER PLAYER 1234 100 PLAYER 5678 99");
+                            out.println("GAME 1 OVER PLAYER 1234 100 PLAYER 5678 99");
                             break;
                         }
 
-                        message = in.readUTF();
+                        message = in.readLine();
                         System.out.println("Echo received: " + message);
 
                         if(!flag1){
-                            out.writeUTF("GAME 1 MOVE 2 PLAYER 5678 PLACED AT 1 1 1 1 FOUNDED SETTLEMENT AT 0 1 -1");
+                            out.println("GAME 1 MOVE 2 PLAYER 5678 PLACED AT 1 1 1 1 FOUNDED SETTLEMENT AT 0 1 -1");
                             flag1 = true;
                         } else{
                             if(!flag2){
-                                out.writeUTF("GAME 1 MOVE 2 PLAYER 5678 FORFEITED: ILLEGAL TILE PLACEMENT");
+                                out.println("GAME 1 MOVE 2 PLAYER 5678 FORFEITED: ILLEGAL TILE PLACEMENT");
                                 flag2 = true;
                             }
                         }
@@ -120,14 +122,14 @@ public class MockTigerLandServer extends Thread{
                     }
 
                     //end of game
-                    out.writeUTF("GAME " + GID + " OVER PLAYER " + assignedPlayerId + " " + score + " PLAYER " + opponentId + " " + score);
+                    out.println("GAME " + GID + " OVER PLAYER " + assignedPlayerId + " " + score + " PLAYER " + opponentId + " " + score);
 
-                    out.writeUTF("END OF ROUND " + RID + " OF " + rounds);
+                    out.println("END OF ROUND " + RID + " OF " + rounds);
                 }
 
-                out.writeUTF("END OF CHALLENGES");
-//                out.writeUTF("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
-                out.writeUTF("THANK YOU FOR PLAYING! GOODBYE");
+                out.println("END OF CHALLENGES");
+//                out.println("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
+                out.println("THANK YOU FOR PLAYING! GOODBYE");
 
             }
 //                server.close();
@@ -160,25 +162,25 @@ public class MockTigerLandServer extends Thread{
 
 /**
  ///ADD MORE OF THE MOVES HERE
- out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: ILLEGAL TILE PLACEMENT");
+ out.println("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: ILLEGAL TILE PLACEMENT");
  try {
  Thread.sleep(1000);
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
- out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: ILLEGAL BUILD");
+ out.println("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: ILLEGAL BUILD");
  try {
  Thread.sleep(1000);
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
- out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: TIMEOUT");
+ out.println("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " FORFEITED: TIMEOUT");
  try {
  Thread.sleep(1000);
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
- out.writeUTF("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " LOST: UNABLE TO BUILD");
+ out.println("GAME " + GID + " MOVE " + number + " PLAYER " + PID + " LOST: UNABLE TO BUILD");
  try {
  Thread.sleep(1000);
  } catch (InterruptedException e) {

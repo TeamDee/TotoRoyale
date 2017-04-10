@@ -5,8 +5,12 @@ package GameNetworking;
  */
 public class MockServerClientRunner {
     public static void main(String[] args){
-        int port = 6969;
-        String serverName = "10.136.31.59";
+        int port = 666;
+//        int port = 1708;
+//        String serverName = "10.136.31.59";
+//          String serverName = "10.136.15.159";
+        String serverName = "192.168.1.36";
+//        String serverName = "10.228.1.171";
 //        String serverName = "10.192.246.753";
 //        String serverName = "192.168.1.142";
         try {

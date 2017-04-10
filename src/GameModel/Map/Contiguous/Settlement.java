@@ -128,7 +128,9 @@ public class Settlement{
     }
 
     public boolean isContiguous(TerrainTile tile) {
-        for (TerrainTile contiguousTile : exsettle) {
+        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
+        checkExpansion.addAll(exsettle);
+        for (TerrainTile contiguousTile : checkExpansion) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }

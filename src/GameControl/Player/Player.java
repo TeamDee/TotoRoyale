@@ -72,7 +72,7 @@ public class Player {
             System.out.println("Expansion added to settlment " + toBeAddedTo);
         }
         settlements = toBeAddedTo.combineAdjacentSettlementsForMultTiles(expansion, settlements, toBeAddedTo);
-        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().toString();
+        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
     }
 
     private boolean legalExpansionVisible(){
@@ -202,15 +202,22 @@ public class Player {
 
     public void opponentNewSettlement(OffsetCoordinate location){
         TerrainTile toBeFoundSettlement = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-        enemyPlayer.buildSettlement(toBeFoundSettlement);
+// Updated upstream
+        buildSettlement(toBeFoundSettlement);
         //activeSettlement = settlements.get(settlements.size()-1);
         //settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(toBeFoundSettlement,settlements,activeSettlement);
+//======
+//        buildSettlement(toBeFoundSettlement);
+//        activeSettlement = settlements.get(settlements.size()-1);
+//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeFoundSettlement,settlements,activeSettlement);
+// Stashed changes
+        System.out.println("Opponent action: New Settlement");
     }
 
     public void opponentExpand(OffsetCoordinate location, String terrainType){
         TerrainTile toBeExpanded = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
         ArrayList<TerrainTile> expansionTiles = null;
-        Settlement targetSettlement = enemyPlayer.getSettlementContaining(toBeExpanded);
+        Settlement targetSettlement = getSettlementContaining(toBeExpanded);
 
         if(terrainType.compareTo("GRASS") == 0){
             expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.GRASS);
@@ -222,47 +229,69 @@ public class Player {
             expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.ROCK);
         }
 
-        enemyPlayer.executeExpansion(expansionTiles, targetSettlement);
+// Updated upstream
+        executeExpansion(expansionTiles, targetSettlement);
+// =======
+//        executeExpansion(expansionTiles, targetSettlement);
+        System.out.println("Opponent action: Expanded on " + terrainType);
+// Stashed changes
     }
 
     public void opponentNewTotoro(OffsetCoordinate location){
         TerrainTile toBeBuiltTotoro = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-        enemyPlayer.placeTotoro(toBeBuiltTotoro);
+// Updated upstream
+        placeTotoro(toBeBuiltTotoro);
         for (Direction d : Direction.values()) {
             if (toBeBuiltTotoro.hasNeighborInDirection(d)) {
                 if (toBeBuiltTotoro.getNeighborInDirection(d) instanceof TerrainTile) {
-                    Settlement adjacentSettlement = enemyPlayer.getSettlementContaining((TerrainTile) toBeBuiltTotoro.getNeighborInDirection(d));
+                    Settlement adjacentSettlement = getSettlementContaining((TerrainTile) toBeBuiltTotoro.getNeighborInDirection(d));
                     if (adjacentSettlement != null) {
                         if (!adjacentSettlement.hasTotoro() && adjacentSettlement.getSettlementSize() >= 5) {
                             adjacentSettlement.addToSettlement(toBeBuiltTotoro);
                             adjacentSettlement.placedTotoro();
-                            enemyPlayer.awardPoints(200);
-                            enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, enemyPlayer.getSettlements(), adjacentSettlement));
+                            awardPoints(200);
+                            setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, enemyPlayer.getSettlements(), adjacentSettlement));
                         }
                     }
                 }
             }
         }
+//=======
+//        placeTotoro(toBeBuiltTotoro);
+//        activeSettlement.addToSettlement(toBeBuiltTotoro);
+//        activeSettlement.placedTotoro();
+//        this.awardPoints(200);
+//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTotoro,settlements,activeSettlement);
+        System.out.println("Opponent action: Placed Totoro");
+//Stashed changes
     }
 
     public void opponentNewTiger(OffsetCoordinate location){
         TerrainTile toBeBuiltTiger = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
         placeTiger(toBeBuiltTiger);
+// Updated upstream
         for (Direction d : Direction.values()) {
             if (toBeBuiltTiger.hasNeighborInDirection(d)) {
                 if (toBeBuiltTiger.getNeighborInDirection(d) instanceof TerrainTile) {
-                    Settlement adjacentSettlement = enemyPlayer.getSettlementContaining((TerrainTile) toBeBuiltTiger.getNeighborInDirection(d));
+                    Settlement adjacentSettlement = getSettlementContaining((TerrainTile) toBeBuiltTiger.getNeighborInDirection(d));
                     if (adjacentSettlement != null) {
                         if (!adjacentSettlement.hasTiger()) {
                             adjacentSettlement.addToSettlement(toBeBuiltTiger);
                             adjacentSettlement.placedTotoro();
-                            enemyPlayer.awardPoints(200);
-                            enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, enemyPlayer.getSettlements(), adjacentSettlement));
+                            awardPoints(200);
+                            setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, enemyPlayer.getSettlements(), adjacentSettlement));
                         }
                     }
                 }
             }
         }
+//=======
+//        activeSettlement.addToSettlement(toBeBuiltTiger);
+//        activeSettlement.placedTiger();
+//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTiger,settlements,activeSettlement);
+//        this.awardPoints(75);
+        System.out.println("Opponent action: Placed Tiger");
+// Stashed changes
     }
 
     public int scoreTilePlacement(Placement placement) {
@@ -826,7 +855,7 @@ public class Player {
             //settlements = bestOverallExpansion.getSettlement().combineAdjacentSettlementsForMultTiles(bestOverallExpansion.getTiles(), settlements, bestOverallExpansion.getSettlement());
             //System.out.println("Player Settlement Size After: " + settlements.size());
 
-            buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+            buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
 
             return true;
         }
@@ -882,7 +911,8 @@ public class Player {
             buildSettlement(this.myMap);
         }
         else
-            this.expandSettlement();
+            if(expandSettlement())
+                this.buildSettlement(this.myMap);
     }
 
     private String buildPhase(GameMap gameMap){
@@ -896,10 +926,10 @@ public class Player {
         }
 
         if(settlements.size() > 0) { //if current player has at least one settlement already
-            if (addTotoro()) {
-                finalMessage = buildMessage;
-            }
-            else if (addTiger()) { //can't add totoro, add tiger
+//            if (addTotoro()) {
+//                finalMessage = buildMessage;
+//            }
+            if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
             }
             else if (expandSettlement()) {
