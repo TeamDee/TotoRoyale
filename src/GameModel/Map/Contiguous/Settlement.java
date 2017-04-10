@@ -128,7 +128,7 @@ public class Settlement{
     }
 
     public boolean isContiguous(TerrainTile tile) {
-        for (TerrainTile contiguousTile : settlement) {
+        for (TerrainTile contiguousTile : exsettle) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }
