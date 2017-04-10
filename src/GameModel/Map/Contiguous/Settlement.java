@@ -128,7 +128,9 @@ public class Settlement{
     }
 
     public boolean isContiguous(TerrainTile tile) {
-        for (TerrainTile contiguousTile : exsettle) {
+        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
+        checkExpansion.addAll(exsettle);
+        for (TerrainTile contiguousTile : checkExpansion) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;
         }
@@ -434,5 +436,50 @@ public class Settlement{
 
     public Player getOwner() {
         return settlement.get(0).getOwner();
+    }
+
+    public void checkForRepeatedTiles(){
+        for(int i=0; i!=settlement.size();++i){
+            for(int j = i+1; j!=settlement.size(); ++j){
+                if(settlement.get(i) == settlement.get(j)){
+                    System.out.println("REPEATED TILES IN SETTLEMENT");
+
+                    try {
+                        Thread.sleep(1000000);
+                    }
+                    catch(InterruptedException ie){
+
+                    }
+                }
+            }
+        }
+    }
+
+    public void checkForNonAdjacentTiles(){
+//        for(TerrainTile tt: this.settlement){
+//            if(this.doubleCheckAdjacent(tt) || settlement.size() == 1){
+//
+//            }
+//            else{
+//                //settlement.remove(tt);
+//                System.out.println("SETTLEMENT EXISTS WITH NONADJACENT TILES");
+//                System.out.println(this);
+//                try {
+//                    Thread.sleep(1000000);
+//                }
+//                catch(InterruptedException ie){
+//
+//                }
+//            }
+//        }
+    }
+
+    @Override
+    public String toString(){
+        String returnMe ="";
+        for(TerrainTile tt: settlement){
+            returnMe += tt;
+        }
+        return returnMe;
     }
 }

@@ -21,7 +21,9 @@ public class Grass extends TerrainTile {
 
     @Override
     public String toString(){
-        return "Grass";
+        String returnMe = super.toString();
+        returnMe += "Grass";
+        return returnMe;
     }
 
 

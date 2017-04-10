@@ -130,7 +130,8 @@ public abstract class HexTile extends Tile {
 
     @Override
     public String toString(){
-        String returnMe = "HexTile";
+        String returnMe = super.toString();
+        returnMe += "HexTile";
         return returnMe;
     }
 

@@ -880,10 +880,18 @@ public class Player {
             buildSettlement(this.myMap);
         }
         else
-            this.expandSettlement();
+            if(expandSettlement()){}
+            else{buildSettlement(this.myMap);}
     }
 
     private String buildPhase(GameMap gameMap){
+
+        for(Settlement settlement: settlements){
+            settlement.checkForRepeatedTiles();
+            settlement.checkForNonAdjacentTiles();
+        }
+
+
         ArrayList<HexTile> tiles = gameMap.getVisible();
         String finalMessage = "";
 
@@ -1220,7 +1228,7 @@ public class Player {
     public Settlement getSettlementContaining(TerrainTile tt) {
         for (Settlement s : settlements) {
             if (s.contains(tt));
-            return s;
+                return s;
         }
         return null;
     }
