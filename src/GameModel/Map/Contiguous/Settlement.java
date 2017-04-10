@@ -72,7 +72,7 @@ public class Settlement{
         ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied() && doubleCheckAdjacent(t)){
+            if(!t.isOccupied() && doubleCheckAdjacent(t) && isContiguousTotoroOrTiger(t)){
                 returnMe.add(t);
             }
         }
@@ -99,7 +99,7 @@ public class Settlement{
         ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
         for(TerrainTile t: getTigerPlaceMent){
-            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjacent(t)){
+            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjacent(t) && isContiguousTotoroOrTiger(t)){
                 returnMe.add(t);
             }
         }
@@ -130,6 +130,15 @@ public class Settlement{
     public boolean isContiguous(TerrainTile tile) {
         ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
         checkExpansion.addAll(exsettle);
+        for (TerrainTile contiguousTile : checkExpansion) {
+            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isContiguousTotoroOrTiger(TerrainTile tile) {
+        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
         for (TerrainTile contiguousTile : checkExpansion) {
             if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
                 return true;

@@ -619,6 +619,10 @@ public class Player {
             {
                 return 50;
             }
+            else if(temp.getLevel() == 2)
+            {
+                return 30;
+            }
         }
         if(bs.getNorthWest() != null)
         {
@@ -628,6 +632,10 @@ public class Player {
                 if(temp.getLevel() >= 3)
                 {
                     return 50;
+                }
+                else if(temp.getLevel() == 2)
+                {
+                    return 30;
                 }
             }
         }
@@ -640,6 +648,10 @@ public class Player {
                 {
                     return 50;
                 }
+                else if(temp.getLevel() == 2)
+                {
+                    return 30;
+                }
             }
         }
         if(bs.getSouth() != null)
@@ -650,6 +662,10 @@ public class Player {
                 if(temp.getLevel() >= 3)
                 {
                     return 50;
+                }
+                else if(temp.getLevel() == 2)
+                {
+                    return 30;
                 }
             }
         }
@@ -662,6 +678,10 @@ public class Player {
                 {
                     return 50;
                 }
+                else if(temp.getLevel() == 2)
+                {
+                    return 30;
+                }
             }
         }
         if(bs.getSouthWest() != null)
@@ -672,6 +692,10 @@ public class Player {
                 if(temp.getLevel() >= 3)
                 {
                     return 50;
+                }
+                else if(temp.getLevel() == 2)
+                {
+                    return 30;
                 }
             }
         }
@@ -1009,7 +1033,23 @@ public class Player {
                 }
             }
         }
-
+        if(!outOfTotoroOrTigers() && expansionTiles.size() == 1 && expansionTiles.get(0).getLevel() < 3)
+        {
+            if(scoreAdjacenttoLevel1Tiles(expansionTiles.get(0)) == 50)
+            {
+                expansionValue += 100;
+            }
+        }
+        else if(!outOfTotoroOrTigers() && expansionTiles.size() == 2 && expansionTiles.get(0).getLevel() < 3)
+        {
+            for(TerrainTile j: expansionTiles)
+            {
+                if(scoreAdjacenttoLevel1Tiles(j) == 50)
+                {
+                    expansionValue += 45;
+                }
+            }
+        }
         if (outOfTotoroOrTigers()) {
             expansionValue += meepleCost * 30;
         }
