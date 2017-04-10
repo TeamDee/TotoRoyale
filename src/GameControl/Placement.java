@@ -91,7 +91,6 @@ public class Placement {
             return false;
     }
 
-    //TODO do individual hextiles need to reference each other? Or is getBoardSpace().getNorth.getTopTile() sufficient?
     public void place(){
         if(oldA == oldB || oldB == oldC){
             System.out.println("FATAL ERROR: Placement has two of the same board spaces");
@@ -122,12 +121,23 @@ public class Placement {
 
     private void nukeAnySettlements() {
         HexTile ht;
+        ArrayList<TerrainTile> whiteTilesToNuke = new ArrayList<TerrainTile>();
+        ArrayList<TerrainTile> blackTilesToNuke = new ArrayList<TerrainTile>();
         for (BoardSpace b: getBoardSpaces()) {
             ht = b.topTile();
             if (ht.isOccupied()) {
-                Player owner = ht.getOwner();
-                owner.nukeSettlements((TerrainTile) ht);
+                if (ht.isOwnedByWhite()) {
+                    whiteTilesToNuke.add((TerrainTile) ht);
+                }
+                else
+                    blackTilesToNuke.add((TerrainTile) ht);
             }
+        }
+        if (whiteTilesToNuke.size() > 0) {
+            whiteTilesToNuke.get(0).getOwner().nukeSettlements(whiteTilesToNuke);
+        }
+        if (blackTilesToNuke.size() > 0) {
+            blackTilesToNuke.get(0).getOwner().nukeSettlements(blackTilesToNuke);
         }
     }
 

@@ -56,7 +56,7 @@ public class PlayerTest {
         player1.clearSettlements();
         player1.addSettlement(settlement);
         Assert.assertEquals(3, settlement.getSettlementSize());
-        player1.nukeSettlements(center);
+        player1.nukeSettlements(new ArrayList<TerrainTile>(center));
         ArrayList<Settlement> playerSettlements = player1.getSettlements();
         Assert.assertEquals(2, playerSettlements.size());
         Assert.assertEquals(1, playerSettlements.get(0).getSettlementSize());

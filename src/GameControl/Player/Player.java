@@ -1209,12 +1209,14 @@ public class Player {
         return returnMe;
     }
     
-    public void nukeSettlements(TerrainTile nukedTile) {
-        Settlement settlementToNuke = getSettlementContaining(nukedTile);
-        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTile);
+    public void nukeSettlements(ArrayList<TerrainTile> nukedTiles) {
+        Settlement settlementToNuke = getSettlementContaining(nukedTiles.get(0));
+        ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTiles);
         settlements.remove(settlementToNuke);
         settlements.addAll(newSettlements);
-        nukedTile.nuke();
+        for (TerrainTile tt : nukedTiles) {
+            tt.nuke();
+        }
     }
 
     public Settlement getSettlementContaining(TerrainTile tt) {
