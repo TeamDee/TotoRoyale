@@ -9,7 +9,7 @@ public class MockServerClientRunner {
 //        int port = 1708;
 //        String serverName = "10.136.31.59";
 //          String serverName = "10.136.15.159";
-        String serverName = "192.168.1.36";
+        String serverName = "10.136.125.76";
 //        String serverName = "10.228.1.171";
 //        String serverName = "10.192.246.753";
 //        String serverName = "192.168.1.142";
