@@ -14,6 +14,7 @@ import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -27,8 +28,7 @@ public class Player {
     private int meepleCount;
     private int tigerCount;
     private String buildMessage;
-    private List<OffsetCoordinate> meeplePlacements;
-    private List<OffsetCoordinate> totoroPlacements;
+    private HashMap<OffsetCoordinate, TerrainTile> ownedTiles;
     private ArrayList<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
     private AIPlayerController AI;
@@ -54,6 +54,7 @@ public class Player {
         myMap = thisPlayersMap;
         enemyPlayer = enemy;
         expansionWorth = 0;
+        ownedTiles = new HashMap<OffsetCoordinate, TerrainTile>();
     }
 
     public ArrayList<Settlement> getSettlements()
@@ -66,8 +67,7 @@ public class Player {
 
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
         for (TerrainTile add : expansion) {
-            add.placeMeeple(this);
-            //placeMeeples(add);
+            placeMeeples(add);
             toBeAddedTo.addToSettlement(add);
             System.out.println("Expansion added to settlment " + toBeAddedTo);
         }
@@ -959,7 +959,7 @@ public class Player {
     public void placeMeeples(TerrainTile tt) {
         tt.placeMeeple(this);
         removeMeeples(tt.getLevel());
-        awardPoints(tt.getLevel() ^ 2);
+        awardPoints(tt.getLevel() * tt.getLevel());
     }
 
     public int scoreSettlementExpansion(SettlementExpansion settlementExpansion) {
@@ -1033,8 +1033,7 @@ public class Player {
 
     public void buildSettlement(TerrainTile tt) {
         if(!tt.isOccupied()) {
-            tt.placeMeeple(this);
-            //placeMeeples(tt);
+            placeMeeples(tt);
             Settlement settlement = new Settlement();
             settlement.createSettlement(tt);
             settlements.add(settlement);
