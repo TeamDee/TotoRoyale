@@ -16,13 +16,14 @@ public class BoardSpace {
     private OffsetCoordinate location;
 
     private BoardSpace north, northeast, southeast, south, southwest, northwest;
-
+    GameMap map;
     public BoardSpace(OffsetCoordinate location, GameMap containingMap){
         this.hasTile = false;
         isActive = false;
         tiles = new ArrayList<HexTile>();
         this.location = location;
         containingMap.connectAdjacentBoardSpaces(this);
+        map = containingMap;
     }
 
     public int getLevel(){
@@ -100,6 +101,7 @@ public class BoardSpace {
     public void activate(){
         isActive = true;
     }
+
     public void activate(BoardSpace callingBS, Direction callingBSDirection){
         Direction.getConverse(callingBSDirection);
         switch(callingBSDirection){
@@ -143,6 +145,7 @@ public class BoardSpace {
         }
         return null;
     }
+    /*
     public BoardSpace getNorth(){
         if(north == null){
             //System.out.println("Warning: returning a null reference to a boardspace");
@@ -177,6 +180,37 @@ public class BoardSpace {
             //System.out.println("Warning: returning a null reference to a boardspace");
         }
         return southwest;
+    }
+    */
+
+    public BoardSpace getNorth() {
+        BoardSpace north = map.getBoardSpaceAt(location.getNorth());
+        return north;
+    }
+
+    public BoardSpace getNorthEast() {
+        BoardSpace northeast = map.getBoardSpaceAt(location.getNorthEast());
+        return northeast;
+    }
+
+    public BoardSpace getSouthEast() {
+        BoardSpace southeast = map.getBoardSpaceAt(location.getSouthEast());
+        return southeast;
+    }
+
+    public BoardSpace getSouth() {
+        BoardSpace south = map.getBoardSpaceAt(location.getSouth());
+        return south;
+    }
+
+    public BoardSpace getSouthWest() {
+        BoardSpace southwest = map.getBoardSpaceAt(location.getSouthWest());
+        return southwest;
+    }
+
+    public BoardSpace getNorthWest() {
+        BoardSpace northwest = map.getBoardSpaceAt(location.getNorthWest());
+        return northwest;
     }
 
     public void setNorth(BoardSpace bs){
@@ -217,5 +251,14 @@ public class BoardSpace {
 
     public void removeTopTile(){
         tiles.remove(tiles.size() - 1);
+    }
+
+    public String toString() {
+        if (hasTile()) {
+            return topTile().toString();
+        }
+        else {
+            return getLocation().toString() + "\tlevel: 0\tBoardspace";
+        }
     }
 }

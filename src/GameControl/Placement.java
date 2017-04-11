@@ -95,10 +95,11 @@ public class Placement {
         if(oldA == oldB || oldB == oldC){
             System.out.println("FATAL ERROR: Placement has two of the same board spaces");
         }
+        System.out.println("PLACING AT\n" + oldA.toString() + "\n" + oldB.toString() + "\n" + oldC.toString());
+        nukeAnySettlements();
         oldA.addTile(newA);
         oldB.addTile(newB);
         oldC.addTile(newC);
-        nukeAnySettlements();
     }
 
     public ArrayList<BoardSpace> getBoardSpaces(){
@@ -124,13 +125,14 @@ public class Placement {
         ArrayList<TerrainTile> whiteTilesToNuke = new ArrayList<TerrainTile>();
         ArrayList<TerrainTile> blackTilesToNuke = new ArrayList<TerrainTile>();
         for (BoardSpace b: getBoardSpaces()) {
-            ht = b.topTile();
-            if (ht.isOccupied()) {
-                if (ht.isOwnedByWhite()) {
-                    whiteTilesToNuke.add((TerrainTile) ht);
+            if (b.hasTile()) {
+                ht = b.topTile();
+                if (ht.isOccupied()) {
+                    if (ht.isOwnedByWhite()) {
+                        whiteTilesToNuke.add((TerrainTile) ht);
+                    } else
+                        blackTilesToNuke.add((TerrainTile) ht);
                 }
-                else
-                    blackTilesToNuke.add((TerrainTile) ht);
             }
         }
         if (whiteTilesToNuke.size() > 0) {

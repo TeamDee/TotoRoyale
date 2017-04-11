@@ -137,7 +137,9 @@ public class GameLogicDirector implements Runnable{
     }
 
     public void run(){
-        while(!isGameOver){ }
+        while(!isGameOver){
+            run2();
+        }
     }
 
     /*
@@ -258,7 +260,7 @@ public class GameLogicDirector implements Runnable{
 
         for(Player p: players){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException ie) {
                 System.out.println(ie.getStackTrace());
             }

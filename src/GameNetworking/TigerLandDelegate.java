@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**
@@ -23,11 +24,20 @@ public class TigerLandDelegate {
     private String unexpectedError;
     private Queue<ArrayList<RoundStats>> gameStats;
 
-    public TigerLandDelegate(String serverName, int port){
+    public TigerLandDelegate(){
+        String serverName;
+        int port;
+        Scanner in = new Scanner(System.in);
+        System.out.println("What is the serverName?");
+        serverName = in.nextLine();
+        System.out.println("What is the port number?");
+        port = Integer.parseInt(in.nextLine());
+        System.out.println("Enter in order: TournamentPassword, Username, Password");
+        tournamentPW = in.next(); username = in.next(); password = in.next();
         client = new TigerLandClient(serverName, port);
-        tournamentPW = "FurRealz";
-        username = "D";
-        password = "D";
+//        tournamentPW = "FurRealz";
+//        username = "D";
+//        password = "D";
         gameEnded = false;
         messageOptOut = 0;
         unexpectedError = "";
@@ -224,15 +234,15 @@ public class TigerLandDelegate {
         String gameId, moveNumber;
         int pId;
         String tileAssigned;
-        int messageCountExpeted = 3 - messageOptOut; //Tells how many messages expected from the Server
+        //int messageCountExpeted = 3 - messageOptOut; //Tells how many messages expected from the Server
 
         try{
-            while(messageCountExpeted>0){
+           // while(messageCountExpeted>0){
                 // MAKE YOUR MOVE IN GAME <gid> WITHIN <timemove> SECOND: MOVE <#> PLACE <tile> or:
                 // GAME <gid> MOVE <#> PLAYER <pid> <move>
                 serverMessage = in.readLine();
-                System.out.println("SERVER: " + serverMessage);
-                messageCountExpeted--;
+                System.out.println("SERVER(Move): " + serverMessage);
+                //messageCountExpeted--;
                 Matcher serverPromptMatcher = FrequentlyUsedPatterns.MoveServerPromptMssgPattern.matcher(serverMessage);
                 Matcher gameMovePlayerMatcher = FrequentlyUsedPatterns.GameMovePlayerMssgPattern.matcher(serverMessage);
                 Matcher gameForfeitedMatcher = FrequentlyUsedPatterns.GameForfeitedMssgPattern.matcher(serverMessage);
@@ -289,12 +299,12 @@ public class TigerLandDelegate {
                         } else {
                             game2.opponentPlayerMove(opponentMoveMssg);
                         }
-                        if(game1.isGameOver() ){//|| game2.isGameOver()
-                            messageCountExpeted = 0;
-                        }
+//                        if(game1.isGameOver() || game2.isGameOver() ){//
+//                            messageCountExpeted = 0;
+//                        }
                     }
                 }
-            }
+            //}
             System.out.println("Delegate: End of Move Protocol!");
         } catch (IOException ex){
             unexpectedError = "MoveProtocol: " + ex.getMessage();

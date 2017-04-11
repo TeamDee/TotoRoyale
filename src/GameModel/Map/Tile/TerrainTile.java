@@ -31,21 +31,11 @@ public abstract class TerrainTile extends HexTile {
         //System.out.println("warning: building a terrainTile without supplying a compositor");
     }
 
-    public boolean placeMeeple(Player p){
-        if(getMeepleCount() != 0) //terrain already has meeples
-            return false;
-        else {
-            if(p.removeMeeples(getLevel())) {  //if the player has enough meeples, remove them and award points
-                p.awardPoints(getLevel() * getLevel());
-                meepleCount = getLevel();
-                myView.addToList(new MeepleView(getLevel(),p));
-                owner = p;
-                myView.visit(this);
-            }
-            else
-                return false;
-        }
-        return true;
+    public void placeMeeple(Player p){
+        owner = p;
+        meepleCount = getLevel();
+        myView.addToList(new MeepleView(getLevel(), p));
+        myView.visit(this);
     }
 
     public boolean placeTotoro(Player owner) {
@@ -56,7 +46,6 @@ public abstract class TerrainTile extends HexTile {
             this.owner = owner;
             hasTotoro = true;
             myView.addToList(new TotoroView(owner));
-            System.out.println("\n\n\n\n\n\n\n\n\nA TOTORO HAS BEEN SUCCESSFULLY PLACED\n\n\n\n\n\n\n\n");
             return true;
         }
     }

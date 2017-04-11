@@ -48,9 +48,7 @@ public class PlayerController extends Controller{
 
     public void placeMeeples(TerrainTile hexTile) {
         if (canPlaceMeeples(hexTile)) {
-            hexTile.placeMeeple(myPlayer);
-            myPlayer.removeMeeples(hexTile.getLevel() + 1);
-            myPlayer.awardPoints((hexTile.getLevel() + 1) * (hexTile.getLevel() + 1));
+            myPlayer.placeMeeples(hexTile);
         }
         else {
             //TODO this player has attempted an illegal place action, make them lose and end the game

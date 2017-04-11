@@ -10,10 +10,12 @@ import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
 
+import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Tile.Tile;
 import GameView.Tileables.TigerView;
 import GameView.Tileables.TileableView;
 import GameView.Viewports.Viewport;
+import com.sun.scenario.effect.Offset;
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,6 +94,13 @@ public abstract class TileView{
             case 4:
                 g.drawString("4", Constants.TILE_WIDTH/2,Constants.TILE_HEIGHT/4);
                 break;
+        }
+
+        if (Constants.SHOW_COORDINATES) {
+            OffsetCoordinate offsetCoordinate = myTile.getLocation();
+            String coordinates = offsetCoordinate.x + ", " + offsetCoordinate.y;
+            int coordinatesWidth = g.getFontMetrics().stringWidth(coordinates);
+            g.drawString(coordinates, (Constants.TILE_WIDTH - coordinatesWidth) / 2, Constants.TILE_HEIGHT * 9 / 10);
         }
 
         drawMe = combined;

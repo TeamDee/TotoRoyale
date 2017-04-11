@@ -1,5 +1,8 @@
 package GameModel.Map.Tile;
 
+import GameControl.Player.BlackPlayer;
+import GameControl.Player.Player;
+import GameControl.Player.WhitePlayer;
 import GameView.Map.HexTileView;
 import GameView.Map.VolcanoView;
 
@@ -14,6 +17,18 @@ public class VolcanoTile extends HexTile {
 
     }
 
+    public boolean isOwnedByWhite() {
+        return false;
+    }
+
+    public boolean isOwnedByBlack() {
+        return false;
+    }
+
+    public Player getOwner(){
+        return null;
+    }
+
     //TODO test this
     public boolean ofSameType(VolcanoTile vt){
         return true;
@@ -23,7 +38,9 @@ public class VolcanoTile extends HexTile {
     }
     @Override
     public String toString(){
-        return "Volcano";
+        String returnMe = super.toString();
+        returnMe += "\tVolcano";
+        return returnMe;
     }
 
     @Override
