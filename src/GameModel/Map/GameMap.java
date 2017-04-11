@@ -497,7 +497,7 @@ public class GameMap {
             this.activateAdjacentBoardSpaces(b);
         }
         this.playedTriHexTiles.add(p.getBoardSpaces().get(0).topTile().getTriHexTile());
-        p.getBoardSpaces().get(0).topTile().resetOwner();
+        //p.getBoardSpaces().get(0).topTile().resetOwner();
     }
 
     private Placement tempPlacement;

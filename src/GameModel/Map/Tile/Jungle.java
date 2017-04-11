@@ -17,8 +17,10 @@ public class Jungle extends TerrainTile{
     }
 
     @Override
-    public String toString(){
-        return "Jungle";
+    public String toString() {
+        String returnMe = super.toString();
+        returnMe += "\tJungle";
+        return returnMe;
     }
 }
 

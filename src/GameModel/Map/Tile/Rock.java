@@ -18,7 +18,9 @@ public class Rock extends TerrainTile{
     }
     @Override
     public String toString(){
-        return "Rock";
+        String returnMe = super.toString();
+        returnMe += "\tRock";
+        return returnMe;
     }
 
 
