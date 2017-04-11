@@ -177,8 +177,13 @@ public class Settlement{
         Stack<TerrainTile> tilesToVisit = new Stack<TerrainTile>();
         ArrayList<TerrainTile> expansionTiles = new ArrayList<TerrainTile>();
         ArrayList<Settlement> adjacentFriendlySettlementsAfterExpansion = new ArrayList<Settlement>();
+        boolean isAdjacentToEmptyLevel3Tile = false;
+        boolean isAdjacentToRaisableLevel2Tile = false;
+        boolean hasTotoroAfterMerge = hasTotoro();
+        boolean hasTigerAfterMerge = hasTiger();
+        int finalSettlementSize = getSize();
         if (terrainType == VOLCANO) {
-            return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion);
+            return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion, false, false, false);
         }
         for (TerrainTile tt : settlement) {
             tilesToVisit.push(tt);
@@ -188,22 +193,41 @@ public class Settlement{
             currentTile = tilesToVisit.pop();
             for (Direction d : Direction.values()) {
                 if (currentTile.hasNeighborInDirection(d)) {
-                    if (currentTile.getNeighborInDirection(d).terrainType() == terrainType) {
+                    if (currentTile.getNeighborInDirection(d) instanceof TerrainTile) {
                         TerrainTile neighbor = (TerrainTile) currentTile.getNeighborInDirection(d);
                         if (!neighbor.isOccupied()) {
-                            if (!settlement.contains(neighbor) && !expansionTiles.contains(neighbor)) {
-                                tilesToVisit.push(neighbor);
-                                expansionTiles.add(neighbor);
+                            if (neighbor.terrainType() == terrainType) {
+                                if (!settlement.contains(neighbor) && !expansionTiles.contains(neighbor)) {
+                                    tilesToVisit.push(neighbor);
+                                    expansionTiles.add(neighbor);
+                                    finalSettlementSize++;
+                                }
+                            } else if (neighbor.getLevel() >= 3) {
+                                isAdjacentToEmptyLevel3Tile = true;
+                            } else if (neighbor.getLevel() == 2) {
+                                if (neighbor.canPlaceTileOn()) {
+                                    isAdjacentToRaisableLevel2Tile = true;
+                                }
                             }
                         } else if (!settlement.contains(neighbor) && currentTile.getOwner() == neighbor.getOwner()) {
                             Player owner = currentTile.getOwner();
-                            adjacentFriendlySettlementsAfterExpansion.add(owner.getSettlementContaining(neighbor));
+                            Settlement adjacentFriendlySettlementAfterExpansion = owner.getSettlementContaining(neighbor);
+                            adjacentFriendlySettlementsAfterExpansion.add(adjacentFriendlySettlementAfterExpansion);
+                            finalSettlementSize += adjacentFriendlySettlementAfterExpansion.getSize();
+                            if (adjacentFriendlySettlementAfterExpansion.hasTotoro()) {
+                                hasTotoroAfterMerge = true;
+                            }
+                            if (adjacentFriendlySettlementAfterExpansion.hasTiger()) {
+                                hasTigerAfterMerge = true;
+                            }
                         }
                     }
                 }
             }
         }
-        return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion);
+        return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion,
+                finalSettlementSize >= 5 && !hasTotoroAfterMerge, isAdjacentToEmptyLevel3Tile && !hasTigerAfterMerge,
+                !hasTigerAfterMerge && isAdjacentToRaisableLevel2Tile);
     }
 
     public ArrayList<Settlement> combineAdjacentSettlementsForMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
