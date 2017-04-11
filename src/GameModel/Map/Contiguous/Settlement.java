@@ -429,6 +429,12 @@ public class Settlement{
         Settlement splitSettlement = new Settlement(owner);
         for (TerrainTile tt : splitSettlementTiles) {
             splitSettlement.addToSettlement(tt);
+            if (tt.hasTotoro()) {
+                splitSettlement.placedTotoro();
+            }
+            if (tt.hasTiger()) {
+                splitSettlement.placedTiger();
+            }
         }
         return splitSettlement;
     }
@@ -497,5 +503,14 @@ public class Settlement{
             returnMe += tt + "\n";
         }
         return returnMe;
+    }
+
+    public void removeAnyUndergroundTiles() {
+        for (TerrainTile tt: settlement) {
+            if (tt.getLevel() < tt.getBoardSpace().getLevel()) {
+                settlement.remove(tt);
+                System.out.println("FOUND AND REMOVED UNDERGROUND TILE " + tt + "\nFROM SETTLEMENT\n" + this);
+            }
+        }
     }
 }

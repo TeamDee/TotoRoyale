@@ -85,6 +85,7 @@ public class Player {
             }
             settlements.remove(friendlyAdjacentSettlementsAfterExpansion);
         }
+        System.out.println("Expansion added to settlment\n" + settlementToExpand);
     }
 
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
@@ -277,7 +278,7 @@ public class Player {
                         if (!adjacentSettlement.hasTiger()) {
                             adjacentSettlement.addToSettlement(toBeBuiltTiger);
                             adjacentSettlement.placedTotoro();
-                            enemyPlayer.awardPoints(200);
+                            enemyPlayer.awardPoints(75);
                             enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, enemyPlayer.getSettlements(), adjacentSettlement));
                         }
                     }
@@ -761,6 +762,7 @@ public class Player {
             placeTotoro(placeTotoroHere);
             activeSettlement.addToSettlement(placeTotoroHere);
             activeSettlement.placedTotoro();
+            System.out.println("ADDED TOTORO AT " + placeTotoroHere + "\nIN SETTLEMENT\n" + activeSettlement);
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(placeTotoroHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
@@ -799,7 +801,7 @@ public class Player {
         return false;
     }
 
-    private void expandSettlementToMaximizeMeepleUsage(){
+    private void expandSettlementToMaximizeMeepleUsage() {
         Integer tempValue = new Integer(0);
         for(int i = 0; i!= settlements.size();++i){
             ArrayList<TerrainTile> expansion = expandSettlementToMaximizeMeeplePlacement(settlements.get(i), tempValue);
@@ -954,6 +956,10 @@ public class Player {
         else {
             buildSettlement(gameMap);
             finalMessage = buildMessage;
+        }
+
+        for (Settlement s: settlements) {
+            s.removeAnyUndergroundTiles();
         }
         return finalMessage;
     }
