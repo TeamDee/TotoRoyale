@@ -21,7 +21,7 @@ public class Lake extends TerrainTile{
     @Override
     public String toString(){
         String returnMe = super.toString();
-        returnMe += "Lake";
+        returnMe += "\tLake";
         return returnMe;
     }
 

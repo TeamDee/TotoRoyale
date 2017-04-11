@@ -131,27 +131,27 @@ public abstract class HexTile extends Tile {
     @Override
     public String toString(){
         String returnMe = super.toString();
-        returnMe += "HexTile";
+        returnMe += "\tlocation: " + this.getLocation() + "\tlevel: " + getLevel();
         return returnMe;
     }
 
     public HexTile getNorth(){
-        return north;
+        return myBoardSpace.getNorth().topTile();
     }
     public HexTile getNorthEast(){
-        return northEast;
+        return myBoardSpace.getNorthEast().topTile();
     }
     public HexTile getNorthWest(){
-        return northWest;
+        return myBoardSpace.getNorthWest().topTile();
     }
     public HexTile getSouth(){
-        return south;
+        return myBoardSpace.getSouth().topTile();
     }
     public HexTile getSouthEast(){
-        return southEast;
+        return myBoardSpace.getSouthEast().topTile();
     }
     public HexTile getSouthWest(){
-        return southWest;
+        return myBoardSpace.getSouthWest().topTile();
     }
     //Setting references to adjacent tiles
     public void setNorth(HexTile newNorth){

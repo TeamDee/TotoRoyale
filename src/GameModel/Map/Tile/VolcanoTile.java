@@ -38,7 +38,9 @@ public class VolcanoTile extends HexTile {
     }
     @Override
     public String toString(){
-        return "Volcano";
+        String returnMe = super.toString();
+        returnMe += "\tVolcano";
+        return returnMe;
     }
 
     @Override

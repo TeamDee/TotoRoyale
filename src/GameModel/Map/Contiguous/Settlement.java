@@ -173,6 +173,32 @@ public class Settlement{
         }
     }
 
+    public ArrayList<TerrainTile> getExpansion(TerrainType terrainType) {
+        Stack<TerrainTile> tilesToVisit = new Stack<TerrainTile>();
+        ArrayList<TerrainTile> expansionTiles = new ArrayList<TerrainTile>();
+        for (TerrainTile tt : settlement) {
+            tilesToVisit.push(tt);
+        }
+        TerrainTile currentTile;
+        while (!tilesToVisit.isEmpty()) {
+            currentTile = tilesToVisit.pop();
+            for (Direction d : Direction.values()) {
+                if (currentTile.hasNeighborInDirection(d)) {
+                    if (currentTile.getNeighborInDirection(d).terrainType() != VOLCANO) {
+                        TerrainTile neighbor = (TerrainTile) currentTile.getNeighborInDirection(d);
+                        if (!neighbor.isOccupied() && neighbor.terrainType() == terrainType) {
+                            if (!settlement.contains(neighbor) && !expansionTiles.contains(neighbor)) {
+                                tilesToVisit.push(neighbor);
+                                expansionTiles.add(neighbor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return expansionTiles;
+    }
+
     public ArrayList<Settlement> combineAdjacentSettlementsForMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
     {
         ArrayList<Settlement> ss = PlayerSettlements;
@@ -433,7 +459,20 @@ public class Settlement{
             else{
                 //settlement.remove(tt);
                 System.out.println("SETTLEMENT EXISTS WITH NONADJACENT TILES");
-                System.out.println(this);
+                System.out.println("SETTLEMENT:\n" + this);
+                for (TerrainTile tt1 : settlement) {
+                    System.out.println("NEIGHBORS OF " + tt1.toString());
+                    for (Direction d : Direction.values()) {
+                        System.out.print(d.toString() + ":\t");
+                        if (tt1.hasNeighborInDirection(d)) {
+                            System.out.print(tt1.getNeighborInDirection(d).toString());
+                        }
+                        else {
+                            System.out.print("NONE");
+                        }
+                        System.out.print("\n");
+                    }
+                }
                 try {
                     Thread.sleep(1000000);
                 }
@@ -448,7 +487,7 @@ public class Settlement{
     public String toString(){
         String returnMe ="";
         for(TerrainTile tt: settlement){
-            returnMe += tt;
+            returnMe += tt + "\n";
         }
         return returnMe;
     }

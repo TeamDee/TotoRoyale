@@ -111,12 +111,5 @@ public abstract class TerrainTile extends HexTile {
         }
         return numberOfFriendlyNeighbors;
     }
-
-    @Override
-    public String toString(){
-        String returnMe = super.toString();
-        returnMe += "location:" + this.getLocation();
-        return returnMe;
-    }
 }
 

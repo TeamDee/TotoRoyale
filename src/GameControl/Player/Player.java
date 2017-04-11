@@ -69,7 +69,7 @@ public class Player {
         for (TerrainTile add : expansion) {
             placeMeeples(add);
             toBeAddedTo.addToSettlement(add);
-            System.out.println("Expansion added to settlment " + toBeAddedTo);
+            System.out.println("Expansion added to settlment\n" + toBeAddedTo);
         }
         settlements = toBeAddedTo.combineAdjacentSettlementsForMultTiles(expansion, settlements, toBeAddedTo);
         buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().toString();
@@ -1261,21 +1261,22 @@ public class Player {
     
     public void nukeSettlements(ArrayList<TerrainTile> nukedTiles) {
         Settlement settlementToNuke = getSettlementContaining(nukedTiles.get(0));
+        System.out.println("NUKING " + name + " SETTLEMENT\n" + settlementToNuke.toString());
         settlements.remove(settlementToNuke);
         ArrayList<Settlement> newSettlements = settlementToNuke.getSplitSettlementsAfterNuke(nukedTiles);
-
         settlements.addAll(newSettlements);
-        if(newSettlements.size() > 2){
-            System.out.println("\n\n\n\nNEW SETTLEMENTS AFTER NUKE COUNT: " + newSettlements.size()+"\n\n\n\n");
-        }
         for (TerrainTile tt : nukedTiles) {
             tt.nuke();
+            System.out.println("NUKED TILE " + tt.toString());
+        }
+        for (int i = 0; i < newSettlements.size(); ++i) {
+            System.out.println("RESULTING SETTLEMENT " + i + "\n" + newSettlements.get(i).toString());
         }
     }
 
     public Settlement getSettlementContaining(TerrainTile tt) {
         for (Settlement s : settlements) {
-            if (s.contains(tt));
+            if (s.contains(tt))
                 return s;
         }
         return null;
