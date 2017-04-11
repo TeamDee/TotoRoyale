@@ -922,8 +922,7 @@ public class Player {
     private String buildPhase(GameMap gameMap){
 
         for(Settlement settlement: settlements){
-            settlement.checkForRepeatedTiles();
-            settlement.checkForNonAdjacentTiles();
+            settlement.checkSettlementsLegality();
         }
 
 

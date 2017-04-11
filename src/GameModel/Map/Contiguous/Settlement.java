@@ -441,6 +441,29 @@ public class Settlement{
         return settlement.get(0).getOwner();
     }
 
+    public void checkSettlementsLegality(){
+        checkForNonAdjacentTiles();
+        checkForRepeatedTiles();
+        checkForNotTopLevelTiles();
+    }
+
+    public void checkForNotTopLevelTiles(){
+        for(int i=0; i!=settlement.size();++i){
+            for(TerrainTile t: this.settlement){
+                if(t.getLevel()!=t.getBoardSpace().topTile().getLevel()){
+                    System.out.println("TILE NOT AT TOP LEVEL BUT IN SETTLEMENT");
+
+                    try {
+                        Thread.sleep(1000000);
+                    }
+                    catch(InterruptedException ie){
+
+                    }
+                }
+            }
+        }
+    }
+
     public void checkForRepeatedTiles(){
         for(int i=0; i!=settlement.size();++i){
             for(int j = i+1; j!=settlement.size(); ++j){
