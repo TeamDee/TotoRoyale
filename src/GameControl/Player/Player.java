@@ -301,7 +301,7 @@ public class Player {
             //Level Consideration
             if (hex.getLevel() == 0) { //Empty space
                 score += 15;
-                //return score;
+                return score;
             }
             if (hex.getLevel() == 1) //Nuke and potential for a tiger
                 score += 20;
