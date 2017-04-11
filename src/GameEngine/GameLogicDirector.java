@@ -138,7 +138,7 @@ public class GameLogicDirector implements Runnable{
 
     public void run(){
         while(!isGameOver){
-            run2();
+//            run2();
         }
     }
 
@@ -187,11 +187,7 @@ public class GameLogicDirector implements Runnable{
 
             System.out.println("\n");
             //gc.paint();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
+
         }
         //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
         if (deck.cardsLeft() == 0) {
@@ -201,11 +197,6 @@ public class GameLogicDirector implements Runnable{
 
         if (deck.cardsLeft() % 10 == 0) {
             //gc.paint();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
         }
     }
 
@@ -259,11 +250,13 @@ public class GameLogicDirector implements Runnable{
         System.out.println("Score " + currentPlayer.getScore());
 
         for(Player p: players){
+// HEAD
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException ie) {
                 System.out.println(ie.getStackTrace());
             }
+
             AItakeTurn();
             nextPlayer();
             paint();
@@ -278,11 +271,11 @@ public class GameLogicDirector implements Runnable{
         System.out.println("\n");
 
         //TODO: for the official game tournament, this block should be removed
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException ie) {
-            System.out.println(ie.getStackTrace());
-        }
+//        try {
+//            Thread.sleep(250);
+//        } catch (InterruptedException ie) {
+//            System.out.println(ie.getStackTrace());
+//        }
     }
 
     private Player compareTotoroCount(){
