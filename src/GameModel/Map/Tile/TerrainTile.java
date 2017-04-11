@@ -10,6 +10,9 @@ import GameView.Tileables.TigerView;
 import GameView.Tileables.TotoroView;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import static GameModel.Map.Tile.TerrainType.VOLCANO;
 
 /**
  * Terrain tiles can hold meeples and totoros.
@@ -101,7 +104,7 @@ public abstract class TerrainTile extends HexTile {
         }
         for (Direction d : Direction.values()) {
             if (hasNeighborInDirection(d)) {
-                if (getNeighborInDirection(d).terrainType() != TerrainType.VOLCANO) {
+                if (getNeighborInDirection(d).terrainType() != VOLCANO) {
                     TerrainTile neighbor = (TerrainTile) getNeighborInDirection(d);
                     if (neighbor.isOccupied() && neighbor.getOwner() == getOwner()) {
                         ++numberOfFriendlyNeighbors;
@@ -110,6 +113,36 @@ public abstract class TerrainTile extends HexTile {
             }
         }
         return numberOfFriendlyNeighbors;
+    }
+
+    public ArrayList<TerrainTile> getEmptyAdjacentTerrainTiles() {
+        ArrayList<TerrainTile> emptyAdjacentTerrainTiles = new ArrayList<TerrainTile>();
+        for (Direction d: Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                if (getNeighborInDirection(d).terrainType() != VOLCANO) {
+                    TerrainTile adjacentTerrainTile = (TerrainTile) getNeighborInDirection(d);
+                    if (!adjacentTerrainTile.isOccupied()) {
+                        emptyAdjacentTerrainTiles.add(adjacentTerrainTile);
+                    }
+                }
+            }
+        }
+        return emptyAdjacentTerrainTiles;
+    }
+
+    public ArrayList<TerrainTile> getFriendlyAdjacentTerrainTiles() {
+        ArrayList<TerrainTile> friendlyAdjacentTerrainTiles = new ArrayList<TerrainTile>();
+        for (Direction d: Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                if (getNeighborInDirection(d).terrainType() != VOLCANO) {
+                    TerrainTile adjacentTerrainTile = (TerrainTile) getNeighborInDirection(d);
+                    if (adjacentTerrainTile.isOccupied() && adjacentTerrainTile.getOwner() == owner) {
+                        friendlyAdjacentTerrainTiles.add(adjacentTerrainTile);
+                    }
+                }
+            }
+        }
+        return friendlyAdjacentTerrainTiles;
     }
 }
 

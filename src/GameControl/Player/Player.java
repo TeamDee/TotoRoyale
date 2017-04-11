@@ -15,7 +15,6 @@ import GameView.Map.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -65,6 +64,29 @@ public class Player {
         return !legalNewSettlementVisible(map) && !legalTotoroPlacementVisible() && !legalExpansionVisible();
     }
 
+    private void executeExpansion(SettlementExpansion expansion) {
+        Settlement settlementToExpand = expansion.getSettlementToExpand();
+        ArrayList<TerrainTile> expansionTiles = expansion.getTiles();
+        ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion = expansion.getFriendlyAdjacentSettlementsAfterExpansion();
+        for (TerrainTile expansionTile: expansionTiles) {
+            placeMeeples(expansionTile);
+            settlementToExpand.addToSettlement(expansionTile);
+        }
+        for (Settlement settlementToMergeWith: friendlyAdjacentSettlementsAfterExpansion) {
+            ArrayList<TerrainTile> tilesToAdd = settlementToMergeWith.getTiles();
+            for (TerrainTile tt: tilesToAdd) {
+                settlementToExpand.addToSettlement(tt);
+            }
+            if (settlementToMergeWith.hasTotoro()) {
+                settlementToExpand.placedTotoro();
+            }
+            if (settlementToMergeWith.hasTiger()) {
+                settlementToExpand.placedTiger();
+            }
+            settlements.remove(friendlyAdjacentSettlementsAfterExpansion);
+        }
+    }
+
     private void executeExpansion(ArrayList<TerrainTile> expansion, Settlement toBeAddedTo){
         for (TerrainTile add : expansion) {
             placeMeeples(add);
@@ -72,7 +94,7 @@ public class Player {
             System.out.println("Expansion added to settlment\n" + toBeAddedTo);
         }
         settlements = toBeAddedTo.combineAdjacentSettlementsForMultTiles(expansion, settlements, toBeAddedTo);
-        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().toString();
+        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getTiles().get(0).getBoardSpace().getLocation().toString();
     }
 
     private boolean legalExpansionVisible(){
@@ -213,13 +235,13 @@ public class Player {
         Settlement targetSettlement = enemyPlayer.getSettlementContaining(toBeExpanded);
 
         if(terrainType.compareTo("GRASS") == 0){
-            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.GRASS);
+            expansionTiles = targetSettlement.getExpansionTiles(TerrainType.GRASS);
         } else if(terrainType.compareTo("JUNGLE") == 0){
-            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.JUNGLE);
+            expansionTiles = targetSettlement.getExpansionTiles(TerrainType.JUNGLE);
         } else if(terrainType.compareTo("LAKE") == 0){
-            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.LAKE);
+            expansionTiles = targetSettlement.getExpansionTiles(TerrainType.LAKE);
         } else if(terrainType.compareTo("ROCK") == 0){
-            expansionTiles = targetSettlement.getExpansionTiles(targetSettlement.getSettlement(), TerrainType.ROCK);
+            expansionTiles = targetSettlement.getExpansionTiles(TerrainType.ROCK);
         }
 
         enemyPlayer.executeExpansion(expansionTiles, targetSettlement);
@@ -233,10 +255,9 @@ public class Player {
                 if (toBeBuiltTotoro.getNeighborInDirection(d) instanceof TerrainTile) {
                     Settlement adjacentSettlement = enemyPlayer.getSettlementContaining((TerrainTile) toBeBuiltTotoro.getNeighborInDirection(d));
                     if (adjacentSettlement != null) {
-                        if (!adjacentSettlement.hasTotoro() && adjacentSettlement.getSettlementSize() >= 5) {
+                        if (!adjacentSettlement.hasTotoro() && adjacentSettlement.getSize() >= 5) {
                             adjacentSettlement.addToSettlement(toBeBuiltTotoro);
                             adjacentSettlement.placedTotoro();
-                            enemyPlayer.awardPoints(200);
                             enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, enemyPlayer.getSettlements(), adjacentSettlement));
                         }
                     }
@@ -337,7 +358,7 @@ public class Player {
             BoardSpace temp = bs.getNorth();
             if(temp.getLevel() > 0)
             {
-                ArrayList<TerrainTile> ts = s.getSettlement();
+                ArrayList<TerrainTile> ts = s.getTiles();
                 if(ts.contains(temp.topTile()))
                 {
                     value = 20 + scoreTilePlacement(p);
@@ -350,7 +371,7 @@ public class Player {
             BoardSpace temp = bs.getNorthWest();
             if(temp.getLevel() > 0)
             {
-                ArrayList<TerrainTile> ts = s.getSettlement();
+                ArrayList<TerrainTile> ts = s.getTiles();
                 if(ts.contains(temp.topTile()))
                 {
                     value = 20 + scoreTilePlacement(p);
@@ -363,7 +384,7 @@ public class Player {
             BoardSpace temp = bs.getNorthEast();
             if(temp.getLevel() > 0)
             {
-                ArrayList<TerrainTile> ts = s.getSettlement();
+                ArrayList<TerrainTile> ts = s.getTiles();
                 if(ts.contains(temp.topTile()))
                 {
                     value = 20 + scoreTilePlacement(p);
@@ -376,7 +397,7 @@ public class Player {
             BoardSpace temp = bs.getSouth();
             if(temp.getLevel() > 0)
             {
-                ArrayList<TerrainTile> ts = s.getSettlement();
+                ArrayList<TerrainTile> ts = s.getTiles();
                 if(ts.contains(temp.topTile()))
                 {
                     value = 20 + scoreTilePlacement(p);
@@ -389,7 +410,7 @@ public class Player {
             BoardSpace temp = bs.getSouthEast();
             if(temp.getLevel() > 0)
             {
-                ArrayList<TerrainTile> ts = s.getSettlement();
+                ArrayList<TerrainTile> ts = s.getTiles();
                 if(ts.contains(temp.topTile()))
                 {
                     value = 20 + scoreTilePlacement(p);
@@ -402,7 +423,7 @@ public class Player {
             BoardSpace temp = bs.getSouthWest();
             if(temp.getLevel() > 0)
             {
-                ArrayList<TerrainTile> ts = s.getSettlement();
+                ArrayList<TerrainTile> ts = s.getTiles();
                 if(ts.contains(temp.topTile()))
                 {
                     value = 20 + scoreTilePlacement(p);
@@ -490,7 +511,7 @@ public class Player {
                 ArrayList<BoardSpace> BSLoactions = t.getBoardSpaces();
                 for (Settlement s : settlements) {
                     //BSLocations 0 is a volcano Tile
-                    ArrayList<TerrainTile> currentSettlement = s.getSettlement();
+                    ArrayList<TerrainTile> currentSettlement = s.getTiles();
                     HexTile temp1 = null;
                     HexTile temp2 = null;
                     if(BSLoactions.get(1).getLevel() > 0) {
@@ -740,7 +761,6 @@ public class Player {
             placeTotoro(placeTotoroHere);
             activeSettlement.addToSettlement(placeTotoroHere);
             activeSettlement.placedTotoro();
-            this.awardPoints(200);
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(placeTotoroHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
@@ -791,10 +811,10 @@ public class Player {
         value = 0;
         int excheck = 0;
         ArrayList<ArrayList<TerrainTile>> allexpand = new ArrayList<ArrayList<TerrainTile>>();
-        ArrayList<TerrainTile> expansion1 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.GRASS);
-        ArrayList<TerrainTile> expansion2 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.JUNGLE);
-        ArrayList<TerrainTile> expansion3 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.LAKE);
-        ArrayList<TerrainTile> expansion4 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.ROCK);
+        ArrayList<TerrainTile> expansion1 = settlement.getExpansionTiles(TerrainType.GRASS);
+        ArrayList<TerrainTile> expansion2 = settlement.getExpansionTiles(TerrainType.JUNGLE);
+        ArrayList<TerrainTile> expansion3 = settlement.getExpansionTiles(TerrainType.LAKE);
+        ArrayList<TerrainTile> expansion4 = settlement.getExpansionTiles(TerrainType.ROCK);
         //System.out.println("Expand test: " + expansion1.size() + " " + expansion2.size() + " " + expansion3.size() + " " + expansion4.size());
         allexpand.add(expansion1);
         allexpand.add(expansion2);
@@ -834,7 +854,7 @@ public class Player {
     }
 
     public boolean expandSettlement() {
-        SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0));
+        SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0), null);
 
         for(int i = 0; i!= settlements.size();++i){
             Settlement s = settlements.get(i);
@@ -844,13 +864,13 @@ public class Player {
             }
         }
 
-        if (bestOverallExpansion.getValue() >= 50) {
-            executeExpansion(bestOverallExpansion.getTiles(), bestOverallExpansion.getSettlement());
+        if (bestOverallExpansion.getValue() >= 5) {
+            executeExpansion(bestOverallExpansion);
             //System.out.println("Player Settlement Size Before: " + settlements.size());
-            //settlements = bestOverallExpansion.getSettlement().combineAdjacentSettlementsForMultTiles(bestOverallExpansion.getTiles(), settlements, bestOverallExpansion.getSettlement());
+            //settlements = bestOverallExpansion.getSettlementToExpand().combineAdjacentSettlementsForMultTiles(bestOverallExpansion.getTiles(), settlements, bestOverallExpansion.getSettlementToExpand());
             //System.out.println("Player Settlement Size After: " + settlements.size());
 
-            buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlement().getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+            buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlementToExpand().getTiles().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
 
             return true;
         }
@@ -859,27 +879,14 @@ public class Player {
     }
 
     public SettlementExpansion getBestExpansionForSettlement(Settlement settlement) {
-        SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement);
-        ArrayList<ArrayList<TerrainTile>> allExpansions = new ArrayList<ArrayList<TerrainTile>>();
-
-        ArrayList<TerrainTile> expansion1 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.GRASS);
-        ArrayList<TerrainTile> expansion2 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.JUNGLE);
-        ArrayList<TerrainTile> expansion3 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.LAKE);
-        ArrayList<TerrainTile> expansion4 = settlement.getExpansionTiles(settlement.getSettlement(), TerrainType.ROCK);
-        //System.out.println("Expand test: " + expansion1.size() + " " + expansion2.size() + " " + expansion3.size() + " " + expansion4.size());
-        allExpansions.add(expansion1);
-        allExpansions.add(expansion2);
-        allExpansions.add(expansion3);
-        allExpansions.add(expansion4);
-        for (int i = 0; i < allExpansions.size(); i ++)
-        {
-            SettlementExpansion currentExpansion = new SettlementExpansion(allExpansions.get(i), settlement);
+        SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement , null);
+        ArrayList<SettlementExpansion> allExpansions = settlement.getAllExpansions();
+        for (SettlementExpansion currentExpansion: allExpansions) {
             currentExpansion.setValue(scoreSettlementExpansion(currentExpansion));
-            if (currentExpansion.getValue() > bestExpansion.getValue())
+            if (currentExpansion.getValue() > bestExpansion.getValue()) {
                 bestExpansion = currentExpansion;
-
+            }
         }
-
         return bestExpansion;
     }
 
@@ -892,6 +899,7 @@ public class Player {
             return false;
         }
         buildSettlement(bestPlaceToSettle);
+        System.out.println("BUILT SETTLEMENT AT " + bestPlaceToSettle.toString());
         //activeSettlement = settlements.get(settlements.size()-1);
         //settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(bestPlaceToSettle,settlements,activeSettlement);
         buildMessage = "FOUND SETTLEMENT AT " + bestPlaceToSettle.getBoardSpace().getLocation().getCubicCoordinate().toString();
@@ -990,8 +998,8 @@ public class Player {
         int expansionValue = 0;
         ArrayList<TerrainTile> expansionTiles = settlementExpansion.getTiles();
         ArrayList<Settlement> adjacentFriendlySettlementsAfterExpansion = new ArrayList<Settlement>();
-        Settlement originalSettlement = settlementExpansion.getSettlement();
-        Settlement settlementAfterExpansion = new Settlement();
+        Settlement originalSettlement = settlementExpansion.getSettlementToExpand();
+        Settlement settlementAfterExpansion = new Settlement(this);
         int meepleCost = settlementExpansion.getMeepleCost();
         boolean adjacentFriendlySettlementsHaveTotoro = false;
         boolean adjacentFriendlySettlementsHaveTiger = false;
@@ -1002,7 +1010,7 @@ public class Player {
         }
 
         //see what settlement will look like after expansion
-        for (TerrainTile tt : originalSettlement.getSettlement()) {
+        for (TerrainTile tt : originalSettlement.getTiles()) {
             settlementAfterExpansion.temporarilyAddToSettlement(tt);
         }
         for (TerrainTile tt : expansionTiles) {
@@ -1016,7 +1024,7 @@ public class Player {
         }
 
         //find all adjacent friendly settlements after expansion
-        for (TerrainTile tt : settlementAfterExpansion.getSettlement()) {
+        for (TerrainTile tt : settlementAfterExpansion.getTiles()) {
             for (Direction d : Direction.values()) {
                 if (tt.hasNeighborInDirection(d)) {
                     HexTile neighbor = tt.getNeighborInDirection(d);
@@ -1074,7 +1082,7 @@ public class Player {
     public void buildSettlement(TerrainTile tt) {
         if(!tt.isOccupied()) {
             placeMeeples(tt);
-            Settlement settlement = new Settlement();
+            Settlement settlement = new Settlement(this);
             settlement.createSettlement(tt);
             settlements.add(settlement);
             settlement.combineAdjacentSettlementsForSingleTile(tt,settlements,settlement);
@@ -1089,10 +1097,11 @@ public class Player {
     public void placeTotoro(TerrainTile tt) {
         tt.placeTotoro(this);
         removeTotoro(1);
+        awardPoints(200);
     }
     public boolean canPlaceTotoro(Settlement settlement)
     {
-        if(settlement.getSettlementSize()<5 || settlement.hasTotoro()) {
+        if(settlement.getSize()<5 || settlement.hasTotoro()) {
             return false;
         }
         ArrayList<TerrainTile> Tplacements = settlement.getLegalTotoroTiles();

@@ -9,13 +9,15 @@ import java.util.ArrayList;
  */
 public class SettlementExpansion {
     private ArrayList<TerrainTile> tiles;
-    private Settlement settlement;
+    private Settlement settlementToExpand;
+    private ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion = new ArrayList<Settlement>();
     private int value;
     private int meepleCost;
 
-    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlement) {
+    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlementToExpand, ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion) {
         this.tiles = tiles;
-        this.settlement = settlement;
+        this.settlementToExpand = settlementToExpand;
+        this.friendlyAdjacentSettlementsAfterExpansion = friendlyAdjacentSettlementsAfterExpansion;
         value = 0;
         meepleCost = 0;
         if (tiles != null) {
@@ -32,12 +34,17 @@ public class SettlementExpansion {
     public int getValue() {
         return value;
     }
+
     public ArrayList<TerrainTile> getTiles() {
         return tiles;
     }
 
-    public Settlement getSettlement () {
-        return settlement;
+    public ArrayList<Settlement> getFriendlyAdjacentSettlementsAfterExpansion() {
+        return friendlyAdjacentSettlementsAfterExpansion;
+    }
+
+    public Settlement getSettlementToExpand() {
+        return settlementToExpand;
     }
 
     public int getMeepleCost() {

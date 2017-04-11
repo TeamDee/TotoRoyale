@@ -2,7 +2,6 @@ package GameModel.Map.Contiguous;
 
 import GameControl.Player.Player;
 import GameModel.Map.BoardSpace;
-import GameModel.Map.Coordinates.OffsetCoordinate;
 import GameModel.Map.Direction;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
@@ -17,42 +16,44 @@ import static GameModel.Map.Tile.TerrainType.VOLCANO;
  * Created by conor on 3/20/2017.
  */
 public class Settlement{
-    public ArrayList<TerrainTile> settlement;
-    public ArrayList<TerrainTile> exsettle;
-    //public ArrayList<TerrainTile> Tplacement;
-    public boolean HasTotoro;
-    public boolean HasTiger;
     private Player owner;
+    public ArrayList<TerrainTile> settlement;
+    private boolean hasTotoro = false;
+    private boolean hasTiger = false;
+
     public Settlement() {
+        owner = null;
         settlement = new ArrayList<TerrainTile>();
-        exsettle = new ArrayList<TerrainTile>();
-        HasTotoro = false;
-        HasTiger = false;
     }
 
-    public boolean hasTotoro()
-    {
-        return HasTotoro;
-    }
-    public boolean hasTiger()
-    {
-        return HasTiger;
-    }
-    public void placedTotoro()
-    {
-        HasTotoro = true;
-    }
-    public void placedTiger()
-    {
-        HasTiger = true;
+    public Settlement(Player owner) {
+        this.owner = owner;
+        settlement = new ArrayList<TerrainTile>();
+
     }
 
-    public ArrayList<TerrainTile> getAdjacentTerrainTiles(){
+    public boolean hasTotoro() {
+        return hasTotoro;
+    }
+
+    public boolean hasTiger() {
+        return hasTiger;
+    }
+
+    public void placedTotoro() {
+        hasTotoro = true;
+    }
+
+    public void placedTiger() {
+        hasTiger = true;
+    }
+
+    public ArrayList<TerrainTile> getAdjacentTerrainTiles() {
         ArrayList<TerrainTile> adjacentTerrainTiles = new ArrayList<TerrainTile>();
-        ArrayList<TerrainTile> potentialPlacements = new ArrayList<TerrainTile>();
-        for(TerrainTile check: settlement)
+        ArrayList<TerrainTile> potentialPlacements;
+        for(TerrainTile tt: settlement)
         {
-            potentialPlacements = getAdjacentTerrainTiles(check);
+            potentialPlacements = getAdjacentTerrainTiles(tt);
             for(TerrainTile scan: potentialPlacements)
             {
                 if(!adjacentTerrainTiles.contains(scan) && !settlement.contains(scan)) {
@@ -63,20 +64,23 @@ public class Settlement{
         return adjacentTerrainTiles;
     }
 
+    public ArrayList<TerrainTile> getEmptyAdjacentTerrainTiles() {
+        ArrayList<TerrainTile> emptyAdjacentTerrainTiles = new ArrayList<TerrainTile>();
+        for (TerrainTile tt: settlement) {
+            ArrayList<TerrainTile> emptyAdjacentTerrainTilesAtCurrentTile = tt.getEmptyAdjacentTerrainTiles();
+            emptyAdjacentTerrainTiles.addAll(emptyAdjacentTerrainTilesAtCurrentTile);
+        }
+        return emptyAdjacentTerrainTiles;
+    }
+
     public ArrayList<TerrainTile> getLegalTotoroTiles()
     {
-        if(this.getSettlementSize() <5) {
+        if(getSize() <5) {
             System.out.println("calling getLegalTotoroTiles when you shouldn't be.");
-            return null;
+            return new ArrayList<TerrainTile>();
         }
-        ArrayList<TerrainTile> getTotoroPlaceMent = getAdjacentTerrainTiles();
-        ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
-        for(TerrainTile t: getTotoroPlaceMent){
-            if(!t.isOccupied() && doubleCheckAdjacent(t) && isContiguousTotoroOrTiger(t)){
-                returnMe.add(t);
-            }
-        }
-        return returnMe;
+        ArrayList<TerrainTile> legalTotoroPlacements = getEmptyAdjacentTerrainTiles();
+        return legalTotoroPlacements;
     }
 
     public boolean doubleCheckAdjacent(TerrainTile tt)
@@ -96,14 +100,14 @@ public class Settlement{
 
     public ArrayList<TerrainTile> getLegalTigerTiles()
     {
-        ArrayList<TerrainTile> getTigerPlaceMent = getAdjacentTerrainTiles();
-        ArrayList<TerrainTile> returnMe = new ArrayList<TerrainTile>();
-        for(TerrainTile t: getTigerPlaceMent){
-            if(t.getLevel() >= 3 && !t.isOccupied() && doubleCheckAdjacent(t) && isContiguousTotoroOrTiger(t)){
-                returnMe.add(t);
+        ArrayList<TerrainTile> emptyAdjacentTerrainTiles = getEmptyAdjacentTerrainTiles();
+        ArrayList<TerrainTile> legalTigerPlacements = new ArrayList<TerrainTile>();
+        for(TerrainTile tt: emptyAdjacentTerrainTiles){
+            if(tt.getLevel() >= 3) {
+                legalTigerPlacements.add(tt);
             }
         }
-        return returnMe;
+        return legalTigerPlacements;
     }
 
     public void createSettlement(TerrainTile starttile){
@@ -122,60 +126,18 @@ public class Settlement{
         settlement.add(tt);
     }
 
-    public ArrayList<TerrainTile> getSettlement()
+    public ArrayList<TerrainTile> getTiles()
     {
         return settlement;
     }
 
-    public boolean isContiguous(TerrainTile tile) {
-        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
-        checkExpansion.addAll(exsettle);
-        for (TerrainTile contiguousTile : checkExpansion) {
-            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
-                return true;
-        }
-        return false;
-    }
-
-    public boolean isContiguousTotoroOrTiger(TerrainTile tile) {
-        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
-        for (TerrainTile contiguousTile : checkExpansion) {
-            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
-                return true;
-        }
-        return false;
-    }
-
-    public ArrayList<TerrainTile> getExpansionTiles(ArrayList<TerrainTile> ExpandSettlement,TerrainType terrainType)
-    {
-        ArrayList<TerrainTile> expand = new ArrayList<TerrainTile>();
-        for(TerrainTile check: ExpandSettlement)
-        {
-            fill(check, terrainType);
-            for(TerrainTile scan: exsettle)
-            {
-                if(!expand.contains(scan)) {
-                    expand.add(scan);
-                }
-            }
-        }
-        exsettle.clear();
-        return expand;
-    }
-
-    public void fill(TerrainTile hexTile, TerrainType terrainType) {
-        ArrayList<TerrainTile> adjacentHexTiles = getAdjacentTerrainTiles(hexTile);
-        for (TerrainTile adjacentHexTile : adjacentHexTiles) {
-            if (!exsettle.contains(adjacentHexTile) && isContiguous(adjacentHexTile) && adjacentHexTile.terrainType() == terrainType && !adjacentHexTile.isOccupied()) {
-                exsettle.add(adjacentHexTile);
-                fill(adjacentHexTile, terrainType);
-            }
-        }
-    }
-
-    public ArrayList<TerrainTile> getExpansion(TerrainType terrainType) {
+    public ArrayList<TerrainTile> getExpansionTiles(TerrainType terrainType) {
         Stack<TerrainTile> tilesToVisit = new Stack<TerrainTile>();
         ArrayList<TerrainTile> expansionTiles = new ArrayList<TerrainTile>();
+        ArrayList<Settlement> adjacentFriendlySettlementsAfterExpansion = new ArrayList<Settlement>();
+        if (terrainType == VOLCANO) {
+            return expansionTiles;
+        }
         for (TerrainTile tt : settlement) {
             tilesToVisit.push(tt);
         }
@@ -184,19 +146,64 @@ public class Settlement{
             currentTile = tilesToVisit.pop();
             for (Direction d : Direction.values()) {
                 if (currentTile.hasNeighborInDirection(d)) {
-                    if (currentTile.getNeighborInDirection(d).terrainType() != VOLCANO) {
+                    if (currentTile.getNeighborInDirection(d).terrainType() == terrainType) {
                         TerrainTile neighbor = (TerrainTile) currentTile.getNeighborInDirection(d);
-                        if (!neighbor.isOccupied() && neighbor.terrainType() == terrainType) {
+                        if (!neighbor.isOccupied()) {
                             if (!settlement.contains(neighbor) && !expansionTiles.contains(neighbor)) {
                                 tilesToVisit.push(neighbor);
                                 expansionTiles.add(neighbor);
                             }
+                        } else if (currentTile.getOwner() == neighbor.getOwner()) {
+                            Player owner = currentTile.getOwner();
+                            adjacentFriendlySettlementsAfterExpansion.add(owner.getSettlementContaining(neighbor));
                         }
                     }
                 }
             }
         }
         return expansionTiles;
+    }
+
+    public ArrayList<SettlementExpansion> getAllExpansions() {
+        ArrayList<SettlementExpansion> allExpansions = new ArrayList<SettlementExpansion>();
+        allExpansions.add(getExpansion(TerrainType.GRASS));
+        allExpansions.add(getExpansion(TerrainType.JUNGLE));
+        allExpansions.add(getExpansion(TerrainType.ROCK));
+        allExpansions.add(getExpansion(TerrainType.LAKE));
+        return allExpansions;
+    }
+
+    public SettlementExpansion getExpansion(TerrainType terrainType) {
+        Stack<TerrainTile> tilesToVisit = new Stack<TerrainTile>();
+        ArrayList<TerrainTile> expansionTiles = new ArrayList<TerrainTile>();
+        ArrayList<Settlement> adjacentFriendlySettlementsAfterExpansion = new ArrayList<Settlement>();
+        if (terrainType == VOLCANO) {
+            return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion);
+        }
+        for (TerrainTile tt : settlement) {
+            tilesToVisit.push(tt);
+        }
+        TerrainTile currentTile;
+        while (!tilesToVisit.isEmpty()) {
+            currentTile = tilesToVisit.pop();
+            for (Direction d : Direction.values()) {
+                if (currentTile.hasNeighborInDirection(d)) {
+                    if (currentTile.getNeighborInDirection(d).terrainType() == terrainType) {
+                        TerrainTile neighbor = (TerrainTile) currentTile.getNeighborInDirection(d);
+                        if (!neighbor.isOccupied()) {
+                            if (!settlement.contains(neighbor) && !expansionTiles.contains(neighbor)) {
+                                tilesToVisit.push(neighbor);
+                                expansionTiles.add(neighbor);
+                            }
+                        } else if (!settlement.contains(neighbor) && currentTile.getOwner() == neighbor.getOwner()) {
+                            Player owner = currentTile.getOwner();
+                            adjacentFriendlySettlementsAfterExpansion.add(owner.getSettlementContaining(neighbor));
+                        }
+                    }
+                }
+            }
+        }
+        return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion);
     }
 
     public ArrayList<Settlement> combineAdjacentSettlementsForMultTiles(ArrayList<TerrainTile> ExpandedTile, ArrayList<Settlement> PlayerSettlements, Settlement BeingEdit)
@@ -223,7 +230,7 @@ public class Settlement{
             for(int i = 0; i < tempSettlements.size();i++)
             {
                 Settlement s = tempSettlements.get(i);
-                ArrayList<TerrainTile> a = s.getSettlement();
+                ArrayList<TerrainTile> a = s.getTiles();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
                     if(BeingEdit.hasTotoro() || s.hasTotoro())
                     {
@@ -244,7 +251,7 @@ public class Settlement{
             for(int i = 0; i < tempSettlements.size();i++)
             {
                 Settlement s = tempSettlements.get(i);
-                ArrayList<TerrainTile> a = s.getSettlement();
+                ArrayList<TerrainTile> a = s.getTiles();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
                     if(BeingEdit.hasTotoro() || s.hasTotoro())
                     {
@@ -265,7 +272,7 @@ public class Settlement{
             for(int i = 0; i < tempSettlements.size();i++)
             {
                 Settlement s = tempSettlements.get(i);
-                ArrayList<TerrainTile> a = s.getSettlement();
+                ArrayList<TerrainTile> a = s.getTiles();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
                     if(BeingEdit.hasTotoro() || s.hasTotoro())
                     {
@@ -286,7 +293,7 @@ public class Settlement{
             for(int i = 0; i < tempSettlements.size();i++)
             {
                 Settlement s = tempSettlements.get(i);
-                ArrayList<TerrainTile> a = s.getSettlement();
+                ArrayList<TerrainTile> a = s.getTiles();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
                     if(BeingEdit.hasTotoro() || s.hasTotoro())
                     {
@@ -307,7 +314,7 @@ public class Settlement{
             for(int i = 0; i < tempSettlements.size();i++)
             {
                 Settlement s = tempSettlements.get(i);
-                ArrayList<TerrainTile> a = s.getSettlement();
+                ArrayList<TerrainTile> a = s.getTiles();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
                     if(BeingEdit.hasTotoro() || s.hasTotoro())
                     {
@@ -328,7 +335,7 @@ public class Settlement{
             for(int i = 0; i < tempSettlements.size();i++)
             {
                 Settlement s = tempSettlements.get(i);
-                ArrayList<TerrainTile> a = s.getSettlement();
+                ArrayList<TerrainTile> a = s.getTiles();
                 if(a.contains(check) && PlayerSettlements.contains(s)) {
                     if(BeingEdit.hasTotoro() || s.hasTotoro())
                     {
@@ -345,9 +352,9 @@ public class Settlement{
         }
         for(TerrainTile t: adjacentHexTiles)
         {
-            if(!BeingEdit.getSettlement().contains(t))
+            if(!BeingEdit.getTiles().contains(t))
             {
-                BeingEdit.getSettlement().add(t);
+                BeingEdit.getTiles().add(t);
             }
         }
         if(PlayerSettlements.contains(tempsettlement)) {
@@ -379,7 +386,7 @@ public class Settlement{
         return adjacentHexTiles;
     }
 
-    public int getSettlementSize()
+    public int getSize()
     {
         return settlement.size();
     }
@@ -419,7 +426,7 @@ public class Settlement{
             }
         }
 
-        Settlement splitSettlement = new Settlement();
+        Settlement splitSettlement = new Settlement(owner);
         for (TerrainTile tt : splitSettlementTiles) {
             splitSettlement.addToSettlement(tt);
         }
@@ -485,7 +492,7 @@ public class Settlement{
 
     @Override
     public String toString(){
-        String returnMe ="";
+        String returnMe = "";
         for(TerrainTile tt: settlement){
             returnMe += tt + "\n";
         }

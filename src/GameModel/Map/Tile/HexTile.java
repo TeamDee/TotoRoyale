@@ -217,4 +217,15 @@ public abstract class HexTile extends Tile {
         isPartOfSettlement = false;
         settlementSize = 0;
     }
+
+    public boolean hasNeighborBelongingToPlayer(Player player) {
+        for (Direction d : Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                HexTile neighbor = getNeighborInDirection(d);
+                if (neighbor.getOwner() == player)
+                    return true;
+            }
+        }
+        return false;
+    }
 }
