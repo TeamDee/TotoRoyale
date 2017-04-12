@@ -893,6 +893,7 @@ public class Player {
             //System.out.println("Player Settlement Size After: " + settlements.size());
 
             buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlementToExpand().getTiles().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+            buildMessage += " " + bestOverallExpansion.getTerrainToExpand().name();
 
             return true;
         }
