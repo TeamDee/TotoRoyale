@@ -12,7 +12,6 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
-import com.sun.tools.internal.jxc.ap.Const;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -227,15 +226,7 @@ public class Player {
 
     public void opponentNewSettlement(OffsetCoordinate location){
         TerrainTile toBeFoundSettlement = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-// Updated upstream
         buildSettlement(toBeFoundSettlement);
-        //activeSettlement = settlements.get(settlements.size()-1);
-        //settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(toBeFoundSettlement,settlements,activeSettlement);
-//======
-//        buildSettlement(toBeFoundSettlement);
-//        activeSettlement = settlements.get(settlements.size()-1);
-//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeFoundSettlement,settlements,activeSettlement);
-// Stashed changes
         System.out.println("Opponent action: New Settlement");
     }
 
@@ -282,20 +273,12 @@ public class Player {
                 }
             }
         }
-//=======
-//        placeTotoro(toBeBuiltTotoro);
-//        activeSettlement.addToSettlement(toBeBuiltTotoro);
-//        activeSettlement.placedTotoro();
-//        this.awardPoints(200);
-//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTotoro,settlements,activeSettlement);
         System.out.println("Opponent action: Placed Totoro");
-//Stashed changes
     }
 
     public void opponentNewTiger(OffsetCoordinate location){
         TerrainTile toBeBuiltTiger = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
         placeTiger(toBeBuiltTiger);
-// Updated upstream
         for (Direction d : Direction.values()) {
             if (toBeBuiltTiger.hasNeighborInDirection(d)) {
                 if (toBeBuiltTiger.getNeighborInDirection(d) instanceof TerrainTile) {
@@ -312,13 +295,7 @@ public class Player {
                 }
             }
         }
-//=======
-//        activeSettlement.addToSettlement(toBeBuiltTiger);
-//        activeSettlement.placedTiger();
-//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTiger,settlements,activeSettlement);
-//        this.awardPoints(75);
         System.out.println("Opponent action: Placed Tiger");
-// Stashed changes
     }
 
     public int scoreTilePlacement(Placement placement) {
@@ -1335,9 +1312,8 @@ public class Player {
 
 
     public void cleanup(){
-
         score = 0;
-        placeTileCheck = false;
+        placeTileCheck = false;]
 
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
