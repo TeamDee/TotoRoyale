@@ -10,6 +10,8 @@ public class Constants {
     public static int TIGER_PER_PLAYER = 2;
     public static boolean SHOW_COORDINATES = true;
 
+    public static boolean printGameInfo = false;
+
     public void setTileConstants(int newHeight, int newWidth){
         TILE_HEIGHT = newHeight;
         TILE_WIDTH = newWidth;
