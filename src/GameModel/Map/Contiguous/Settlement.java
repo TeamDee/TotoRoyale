@@ -131,6 +131,29 @@ public class Settlement{
         return settlement;
     }
 
+//    public boolean isContiguous(TerrainTile tile) {
+//        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
+//        checkExpansion.addAll(exsettle);
+//        for (TerrainTile contiguousTile : checkExpansion) {
+//
+//            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
+//                return true;
+//        }
+//        return false;
+//    }
+
+
+//=======
+//
+//
+//    public boolean isContiguousTotoroOrTiger(TerrainTile tile) {
+//        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
+//        for (TerrainTile contiguousTile : checkExpansion) {
+//
+//            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
+//                return true;
+//>>>>>>> serverTesting
+
     public ArrayList<TerrainTile> getExpansionTiles(TerrainType terrainType) {
         Stack<TerrainTile> tilesToVisit = new Stack<TerrainTile>();
         ArrayList<TerrainTile> expansionTiles = new ArrayList<TerrainTile>();

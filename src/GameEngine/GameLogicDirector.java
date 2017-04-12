@@ -44,11 +44,14 @@ public class GameLogicDirector implements Runnable{
         myMap = new GameMap();
         deck = new Deck();
         winner=null;
+        //this.initializeNewGame("bob", "billy");
+        gc = GameController.getInstance();
+
     }
 
     public GameLogicDirector(int playerOneId, int playerTwoId){
         myMap = new GameMap();
-        initializeNewGame(""+playerOneId, ""+playerTwoId);
+        //initializeNewGame(""+playerOneId, ""+playerTwoId);
         winner=null;
     }
 
@@ -57,7 +60,7 @@ public class GameLogicDirector implements Runnable{
         TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
         ActionMessage += currentPlayer.takeTurn(myMap, tht);
         nextPlayer();
-        paint();
+        //paint();
         endRoundChecks();
         if(winner != null)
             setGameOver();
@@ -119,8 +122,10 @@ public class GameLogicDirector implements Runnable{
     }
 
     public static GameLogicDirector getInstance(){
-        if(me == null)
-            me= new GameLogicDirector();
+        if(me == null) {
+            //System.out.println("\n\n\ngame logic director static found to be null.\n\n\n ");
+            me = new GameLogicDirector();
+        }
         return me;
     }
 
@@ -186,26 +191,17 @@ public class GameLogicDirector implements Runnable{
             }
 
             System.out.println("\n");
-            gc.paint();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
+            //gc.paint();
+
         }
         //check if the deck is out of unplayed tiles. If yes, run game winner check and end the game.
         if (deck.cardsLeft() == 0) {
             winner = gameEndCheckWinner();
-            gc.paint();
+            //gc.paint();
         }
 
         if (deck.cardsLeft() % 10 == 0) {
-            gc.paint();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.getStackTrace());
-            }
+            //gc.paint();
         }
     }
 
@@ -254,6 +250,7 @@ public class GameLogicDirector implements Runnable{
 
     public void AIvsAIGameTurn(){
         for(Player p: players){
+// HEAD
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException ie) {
@@ -276,11 +273,11 @@ public class GameLogicDirector implements Runnable{
         System.out.println("\n");
 
         //TODO: for the official game tournament, this block should be removed
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException ie) {
-            System.out.println(ie.getStackTrace());
-        }
+//        try {
+//            Thread.sleep(250);
+//        } catch (InterruptedException ie) {
+//            System.out.println(ie.getStackTrace());
+//        }
     }
 
     private Player compareTotoroCount(){
@@ -333,10 +330,8 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1);
         currentPlayer = p1;
 
-        gc = GameController.getInstance();
         deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
-        gc.initViewControllerInteractions(p1, activePlayer);
         newGame = false; // Q: what's this for? A: see run method
 
         winner = null;
