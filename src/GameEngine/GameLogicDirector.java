@@ -44,14 +44,14 @@ public class GameLogicDirector implements Runnable{
         myMap = new GameMap();
         deck = new Deck();
         winner=null;
-        this.initializeNewGame("bob", "billy");
+        //this.initializeNewGame("bob", "billy");
         gc = GameController.getInstance();
 
     }
 
     public GameLogicDirector(int playerOneId, int playerTwoId){
         myMap = new GameMap();
-        initializeNewGame(""+playerOneId, ""+playerTwoId);
+        //initializeNewGame(""+playerOneId, ""+playerTwoId);
         winner=null;
     }
 
@@ -122,8 +122,10 @@ public class GameLogicDirector implements Runnable{
     }
 
     public static GameLogicDirector getInstance(){
-        if(me == null)
+        if(me == null) {
+            //System.out.println("\n\n\ngame logic director static found to be null.\n\n\n ");
             me = new GameLogicDirector();
+        }
         return me;
     }
 
@@ -333,8 +335,8 @@ public class GameLogicDirector implements Runnable{
         newGame = false; // Q: what's this for? A: see run method
 
         winner = null;
-//        gc = GameController.getInstance();
-//        gc.initViewControllerInteractions(p1, activePlayer);
+        gc = GameController.getInstance();
+        gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     public boolean isGameOver(){
