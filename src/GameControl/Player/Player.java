@@ -33,16 +33,13 @@ public class Player {
     private HashMap<OffsetCoordinate, TerrainTile> ownedTiles;
     private ArrayList<Settlement> settlements;
     private Settlement activeSettlement; //settlement we're adding stuff too
-    private AIPlayerController AI;
-    private int expansionWorth;
-
+    int expansionWorth;
     public Player enemyPlayer;
 
     private GameMap myMap;
-    //private TerrainTile Tplacement;
 
     //scoring
-    private int score;//, expansionWorth;
+    private int score;
     public boolean placeTileCheck = false; //added for testing
 
     //random
@@ -105,21 +102,6 @@ public class Player {
         if(settlements.size() == 0){
             return false;
         }
-        /*
-        int whichsettle = random.nextInt(settlements.size());
-        Integer expansionWorth = new Integer(0);
-        ArrayList<TerrainTile> expansion = getBestExpansionForSettlement(settlements.get(whichsettle));
-        if (expansionWorth >= 50) {
-            for (TerrainTile add : expansion) {
-                placeMeeples(add);
-                settlements.get(whichsettle).addToSettlement(add);
-                awardPoints(add.getLevel() ^ 2);
-                System.out.println("added");
-            }
-            return true;
-        }
-        return false;
-        */
         return true;
     }
 
@@ -146,7 +128,6 @@ public class Player {
         }
         return false;
     }
-
 
     public String placementPhase(GameMap gameMap, TriHexTile tile){
         ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
@@ -269,7 +250,6 @@ public class Player {
                             adjacentSettlement.addToSettlement(toBeBuiltTotoro);
                             adjacentSettlement.placedTotoro();
                             settlements = adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, settlements, adjacentSettlement);
-                            awardPoints(200);
                         }
                     }
                 }
@@ -288,7 +268,6 @@ public class Player {
                     if (adjacentSettlement != null) {
                         adjacentSettlement.addToSettlement(toBeBuiltTiger);
                         adjacentSettlement.placedTiger();
-                        awardPoints(75);
                         settlements = adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, settlements, adjacentSettlement);
                     }
                 }
@@ -754,7 +733,6 @@ public class Player {
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(placeTigerHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
-            this.awardPoints(75);
             buildMessage = "BUILD TIGER PLAYGROUND AT " + placeTigerHere.getBoardSpace().getLocation().getCubicCoordinate().toString();
             return true;
         }
@@ -853,7 +831,7 @@ public class Player {
         return bestExpansion;
     }
 
-    public boolean buildSettlement(GameMap gameMap){
+    public boolean buildSettlement(GameMap gameMap) {
         //choose the best available settlement
         //if we settle... currently the only option
         ArrayList<TerrainTile> legalTilesToBuildSettlmentOn = getLegalTilesToBuildSettlementOn(gameMap);
@@ -866,7 +844,7 @@ public class Player {
         return true; //todo should there be a false?
     }
 
-    private boolean outOfTotoroOrTigers(){
+    private boolean outOfTotoroOrTigers() {
         return (totoroCount == 0 || tigerCount == 0);
     }
 
@@ -882,16 +860,14 @@ public class Player {
         }
     }
 
-    private String buildPhase(GameMap gameMap){
-
+    private String buildPhase(GameMap gameMap) {
+        /*
         for(Settlement settlement: settlements){
             settlement.checkSettlementsLegality();
         }
-
-
-        ArrayList<HexTile> tiles = gameMap.getVisible();
+        */
         String finalMessage = "";
-
+        /*
         if(outOfTotoroOrTigers()){
             getRidOfMeeples();
             finalMessage = buildMessage;
@@ -911,11 +887,10 @@ public class Player {
             else if (buildSettlement(gameMap)) {
                 finalMessage = buildMessage;
             }
-            else{
+            else {
                 System.out.println("Player " + this + "cannot legally move");
                 myLogicDirector.setGameOver();
             }
-
         }
         else {
             buildSettlement(gameMap);
@@ -925,11 +900,14 @@ public class Player {
         for (Settlement s: settlements) {
             s.removeAnyUndergroundTiles();
         }
+        */
+        buildSettlement(gameMap);
+        finalMessage = buildMessage;
         return finalMessage;
     }
 
     //TODO add AI logic
-    public String takeTurn(GameMap gameMap, TriHexTile tile){
+    public String takeTurn(GameMap gameMap, TriHexTile tile) {
         String result = placementPhase(gameMap, tile);
         result += " " + buildPhase(gameMap);
         return result;
@@ -1027,7 +1005,6 @@ public class Player {
         ArrayList<TerrainTile> Tplacements = settlement.getLegalTotoroTiles();
         if(Tplacements.size() != 0)
         {
-            //getBestTotoroPlacementTile(Tplacements);
             return true;
         }
         else
@@ -1097,6 +1074,7 @@ public class Player {
     public void placeTiger(TerrainTile tt) {
         tt.placeTiger(this);
         removeTiger(1);
+        awardPoints(75);
     }
 
     public TerrainTile getBestTigerPlacementTile(ArrayList<Settlement> legalTigerSettlments)
@@ -1250,7 +1228,6 @@ public class Player {
         ownedTiles.clear();
         settlements.clear();
         activeSettlement = null;
-        AI = null;
         expansionWorth = 0;
         enemyPlayer = null;
         myMap = null;
