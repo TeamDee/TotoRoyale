@@ -31,7 +31,9 @@ public class SettlementExpansion {
         value = 0;
         meepleCost = 0;
         if (tiles != null) {
-            terrainToExpand = tiles.get(0).terrainType();
+            if (tiles.size() > 0) {
+                terrainToExpand = tiles.get(0).terrainType();
+            }
             for (TerrainTile tt : tiles) {
                 meepleCost += tt.getLevel();
             }
