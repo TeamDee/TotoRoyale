@@ -1,6 +1,7 @@
 package GameModel.Map.Contiguous;
 
 import GameModel.Map.Tile.TerrainTile;
+import GameModel.Map.Tile.TerrainType;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 public class SettlementExpansion {
     private ArrayList<TerrainTile> tiles;
     private Settlement settlementToExpand;
+    private TerrainType terrainToExpand;
     private ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion = new ArrayList<Settlement>();
     boolean canPlaceTotoroAfterExpansion;
     boolean canPlaceTigerAfterExpansion;
@@ -29,6 +31,7 @@ public class SettlementExpansion {
         value = 0;
         meepleCost = 0;
         if (tiles != null) {
+            terrainToExpand = tiles.get(0).terrainType();
             for (TerrainTile tt : tiles) {
                 meepleCost += tt.getLevel();
             }
@@ -70,4 +73,6 @@ public class SettlementExpansion {
     public boolean canPlaceTigerAfterExpansionAndTilePlacement() {
         return canPlaceTigerAfterExpansionAndTilePlacement;
     }
+
+    public TerrainType getTerrainToExpand() { return terrainToExpand; }
 }
