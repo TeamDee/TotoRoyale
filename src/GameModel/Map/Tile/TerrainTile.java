@@ -144,5 +144,20 @@ public abstract class TerrainTile extends HexTile {
         }
         return friendlyAdjacentTerrainTiles;
     }
+
+    public ArrayList<TerrainTile> getEnemyAdjacentTerrainTiles() {
+        ArrayList<TerrainTile> enemyAdjacentTerrainTiles = new ArrayList<TerrainTile>();
+        for (Direction d: Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                if (getNeighborInDirection(d).terrainType() != VOLCANO) {
+                    TerrainTile adjacentTerrainTile = (TerrainTile) getNeighborInDirection(d);
+                    if (adjacentTerrainTile.isOccupied() && adjacentTerrainTile.getOwner() != owner) {
+                        enemyAdjacentTerrainTiles.add(adjacentTerrainTile);
+                    }
+                }
+            }
+        }
+        return enemyAdjacentTerrainTiles;
+    }
 }
 

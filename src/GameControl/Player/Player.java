@@ -1137,11 +1137,16 @@ public class Player {
     }
 
     private int scoreTotoroPlacement(TerrainTile t) {
-        return 1; // TODO add AI in this method
+
+        int numberOfAdjacentEnemyTiles = t.getEnemyAdjacentTerrainTiles().size();
+        return numberOfAdjacentEnemyTiles;
+        //return 1; // TODO add AI in this method
     }
 
     private int scoreTigerPlacement(TerrainTile t) {
-        return 1; // TODO add AI in this method
+        int numberOfAdjacentEnemyTiles = t.getEnemyAdjacentTerrainTiles().size();
+        return numberOfAdjacentEnemyTiles;
+        //return 1; // TODO add AI in this method
     }
 
     public TerrainTile getBestTotoroPlacementTile(ArrayList<Settlement> legalTotoroSettlements)
