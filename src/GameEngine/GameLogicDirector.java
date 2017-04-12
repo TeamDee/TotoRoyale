@@ -246,7 +246,7 @@ public class GameLogicDirector implements Runnable{
     }
 
     public void paint(){
-        //gc.paint();
+        gc.paint();
     }
 
     private void endRoundChecks(){
@@ -361,7 +361,8 @@ public class GameLogicDirector implements Runnable{
         newGame = false; // Q: what's this for? A: see run method
         winner = null;
         gc = new GameController();//GameController.getInstance();
-        //gc.initViewControllerInteractions(p1, activePlayer);
+        if(!serverGame)
+            gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     public void setUpPlayers(int player1Id, int player2Id){

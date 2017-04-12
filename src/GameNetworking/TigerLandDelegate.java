@@ -29,6 +29,8 @@ public class TigerLandDelegate {
         try {
            Scanner in = new Scanner(new BufferedReader(new FileReader("src/res/networking/serverInfo")));
 
+
+
             game1 = new GameLogicDirector(1, 2, true);
             game2 = new GameLogicDirector(2, 1, true);
             game3 = new GameLogicDirector(3, 4, true);
@@ -39,8 +41,13 @@ public class TigerLandDelegate {
             serverName = in.nextLine();
             System.out.println("What is the port number?");
             port = Integer.parseInt(in.nextLine());
+            client= new TigerLandClient(serverName, port);
+
             System.out.println("Enter in order: TournamentPassword, Username, Password");
             tournamentPW = in.next(); username = in.next(); password = in.next();
+
+            client= new TigerLandClient(serverName, port);
+
             gameEnded = false;
             unexpectedError = "";
             System.out.println("Game Delegate successfully created.");
