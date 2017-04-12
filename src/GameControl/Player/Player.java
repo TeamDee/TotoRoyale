@@ -12,7 +12,6 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
-import com.sun.tools.internal.jxc.ap.Const;
 
 import java.util.ArrayList;
 import java.util.HashMap;

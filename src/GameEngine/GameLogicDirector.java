@@ -65,9 +65,7 @@ public class GameLogicDirector implements Runnable{
     //only needed in server games
     public void cleanup(){
         myMap.cleanup();
-        myMap = new GameMap();
-        deck.cleanup();
-        deck = new Deck();
+        myMap = new GameMap();;
         winner = null;
         serverGame = true;
         newGame=true;
@@ -359,6 +357,13 @@ public class GameLogicDirector implements Runnable{
         newGame = false;
         winner = null;
     }
+
+    public void setUpPlayers(int player1Id, int player2Id){
+        playerOneId = player1Id;
+        playerTwoId = player2Id;
+        setUpPlayers();
+    }
+
 
     public boolean isGameOver(){
         return isGameOver;
