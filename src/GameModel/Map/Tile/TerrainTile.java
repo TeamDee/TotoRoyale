@@ -117,15 +117,11 @@ public abstract class TerrainTile extends HexTile {
     }
 
     public ArrayList<TerrainTile> getEmptyAdjacentTerrainTiles() {
+        ArrayList<TerrainTile> adjacentTerrainTiles = getAdjacentTerrainTiles();
         ArrayList<TerrainTile> emptyAdjacentTerrainTiles = new ArrayList<TerrainTile>();
-        for (Direction d: Direction.values()) {
-            if (hasNeighborInDirection(d)) {
-                if (getNeighborInDirection(d).terrainType() != VOLCANO) {
-                    TerrainTile adjacentTerrainTile = (TerrainTile) getNeighborInDirection(d);
-                    if (!adjacentTerrainTile.isOccupied()) {
-                        emptyAdjacentTerrainTiles.add(adjacentTerrainTile);
-                    }
-                }
+        for (TerrainTile tt: adjacentTerrainTiles) {
+            if (!tt.isOccupied()) {
+                emptyAdjacentTerrainTiles.add(tt);
             }
         }
         return emptyAdjacentTerrainTiles;
