@@ -25,8 +25,8 @@ public class GameLogicDirector implements Runnable{
     private boolean AIgame = true;
     private boolean AIvsHuman = false;
     private boolean HumanVsHuman = false;
-    private int myId, opponentId;
-    private boolean isGameOver = false;
+    private int playerOneId, playerTwoId;
+    private boolean isGameOver = false, serverGame;
 
     //Game specific objects
     Player p1,p2;
@@ -44,15 +44,22 @@ public class GameLogicDirector implements Runnable{
         myMap = new GameMap();
         deck = new Deck();
         winner=null;
-        //this.initializeNewGame("bob", "billy");
         gc = GameController.getInstance();
-
+        serverGame = false;
     }
 
     public GameLogicDirector(int playerOneId, int playerTwoId){
         myMap = new GameMap();
-        //initializeNewGame(""+playerOneId, ""+playerTwoId);
+        this.playerOneId = playerOneId;
+        this.playerTwoId = playerTwoId;
         winner=null;
+        serverGame = false;
+    }
+
+    public GameLogicDirector(int playerOneId, int playerTwoId, boolean serverGame){
+        this(playerOneId, playerTwoId);
+        this.serverGame = serverGame;
+        setUpPlayers();
     }
 
     public String tournamentMove(String tileAssigned){
@@ -84,6 +91,7 @@ public class GameLogicDirector implements Runnable{
         System.out.println("Opponent placement: " + placeMssg);
         System.out.println("Opponent built: " + buildMssg);
         nextPlayer();
+        //paint();
     }
 
     public void opponentPlayerPlace(String placement){
@@ -141,21 +149,15 @@ public class GameLogicDirector implements Runnable{
             currentPlayer =p1;
     }
 
-    public void run(){
-        while(!isGameOver){
-            run2();
-        }
-    }
-
     /*
       NEVER CALL THIS - DAVE
      */
-    public void run2() {
+    public void run() {
         while (winner == null) {
             if (newGame) {
-                initializeNewGame("Whitety", "Blackey");
+                initializeNewGame();
             }
-            else {
+            if(!serverGame) {
                 //game logic
                 System.out.println("cards left" + deck.cardsLeft());
                 if (deck.cardsLeft() > 0) {
@@ -239,7 +241,7 @@ public class GameLogicDirector implements Runnable{
             if (p.checkOnlyOneTypeTokenIsLeft()) {
                 winner = p;
                 break;
-            } else if (deck.cardsLeft() == 0) {
+            } else if (deck!=null && deck.cardsLeft() == 0) {
                 break;
             }
         }
@@ -317,11 +319,21 @@ public class GameLogicDirector implements Runnable{
     }
 
 
-    private void initializeNewGame(String WhitePlayerName, String BlackPlayerName) {
+    private void initializeNewGame() {
         System.out.println("Initializing new game.");
 
-        p1 = new WhitePlayer(WhitePlayerName, myMap, null);
-        p2 = new BlackPlayer(BlackPlayerName, myMap, p1);
+        deck = Deck.newExampleDeck();
+//        System.out.println(deck.cardsLeft());
+        newGame = false; // Q: what's this for? A: see run method
+
+        winner = null;
+//        gc = GameController.getInstance();
+//        gc.initViewControllerInteractions(p1, activePlayer);
+    }
+
+    private void setUpPlayers(){
+        p1 = new WhitePlayer(""+playerOneId, myMap, null);
+        p2 = new BlackPlayer(""+playerTwoId, myMap, p1);
         p1.setEnemyPlayer(p2);
 
         players = new ArrayList<Player>();
@@ -330,13 +342,8 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1);
         currentPlayer = p1;
 
-        deck = Deck.newExampleDeck();
-//        System.out.println(deck.cardsLeft());
-        newGame = false; // Q: what's this for? A: see run method
-
+        newGame = false;
         winner = null;
-        gc = GameController.getInstance();
-        gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     public boolean isGameOver(){

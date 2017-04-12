@@ -335,7 +335,7 @@ public class Player {
             if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
                 score += 10;
             //Enemy Occupant
-            if (hex.topTile().isOccupied()) {
+            if (hex.topTile()!= null && hex.topTile().isOccupied()) {
                 if (hex.getLevel() >= 1) {
                     if ((this.isWhite() && hex.topTile().isOwnedByBlack()) || (!this.isWhite() && hex.topTile().isOwnedByWhite())) { //Enemy owns place
                         if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {//Don't want to make it easier for the opponent
