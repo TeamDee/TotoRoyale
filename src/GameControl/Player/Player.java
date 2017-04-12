@@ -811,7 +811,7 @@ public class Player {
             //System.out.println("Player Settlement Size After: " + settlements.size());
 
             buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlementToExpand().getTiles().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
-            buildMessage += " " + bestOverallExpansion.getTerrainToExpand().name();
+            buildMessage += " " + bestOverallExpansion.getTerrainToExpand();
 
             return true;
         }
@@ -861,13 +861,13 @@ public class Player {
     }
 
     private String buildPhase(GameMap gameMap) {
-        /*
+
         for(Settlement settlement: settlements){
             settlement.checkSettlementsLegality();
         }
-        */
+
         String finalMessage = "";
-        /*
+
         if(outOfTotoroOrTigers()){
             getRidOfMeeples();
             finalMessage = buildMessage;
@@ -900,9 +900,7 @@ public class Player {
         for (Settlement s: settlements) {
             s.removeAnyUndergroundTiles();
         }
-        */
-        buildSettlement(gameMap);
-        finalMessage = buildMessage;
+
         return finalMessage;
     }
 
