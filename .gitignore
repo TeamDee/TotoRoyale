@@ -17,5 +17,8 @@ hs_err_pid*
 .idea
 *.iml
 
+#login files
+serverInfo.txt
+
 # Build files
 target
