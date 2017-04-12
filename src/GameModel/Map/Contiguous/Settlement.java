@@ -90,7 +90,7 @@ public class Settlement{
             if (tt.hasNeighborInDirection(d)) {
                 adjacentTile = tt.getNeighborInDirection(d);
                 if (adjacentTile.terrainType() != VOLCANO) {
-                    if (settlement.contains((TerrainTile) adjacentTile))
+                    if (settlement.contains(adjacentTile))
                         return true;
                 }
             }
