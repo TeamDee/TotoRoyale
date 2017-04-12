@@ -14,7 +14,7 @@ public class TigerLandClient {
             System.out.println("Connecting to Server: " + serverName + " on port number: " + portNumber + " ...");
             client = new Socket(serverName, portNumber);
             System.out.println("Connection established.");
-        } catch (IOException ex){
+        } catch (IOException ex) {
             System.out.println("Connection failed.");
         }
     }
@@ -24,7 +24,7 @@ public class TigerLandClient {
         try{
             dataInputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
         } catch(IOException ex){
-            System.out.println("Failed to obtain a DataInputStream.");
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\nFailed to obtain a DataInputStream.");
         }
         return dataInputStream;
     }
