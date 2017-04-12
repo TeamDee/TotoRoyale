@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
  */
 public class GameLogicDirector implements Runnable{
     private static GameLogicDirector me;
+
     private boolean newGame = true;
     private boolean AIgame = true;
     private boolean AIvsHuman = false;
@@ -229,7 +230,7 @@ public class GameLogicDirector implements Runnable{
             winner = null; //score ties
         return winner;
     }
-    private void paint(){
+    public void paint(){
         gc.paint();
     }
 
@@ -327,15 +328,14 @@ public class GameLogicDirector implements Runnable{
         players = new ArrayList<Player>();
         players.add(p1);
         players.add(p2);
-        activePlayer = new PlayerController(p1);
+        activePlayer = new PlayerController(p1, this);
         currentPlayer = p1;
 
         deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
         newGame = false; // Q: what's this for? A: see run method
-
         winner = null;
-        gc = GameController.getInstance();
+        gc = new GameController();//GameController.getInstance();
         gc.initViewControllerInteractions(p1, activePlayer);
     }
 

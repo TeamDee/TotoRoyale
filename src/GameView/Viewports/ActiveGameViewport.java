@@ -23,7 +23,7 @@ public class ActiveGameViewport extends Viewport {
     TriHexTile tileToPlace;
     boolean scrolling = false;
     Player currentPlayer;
-    Deck deck = GameLogicDirector.getInstance().deck;
+    //Deck deck = GameLogicDirector.getInstance().deck;
 
     private static ActiveGameViewport activeGameViewport;// = new ActiveGameViewport(new WhitePlayer("WhitePlayer", null));
 
@@ -32,7 +32,7 @@ public class ActiveGameViewport extends Viewport {
         this.setBackground(new Color(44,62,80));
 
         currentPlayer = ownedBy;
-        tileToPlace = deck.draw();
+        //tileToPlace = deck.draw();
 
         this.setFocusable(true);
     }
@@ -75,7 +75,7 @@ public class ActiveGameViewport extends Viewport {
     public void paint(Graphics g) {
         super.paint(g);
 
-        List<HexTile> tiles = GameLogicDirector.getInstance().getMap().getVisible();
+        List<HexTile> tiles = currentPlayer.myLogicDirector.getMap().getVisible();
 
         if(tiles!=null)
             if(tiles.size()> 0) {

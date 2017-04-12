@@ -1,6 +1,7 @@
 package GameControl.Player;
 
 import GameControl.Placement;
+import GameEngine.GameLogicDirector;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.TerrainTile;
@@ -14,8 +15,8 @@ import java.util.List;
  */
 public class AIPlayerController extends PlayerController{
 
-    public AIPlayerController(Player myPlayer) {
-        super(myPlayer);
+    public AIPlayerController(Player myPlayer, GameLogicDirector myLogicDirector) {
+        super(myPlayer, myLogicDirector);
     }
 
     public void takeTurn(TriHexTile tileToPlace) {

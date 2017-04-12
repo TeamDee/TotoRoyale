@@ -215,6 +215,7 @@ public class TigerLandDelegate {
                 for (int i = 0; (!game1.isGameOver() || !game2.isGameOver()) && i < 48; i++) {
                     MoveProtocol(in, out);
                 }
+
                 //game1 score Message: GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
                 serverMessage = in.readLine();
                 System.out.println("SERVER(Match): " + serverMessage);
@@ -260,8 +261,10 @@ public class TigerLandDelegate {
                     //palceAndBuildMessage from Our AI's action
                     if(gameId.equals(game1Id)){
                         placedAndBuildMssg = game1.tournamentMove(tileAssigned);
+                        game1.paint();
                     } else{
                         placedAndBuildMssg = game2.tournamentMove(tileAssigned);
+                        game2.paint();
                     }
 
                     clientMessage = "GAME " + gameId + " MOVE " + moveNumber + " ";

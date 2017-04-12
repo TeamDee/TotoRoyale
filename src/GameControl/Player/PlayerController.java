@@ -26,9 +26,10 @@ public class PlayerController extends Controller{
     private Tile currentlySelecteTile;
     //place tile
     //build (settle, expand, or place totoro)
-    public PlayerController(Player myPlayer){
+    public PlayerController(Player myPlayer, GameLogicDirector myLogicDirector){
         this.myPlayer = myPlayer;
-        visibleGameMap = GameLogicDirector.getInstance().getMap();
+        myPlayer.myLogicDirector = myLogicDirector;
+        visibleGameMap = myLogicDirector.getMap();
         viewport = new ActiveGameViewport(myPlayer);
     }
 

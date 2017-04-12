@@ -1,6 +1,7 @@
 package GameControl.Player;
 
 import GameControl.Placement;
+import GameEngine.GameLogicDirector;
 import GameModel.Map.BoardSpace;
 import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Contiguous.SettlementExpansion;
@@ -21,6 +22,8 @@ import java.util.Random;
  * Created by jowens on 3/8/17.
  */
 public class Player {
+
+    public GameLogicDirector myLogicDirector = null;
     //units
     String name;
     private int totoroCount;
@@ -985,6 +988,10 @@ public class Player {
             }
             else if (buildSettlement(gameMap)) {
                 finalMessage = buildMessage;
+            }
+            else{
+                System.out.println("Player " + this + "cannot legally move");
+                myLogicDirector.setGameOver();
             }
 
         }
