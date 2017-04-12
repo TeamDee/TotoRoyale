@@ -4,11 +4,14 @@ import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
 import GameModel.Map.BoardSpace;
+import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Coordinates.*;
 import GameModel.Map.Direction;
 import GameModel.Map.TriHexTile;
 import GameView.Map.HexTileView;
 import GameView.Map.TileView;
+
+import java.util.ArrayList;
 
 /**
  * Created by jowens on 3/8/17.
@@ -250,5 +253,37 @@ public abstract class HexTile extends Tile {
             }
         }
         return false;
+    }
+
+    public ArrayList<HexTile> getAdjacentHexTiles() {
+        ArrayList<HexTile> adjacentHexTiles = new ArrayList<HexTile>();
+        for (Direction d: Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                adjacentHexTiles.add(getNeighborInDirection(d));
+            }
+        }
+        return adjacentHexTiles;
+    }
+
+    public ArrayList<TerrainTile> getAdjacentTerrainTiles() {
+        ArrayList<TerrainTile> adjacentTerrainTiles = new ArrayList<TerrainTile>();
+        ArrayList<HexTile> adjacentHexTiles = getAdjacentHexTiles();
+        for (HexTile ht: adjacentHexTiles) {
+            if (ht.terrainType() != TerrainType.VOLCANO) {
+                adjacentTerrainTiles.add((TerrainTile) ht);
+            }
+        }
+        return adjacentTerrainTiles;
+    }
+
+    public ArrayList<Settlement> getAdjacentSettlementsOwnedBy(Player player) {
+        ArrayList<Settlement> adjacentSettlements = new ArrayList<Settlement>();
+        ArrayList<TerrainTile> adjacentTerrainTiles = getAdjacentTerrainTiles();
+        for (TerrainTile tt: adjacentTerrainTiles) {
+            if (tt.isOwnedBy(player)) {
+                adjacentSettlements.add(player.getSettlementContaining(tt));
+            }
+        }
+        return adjacentSettlements;
     }
 }

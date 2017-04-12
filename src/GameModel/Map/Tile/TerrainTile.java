@@ -2,6 +2,7 @@ package GameModel.Map.Tile;
 import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
+import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Direction;
 import GameModel.Map.TriHexTile;
 import GameView.Map.TerrainView;
