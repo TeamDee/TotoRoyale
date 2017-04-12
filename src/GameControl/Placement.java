@@ -156,4 +156,18 @@ public class Placement {
     }
 
     public int getOrientation() { return orientation; }
+
+    public ArrayList<BoardSpace> getNonVolcanoTileBoardSpaces() {
+        ArrayList<BoardSpace> nonVolcanoBoardSpaces = new ArrayList<BoardSpace>();
+        if (oldA.getLevel() == 0) {
+            return nonVolcanoBoardSpaces;
+        }
+        for (BoardSpace b: getBoardSpaces()) {
+            if (b.hasTile)
+
+
+        }
+        return nonVolcanoBoardSpaces;
+    }
+
 }

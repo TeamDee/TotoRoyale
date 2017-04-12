@@ -10,6 +10,8 @@ import GameModel.Map.TriHexTile;
 import GameView.Map.HexTileView;
 import GameView.Map.TileView;
 
+import java.util.ArrayList;
+
 /**
  * Created by jowens on 3/8/17.
  * current implementation retains old tile underneath new one, it would probably be more efficient to delete it but we can debate that later
@@ -250,5 +252,15 @@ public abstract class HexTile extends Tile {
             }
         }
         return false;
+    }
+
+    public ArrayList<HexTile> getNeigbors() {
+        ArrayList<HexTile> neighbors = new ArrayList<HexTile>();
+        for (Direction d: Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                neighbors.add(getNeighborInDirection(d));
+            }
+        }
+        return neighbors;
     }
 }

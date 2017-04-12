@@ -499,6 +499,31 @@ public class Player {
         return value;
     }
 
+    public Placement findBestPlacementForBuildingTigers(ArrayList<Placement> placements) {
+        Placement bestPlacement;
+        int bestPlacementValue;
+        for (Placement p: placements) {
+            int currentPlacementValue = 0;
+            ArrayList<BoardSpace> placementBoardSpaces = p.getBoardSpaces();
+            if (placementBoardSpaces.get(0).getLevel() == 2) {    //if this placement would raise to level 3
+                ArrayList<Settlement> adjacentFriendlySettlements = new ArrayList<Settlement>();
+                for (int i = 1; i < 3; ++i) {
+                    TerrainTile currentTerrainTile = (TerrainTile) placementBoardSpaces.get(i).topTile();
+                    ArrayList<TerrainTile> neighbors = currentTerrainTile.getTerrainTileNeighbors();
+                    for (TerrainTile neighbor: neighbors) {
+                        if (neighbor.isOwnedBy(this)) {
+
+
+
+
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public Placement TigerFocusAI(ArrayList<Placement> Placements)
     {
         int value = 0;

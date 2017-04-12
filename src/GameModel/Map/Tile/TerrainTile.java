@@ -144,5 +144,20 @@ public abstract class TerrainTile extends HexTile {
         }
         return friendlyAdjacentTerrainTiles;
     }
+
+    public ArrayList<TerrainTile> getTerrainTileNeighbors() {
+        ArrayList<TerrainTile> terrainTileNeighbors = new ArrayList<TerrainTile>();
+        ArrayList<HexTile> allNeighbors = getNeigbors();
+        for (HexTile ht: allNeighbors) {
+            if (ht.terrainType() != TerrainType.VOLCANO) {
+                terrainTileNeighbors.add((TerrainTile) ht);
+            }
+        }
+        return terrainTileNeighbors;
+    }
+
+    public boolean isOwnedBy(Player p) {
+        return isOccupied() && owner == p;
+    }
 }
 
