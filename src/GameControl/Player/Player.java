@@ -900,9 +900,7 @@ public class Player {
         for (Settlement s: settlements) {
             s.removeAnyUndergroundTiles();
         }
-        
-        buildSettlement(gameMap);
-        finalMessage = buildMessage;
+
         return finalMessage;
     }
 
