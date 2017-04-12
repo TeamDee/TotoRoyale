@@ -147,7 +147,6 @@ public class Player {
         return false;
     }
 
-
     public String placementPhase(GameMap gameMap, TriHexTile tile){
         ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
         ArrayList<Placement> placementsThatFixesBuild = new ArrayList<Placement>();
@@ -276,7 +275,6 @@ public class Player {
                             adjacentSettlement.addToSettlement(toBeBuiltTotoro);
                             adjacentSettlement.placedTotoro();
                             settlements = adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, settlements, adjacentSettlement);
-                            awardPoints(200);
                         }
                     }
                 }
@@ -303,7 +301,6 @@ public class Player {
                     if (adjacentSettlement != null) {
                         adjacentSettlement.addToSettlement(toBeBuiltTiger);
                         adjacentSettlement.placedTiger();
-                        awardPoints(75);
                         settlements = adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, settlements, adjacentSettlement);
                     }
                 }
@@ -767,7 +764,6 @@ public class Player {
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(placeTigerHere,settlements,activeSettlement);
             //System.out.println("Player Settlement Size After: " + settlements.size());
-            this.awardPoints(75);
             buildMessage = "BUILD TIGER PLAYGROUND AT " + placeTigerHere.getBoardSpace().getLocation().getCubicCoordinate().toString();
             return true;
         }
@@ -900,8 +896,6 @@ public class Player {
             settlement.checkSettlementsLegality();
         }
 
-
-        ArrayList<HexTile> tiles = gameMap.getVisible();
         String finalMessage = "";
 
         if(outOfTotoroOrTigers()){
@@ -1109,6 +1103,7 @@ public class Player {
     public void placeTiger(TerrainTile tt) {
         tt.placeTiger(this);
         removeTiger(1);
+        awardPoints(75);
     }
 
     public TerrainTile getBestTigerPlacementTile(ArrayList<Settlement> legalTigerSettlments)
