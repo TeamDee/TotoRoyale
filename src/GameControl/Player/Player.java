@@ -13,6 +13,7 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
+import com.sun.tools.internal.jxc.ap.Const;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -224,6 +225,7 @@ public class Player {
         }
         Placement placement = new Placement(bs1, bs2, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
         myMap.implementPlacement(placement);
+        System.out.print("-------------PLACED OPPONENT--------------");
     }
 
     public void opponentNewSettlement(OffsetCoordinate location){
@@ -334,7 +336,7 @@ public class Player {
             if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
                 score += 10;
             //Enemy Occupant
-            if (hex.topTile().isOccupied()) {
+            if (hex.topTile()!= null && hex.topTile().isOccupied()) {
                 if (hex.getLevel() >= 1) {
                     if ((this.isWhite() && hex.topTile().isOwnedByBlack()) || (!this.isWhite() && hex.topTile().isOwnedByWhite())) { //Enemy owns place
                         if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {//Don't want to make it easier for the opponent
@@ -651,15 +653,23 @@ public class Player {
         }
         else
         {
+            int maxScore = 0;
+            Placement bestPlacement = null;
             for(Placement p: Placements)
             {
                 int temp = scoreTilePlacement(p);
-                if(temp == 15)
-                {
-                    returnMe = p;
-                    return returnMe;
+                if(temp > maxScore){
+                    maxScore = temp;
+                    bestPlacement = p;
                 }
+//                if(temp == 15)
+//                {
+//                    returnMe = p;
+//                    return returnMe;
+//                }
+
             }
+            returnMe = bestPlacement;
         }
         if(returnMe == null)
         {
@@ -1245,8 +1255,30 @@ public class Player {
         this.settlements = settlements;
     }
 
-    //added for testing
+    //added for testingGameOv
     public void clearSettlements() {
         settlements.clear();
+    }
+
+
+    public void cleanup(){
+
+        score = 0;
+        placeTileCheck = false;
+
+        totoroCount = Constants.TOTORO_PER_PLAYER;
+        meepleCount = Constants.MEEPLES_PER_PLAYER;
+        tigerCount = Constants.TIGER_PER_PLAYER;
+        buildMessage = "";
+        ownedTiles.clear();
+        settlements.clear();
+        activeSettlement = null;
+        AI = null;
+        expansionWorth = 0;
+        enemyPlayer = null;
+        myMap = null;
+        score = 0;
+        placeTileCheck = false;
+
     }
 }
