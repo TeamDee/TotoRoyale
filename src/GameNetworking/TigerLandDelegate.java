@@ -244,6 +244,7 @@ public class TigerLandDelegate {
         Matcher gameForfeitedMatcher = FrequentlyUsedPatterns.GameForfeitedMssgPattern.matcher(serverMessage);
         Matcher gameLostMatcher = FrequentlyUsedPatterns.GameLostMssgPattern.matcher(serverMessage);
         if(serverPromptMatcher.matches()){
+            System.out.println("Move Protocol: Executing our move...");
             gameId = serverPromptMatcher.group(1);
             if(game1Id == null){
                 game1Id = gameId;
@@ -266,6 +267,7 @@ public class TigerLandDelegate {
             System.out.println("Client: " + clientMessage);
 
         } else if(gameForfeitedMatcher.matches()){
+            System.out.println("Move Protocol: marking game as forfeited...");
             gameId = gameForfeitedMatcher.group(1);
             pId = Integer.parseInt(gameForfeitedMatcher.group(3));
             String opponentForfeitedMssg = gameForfeitedMatcher.group(4);
@@ -275,6 +277,7 @@ public class TigerLandDelegate {
                 game2.setGameOver();
             }
         } else if(gameLostMatcher.matches()){
+            System.out.println("Move Protocol: marking game as lost...");
             gameId = gameLostMatcher.group(1);
             pId = Integer.parseInt(gameLostMatcher.group(3));
             String opponentLostMssg = gameLostMatcher.group(4);
@@ -284,6 +287,7 @@ public class TigerLandDelegate {
                 game2.setGameOver();
             }
         } else if(gameMovePlayerMatcher.matches()){
+            System.out.println("Move Protocol: Executing opponent move...");
             gameId = gameMovePlayerMatcher.group(1);
             pId = Integer.parseInt(gameMovePlayerMatcher.group(3));
             String opponentMoveMssg = gameMovePlayerMatcher.group(4); //could be our move message, if so, ignored
