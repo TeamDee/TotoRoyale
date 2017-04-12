@@ -3,6 +3,7 @@ package GameNetworking;
 import GameEngine.GameLogicDirector;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -23,20 +24,26 @@ public class TigerLandDelegate {
     public TigerLandDelegate(){
         String serverName;
         int port;
-        Scanner in = new Scanner(System.in);
-        System.out.println("What is the serverName?");
-        serverName = in.nextLine();
-        System.out.println("What is the port number?");
-        port = Integer.parseInt(in.nextLine());
-        System.out.println("Enter in order: TournamentPassword, Username, Password");
-        tournamentPW = in.next(); username = in.next(); password = in.next();
-        client = new TigerLandClient(serverName, port);
-//        tournamentPW = "FurRealz";
-//        username = "D";
-//        password = "D";
-        gameEnded = false;
-        unexpectedError = "";
-        System.out.println("Game Delegate successfully created.");
+        //Scanner in;// = new Scanner(System.in);
+        try {
+           Scanner in = new Scanner(new BufferedReader(new FileReader("src/res/networking/serverInfo")));
+
+            System.out.println("What is the serverName?");
+            serverName = in.nextLine();
+            System.out.println("What is the port number?");
+            port = Integer.parseInt(in.nextLine());
+            System.out.println("Enter in order: TournamentPassword, Username, Password");
+            tournamentPW = in.next(); username = in.next(); password = in.next();
+            client = new TigerLandClient(serverName, port);
+    //        tournamentPW = "FurRealz";
+    //        username = "D";
+    //        password = "D";
+            gameEnded = false;
+            unexpectedError = "";
+            System.out.println("Game Delegate successfully created.");
+        }catch (Exception e){
+            System.out.println("Error in scanner");
+        }
     }
 
     public TigerLandClient getClient() { return client; }
@@ -99,7 +106,7 @@ public class TigerLandDelegate {
             System.out.println("Delegate: Authentication is successful!");
         }catch(IOException ex){
             unexpectedError = "AuthenticationProtocol: " + ex.getMessage();
-            System.out.println("Failed to AuthenticationProtocol with server.");
+            System.out.println("Failed to AuthenticationProtocol with server. Error: " + unexpectedError);
         }
         return authenticated;
     }
