@@ -861,13 +861,13 @@ public class Player {
     }
 
     private String buildPhase(GameMap gameMap) {
-        /*
+
         for(Settlement settlement: settlements){
             settlement.checkSettlementsLegality();
         }
-        */
+
         String finalMessage = "";
-        /*
+
         if(outOfTotoroOrTigers()){
             getRidOfMeeples();
             finalMessage = buildMessage;
@@ -900,7 +900,7 @@ public class Player {
         for (Settlement s: settlements) {
             s.removeAnyUndergroundTiles();
         }
-        */
+        
         buildSettlement(gameMap);
         finalMessage = buildMessage;
         return finalMessage;
