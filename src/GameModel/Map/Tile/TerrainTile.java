@@ -2,6 +2,7 @@ package GameModel.Map.Tile;
 import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
+import GameModel.Map.Contiguous.Settlement;
 import GameModel.Map.Direction;
 import GameModel.Map.TriHexTile;
 import GameView.Map.TerrainView;
@@ -143,17 +144,6 @@ public abstract class TerrainTile extends HexTile {
             }
         }
         return friendlyAdjacentTerrainTiles;
-    }
-
-    public ArrayList<TerrainTile> getTerrainTileNeighbors() {
-        ArrayList<TerrainTile> terrainTileNeighbors = new ArrayList<TerrainTile>();
-        ArrayList<HexTile> allNeighbors = getNeigbors();
-        for (HexTile ht: allNeighbors) {
-            if (ht.terrainType() != TerrainType.VOLCANO) {
-                terrainTileNeighbors.add((TerrainTile) ht);
-            }
-        }
-        return terrainTileNeighbors;
     }
 
     public boolean isOwnedBy(Player p) {

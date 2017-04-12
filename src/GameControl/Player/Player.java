@@ -500,28 +500,29 @@ public class Player {
     }
 
     public Placement findBestPlacementForBuildingTigers(ArrayList<Placement> placements) {
-        Placement bestPlacement;
+        Placement bestPlacement = null;
         int bestPlacementValue;
         for (Placement p: placements) {
             int currentPlacementValue = 0;
             ArrayList<BoardSpace> placementBoardSpaces = p.getBoardSpaces();
             if (placementBoardSpaces.get(0).getLevel() == 2) {    //if this placement would raise to level 3
-                ArrayList<Settlement> adjacentFriendlySettlements = new ArrayList<Settlement>();
-                for (int i = 1; i < 3; ++i) {
-                    TerrainTile currentTerrainTile = (TerrainTile) placementBoardSpaces.get(i).topTile();
-                    ArrayList<TerrainTile> neighbors = currentTerrainTile.getTerrainTileNeighbors();
-                    for (TerrainTile neighbor: neighbors) {
-                        if (neighbor.isOwnedBy(this)) {
+                TerrainTile firstTerrainTile = (TerrainTile) placementBoardSpaces.get(1).topTile();
+                TerrainTile secondTerrainTile = (TerrainTile) placementBoardSpaces.get(2).topTile();
+                ArrayList<Settlement> firstTerrainTileAdjacentFriendlySettlements = firstTerrainTile.getAdjacentSettlementsOwnedBy(this);
+                ArrayList<Settlement> secondTerrainTileAdjacentFriendlySettlements = secondTerrainTile.getAdjacentSettlementsOwnedBy(this);
+                if (firstTerrainTileAdjacentFriendlySettlements.size() > 0 || secondTerrainTileAdjacentFriendlySettlements.size() > 0) {
+                    currentPlacementValue += 100;
+                }
+                boolean firstTerrainTileHasUniqueAdjacentSettlement = false;
+                boolean secondTerrainTileHasUnqieAdjacentSettlement = false;
+                for (Settlement firstTerrainTileSettlement: firstTerrainTileAdjacentFriendlySettlements) {
+                    if (!secondTerrainTileAdjacentFriendlySettlements.contains(firstTerrainTileSettlement)) {
 
-
-
-
-
-                        }
                     }
                 }
             }
         }
+        return bestPlacement;
     }
 
     public Placement TigerFocusAI(ArrayList<Placement> Placements)
@@ -635,139 +636,54 @@ public class Player {
         return returnMe;
     }
 
-    public ArrayList<TerrainTile> getLegalNewSettlements(GameMap gameMap){
-        ArrayList<HexTile> tiles = gameMap.getVisible();
-        ArrayList<TerrainTile> legalTilesToSettle = new ArrayList<TerrainTile>();
-        //choose the best available settlement
-        //if we settle... currently the only option
-        TerrainTile bestPlaceToSettle = null;
-        int currentBest = 0;
-        for(HexTile ht: tiles){
-            if(ht.terrainType() != TerrainType.VOLCANO && ht != null){
-                if(ht.isOccupied() || ht.getLevel() != 1)
-                    continue;
-                else {
-                    legalTilesToSettle.add((TerrainTile)ht);
-                }
+    private TerrainTile getBestTileToBuildSettlementOn(ArrayList<TerrainTile> legalTilesToBuildSettlementOn){
+        TerrainTile bestTile = null;
+        int bestTileValue = -1;
+        for(TerrainTile tt: legalTilesToBuildSettlementOn){
+            int currentTileValue = scoreNewSettlementTile(tt);
+            if (currentTileValue > bestTileValue) {
+                bestTile = tt;
+                bestTileValue = currentTileValue;
             }
         }
-        return legalTilesToSettle;
-
+        return bestTile;
     }
 
-    public int scoreAdjacenttoLevel1Tiles(TerrainTile tt)
-    {
+    public ArrayList<TerrainTile> getLegalTilesToBuildSettlementOn(GameMap gameMap){
+        ArrayList<HexTile> visibleTiles = gameMap.getVisible();
+        ArrayList<TerrainTile> legalTilesToBuildSettlementOn = new ArrayList<TerrainTile>();
+        for(HexTile ht: visibleTiles){
+            if(ht.terrainType() != TerrainType.VOLCANO){
+                if(!ht.isOccupied() && ht.getLevel() == 1) {
+                    legalTilesToBuildSettlementOn.add((TerrainTile)ht);
+                }
+            }
+        }
+        return legalTilesToBuildSettlementOn;
+    }
+
+    private int scoreNewSettlementTile(TerrainTile tt){
         int value = 0;
-        BoardSpace bs = tt.getBoardSpace();
-        if(bs.getNorth() != null)
-        {
-            BoardSpace temp = bs.getNorth();
-            if(temp.getLevel() >= 3)
-            {
-                return 50;
-            }
-            else if(temp.getLevel() == 2)
-            {
-                return 30;
-            }
-        }
-        if(bs.getNorthWest() != null)
-        {
-            BoardSpace temp = bs.getNorthWest();
-            if(temp.getLevel() > 0)
-            {
-                if(temp.getLevel() >= 3)
-                {
-                    return 50;
-                }
-                else if(temp.getLevel() == 2)
-                {
-                    return 30;
-                }
-            }
-        }
-        if(bs.getNorthEast() != null)
-        {
-            BoardSpace temp = bs.getNorthEast();
-            if(temp.getLevel() > 0)
-            {
-                if(temp.getLevel() >= 3)
-                {
-                    return 50;
-                }
-                else if(temp.getLevel() == 2)
-                {
-                    return 30;
-                }
-            }
-        }
-        if(bs.getSouth() != null)
-        {
-            BoardSpace temp = bs.getSouth();
-            if(temp.getLevel() > 0)
-            {
-                if(temp.getLevel() >= 3)
-                {
-                    return 50;
-                }
-                else if(temp.getLevel() == 2)
-                {
-                    return 30;
-                }
-            }
-        }
-        if(bs.getSouthEast() != null)
-        {
-            BoardSpace temp = bs.getSouthEast();
-            if(temp.getLevel() > 0)
-            {
-                if(temp.getLevel() >= 3)
-                {
-                    return 50;
-                }
-                else if(temp.getLevel() == 2)
-                {
-                    return 30;
-                }
-            }
-        }
-        if(bs.getSouthWest() != null)
-        {
-            BoardSpace temp = bs.getSouthWest();
-            if(temp.getLevel() > 0)
-            {
-                if(temp.getLevel() >= 3)
-                {
-                    return 50;
-                }
-                else if(temp.getLevel() == 2)
-                {
-                    return 30;
+        ArrayList<TerrainTile> adjacentTerrainTiles = tt.getAdjacentTerrainTiles();
+        for (TerrainTile adjacentTerrainTile: adjacentTerrainTiles) {
+            if (!adjacentTerrainTile.isOccupied()) {
+                if (adjacentTerrainTile.getLevel() >= 3) {
+                    value += 50;
+                    if (adjacentTerrainTile.hasNeighborBelongingToPlayer(enemyPlayer)) {
+                        value -= 20;
+                    }
+                } else if (adjacentTerrainTile.getLevel() == 2) {
+                    value += 20;
+                    if (adjacentTerrainTile.canPlaceTileOn()) {
+                        value += 30;
+                        if (adjacentTerrainTile.hasNeighborBelongingToPlayer(enemyPlayer)) {
+                            value -= 20;
+                        }
+                    }
                 }
             }
         }
         return value;
-    }
-
-    private TerrainTile getBestNewSettlement(ArrayList<TerrainTile> settlements){
-        TerrainTile bestPlaceToSettle = null;
-        int currentBest = 0;
-        for(TerrainTile ht: settlements){
-            if(ht.terrainType() != TerrainType.VOLCANO && ht != null){
-                if(ht.isOccupied() || ht.getLevel() != 1)
-                    continue;
-                else if(bestPlaceToSettle == null) {
-                    bestPlaceToSettle = (TerrainTile) ht;
-                    currentBest = howGoodIsSettlement((TerrainTile)ht, this);
-                }
-                else if(howGoodIsSettlement((TerrainTile)ht, this) >currentBest) {
-                    currentBest = howGoodIsSettlement((TerrainTile)ht, this);
-                    bestPlaceToSettle = (TerrainTile)ht;
-                    break;
-                }
-            }
-        }
-        return bestPlaceToSettle;
     }
 
     private boolean addTotoro(){
@@ -920,11 +836,8 @@ public class Player {
     public boolean buildSettlement(GameMap gameMap){
         //choose the best available settlement
         //if we settle... currently the only option
-        ArrayList<TerrainTile> legalSettlements = getLegalNewSettlements(gameMap);
-        TerrainTile bestPlaceToSettle = getBestNewSettlement(legalSettlements);
-        if(bestPlaceToSettle == null) {
-            return false;
-        }
+        ArrayList<TerrainTile> legalTilesToBuildSettlmentOn = getLegalTilesToBuildSettlementOn(gameMap);
+        TerrainTile bestPlaceToSettle = getBestTileToBuildSettlementOn(legalTilesToBuildSettlmentOn);
         buildSettlement(bestPlaceToSettle);
         System.out.println("BUILT SETTLEMENT AT " + bestPlaceToSettle.toString());
         //activeSettlement = settlements.get(settlements.size()-1);
@@ -993,20 +906,6 @@ public class Player {
         String result = placementPhase(gameMap, tile);
         result += " " + buildPhase(gameMap);
         return result;
-    }
-
-    //TODO this
-    private int howGoodIsSettlement(TerrainTile tt, Player p){
-        int value = 1;
-        if(value < scoreAdjacenttoLevel1Tiles(tt))
-        {
-            value = scoreAdjacenttoLevel1Tiles(tt);
-        }
-        return value; //TODO either add logic here or find a better place to do AI stuff
-        //ideas
-        //get contiguos terrains of a type to see if we could expand there next turn
-        //devalue these terrains if the opponent is also adjacent to them, as they may steal them from us
-
     }
 
     public void placeTile(GameMap gameMap, Placement placement) {
