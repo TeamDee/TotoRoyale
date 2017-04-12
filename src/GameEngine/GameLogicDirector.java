@@ -44,6 +44,9 @@ public class GameLogicDirector implements Runnable{
         myMap = new GameMap();
         deck = new Deck();
         winner=null;
+        this.initializeNewGame("bob", "billy");
+        gc = GameController.getInstance();
+
     }
 
     public GameLogicDirector(int playerOneId, int playerTwoId){
@@ -120,7 +123,7 @@ public class GameLogicDirector implements Runnable{
 
     public static GameLogicDirector getInstance(){
         if(me == null)
-            me= new GameLogicDirector();
+            me = new GameLogicDirector();
         return me;
     }
 
@@ -138,7 +141,7 @@ public class GameLogicDirector implements Runnable{
 
     public void run(){
         while(!isGameOver){
-//            run2();
+            run2();
         }
     }
 

@@ -131,16 +131,16 @@ public class Settlement{
         return settlement;
     }
 
-    public boolean isContiguous(TerrainTile tile) {
-        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
-        checkExpansion.addAll(exsettle);
-        for (TerrainTile contiguousTile : checkExpansion) {
-
-            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
-                return true;
-        }
-        return false;
-    }
+//    public boolean isContiguous(TerrainTile tile) {
+//        ArrayList<TerrainTile> checkExpansion = new ArrayList<TerrainTile>(settlement);
+//        checkExpansion.addAll(exsettle);
+//        for (TerrainTile contiguousTile : checkExpansion) {
+//
+//            if (OffsetCoordinate.areAdjacent(contiguousTile.getLocation(), tile.getLocation()))
+//                return true;
+//        }
+//        return false;
+//    }
 
 
 //=======

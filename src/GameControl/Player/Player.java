@@ -95,11 +95,7 @@ public class Player {
             System.out.println("Expansion added to settlment\n" + toBeAddedTo);
         }
         settlements = toBeAddedTo.combineAdjacentSettlementsForMultTiles(expansion, settlements, toBeAddedTo);
-<<<<<<< HEAD
         buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getTiles().get(0).getBoardSpace().getLocation().toString();
-=======
-        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
->>>>>>> serverTesting
     }
 
     private boolean legalExpansionVisible(){
