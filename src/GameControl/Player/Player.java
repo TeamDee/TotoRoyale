@@ -95,7 +95,11 @@ public class Player {
             System.out.println("Expansion added to settlment\n" + toBeAddedTo);
         }
         settlements = toBeAddedTo.combineAdjacentSettlementsForMultTiles(expansion, settlements, toBeAddedTo);
+<<<<<<< HEAD
         buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getTiles().get(0).getBoardSpace().getLocation().toString();
+=======
+        buildMessage = "EXPAND SETTLEMENT AT " + toBeAddedTo.getSettlement().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+>>>>>>> serverTesting
     }
 
     private boolean legalExpansionVisible(){
@@ -225,15 +229,22 @@ public class Player {
 
     public void opponentNewSettlement(OffsetCoordinate location){
         TerrainTile toBeFoundSettlement = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-        enemyPlayer.buildSettlement(toBeFoundSettlement);
+// Updated upstream
+        buildSettlement(toBeFoundSettlement);
         //activeSettlement = settlements.get(settlements.size()-1);
         //settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(toBeFoundSettlement,settlements,activeSettlement);
+//======
+//        buildSettlement(toBeFoundSettlement);
+//        activeSettlement = settlements.get(settlements.size()-1);
+//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeFoundSettlement,settlements,activeSettlement);
+// Stashed changes
+        System.out.println("Opponent action: New Settlement");
     }
 
     public void opponentExpand(OffsetCoordinate location, String terrainType){
         TerrainTile toBeExpanded = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
         ArrayList<TerrainTile> expansionTiles = null;
-        Settlement targetSettlement = enemyPlayer.getSettlementContaining(toBeExpanded);
+        Settlement targetSettlement = getSettlementContaining(toBeExpanded);
 
         if(terrainType.compareTo("GRASS") == 0){
             expansionTiles = targetSettlement.getExpansionTiles(TerrainType.GRASS);
@@ -245,46 +256,71 @@ public class Player {
             expansionTiles = targetSettlement.getExpansionTiles(TerrainType.ROCK);
         }
 
-        enemyPlayer.executeExpansion(expansionTiles, targetSettlement);
+// Updated upstream
+        executeExpansion(expansionTiles, targetSettlement);
+// =======
+//        executeExpansion(expansionTiles, targetSettlement);
+        System.out.println("Opponent action: Expanded on " + terrainType);
+// Stashed changes
     }
 
     public void opponentNewTotoro(OffsetCoordinate location){
         TerrainTile toBeBuiltTotoro = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-        enemyPlayer.placeTotoro(toBeBuiltTotoro);
+// Updated upstream
+        placeTotoro(toBeBuiltTotoro);
         for (Direction d : Direction.values()) {
             if (toBeBuiltTotoro.hasNeighborInDirection(d)) {
                 if (toBeBuiltTotoro.getNeighborInDirection(d) instanceof TerrainTile) {
-                    Settlement adjacentSettlement = enemyPlayer.getSettlementContaining((TerrainTile) toBeBuiltTotoro.getNeighborInDirection(d));
+                    Settlement adjacentSettlement = getSettlementContaining((TerrainTile) toBeBuiltTotoro.getNeighborInDirection(d));
                     if (adjacentSettlement != null) {
                         if (!adjacentSettlement.hasTotoro() && adjacentSettlement.getSize() >= 5) {
                             adjacentSettlement.addToSettlement(toBeBuiltTotoro);
                             adjacentSettlement.placedTotoro();
                             enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, enemyPlayer.getSettlements(), adjacentSettlement));
+
+                            awardPoints(200);
                         }
                     }
                 }
             }
         }
+//=======
+//        placeTotoro(toBeBuiltTotoro);
+//        activeSettlement.addToSettlement(toBeBuiltTotoro);
+//        activeSettlement.placedTotoro();
+//        this.awardPoints(200);
+//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTotoro,settlements,activeSettlement);
+        System.out.println("Opponent action: Placed Totoro");
+//Stashed changes
     }
 
     public void opponentNewTiger(OffsetCoordinate location){
         TerrainTile toBeBuiltTiger = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
         placeTiger(toBeBuiltTiger);
+// Updated upstream
         for (Direction d : Direction.values()) {
             if (toBeBuiltTiger.hasNeighborInDirection(d)) {
                 if (toBeBuiltTiger.getNeighborInDirection(d) instanceof TerrainTile) {
-                    Settlement adjacentSettlement = enemyPlayer.getSettlementContaining((TerrainTile) toBeBuiltTiger.getNeighborInDirection(d));
+                    Settlement adjacentSettlement = getSettlementContaining((TerrainTile) toBeBuiltTiger.getNeighborInDirection(d));
                     if (adjacentSettlement != null) {
                         if (!adjacentSettlement.hasTiger()) {
                             adjacentSettlement.addToSettlement(toBeBuiltTiger);
                             adjacentSettlement.placedTotoro();
                             enemyPlayer.awardPoints(75);
                             enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, enemyPlayer.getSettlements(), adjacentSettlement));
+
                         }
                     }
                 }
             }
         }
+//=======
+//        activeSettlement.addToSettlement(toBeBuiltTiger);
+//        activeSettlement.placedTiger();
+//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTiger,settlements,activeSettlement);
+//        this.awardPoints(75);
+        System.out.println("Opponent action: Placed Tiger");
+// Stashed changes
     }
 
     public int scoreTilePlacement(Placement placement) {
@@ -294,7 +330,7 @@ public class Player {
             //Level Consideration
             if (hex.getLevel() == 0) { //Empty space
                 score += 15;
-                //return score;
+                return score;
             }
             if (hex.getLevel() == 1) //Nuke and potential for a tiger
                 score += 20;
@@ -303,30 +339,31 @@ public class Player {
             if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
                 score += 10;
             //Enemy Occupant
-            if (hex.getLevel() >= 1){
-                if ((this.isWhite() && hex.topTile().isOwnedByBlack()) || (!this.isWhite() && hex.topTile().isOwnedByWhite())) { //Enemy owns place
-                    if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {//Don't want to make it easier for the opponent
-                        if (hasAdjacentTotoro(hex.topTile()))
-                            return 0;
-                        else
-                            score -= 100;
-                    }
-                    else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
-                        score += 20;
-                }
-                //Own settlement (includes separation for having more totoros)
-                if ((this.isWhite() && hex.topTile().isOwnedByWhite()) || (!this.isWhite() && hex.topTile().isOwnedByBlack())) { //Friendly settlement
-                    if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {
-                        if (hasAdjacentTotoro(hex.topTile())) //Best point to separate a settlement at
-                            score += 100;
-                        else
+            if (hex.topTile().isOccupied()) {
+                if (hex.getLevel() >= 1) {
+                    if ((this.isWhite() && hex.topTile().isOwnedByBlack()) || (!this.isWhite() && hex.topTile().isOwnedByWhite())) { //Enemy owns place
+                        if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {//Don't want to make it easier for the opponent
+                            if (hasAdjacentTotoro(hex.topTile()))
+                                return 0;
+                            else
+                                score -= 100;
+                        } else if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5)
                             score += 20;
                     }
-                    if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5) {
-                        if (hasAdjacentTotoro(hex.topTile())) //Still important, but requires more work to have enough for a totoro
-                            score += 50;
-                        else
-                            score += 10;
+                    //Own settlement (includes separation for having more totoros)
+                    if ((this.isWhite() && hex.topTile().isOwnedByWhite()) || (!this.isWhite() && hex.topTile().isOwnedByBlack())) { //Friendly settlement
+                        if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize >= 5) {
+                            if (hasAdjacentTotoro(hex.topTile())) //Best point to separate a settlement at
+                                score += 100;
+                            else
+                                score += 20;
+                        }
+                        if (hex.topTile().isPartOfSettlement && hex.topTile().settlementSize < 5) {
+                            if (hasAdjacentTotoro(hex.topTile())) //Still important, but requires more work to have enough for a totoro
+                                score += 50;
+                            else
+                                score += 10;
+                        }
                     }
                 }
             }
@@ -916,9 +953,12 @@ public class Player {
         if(meepleCount == 1){
             buildSettlement(this.myMap);
         }
-        else
-            if(expandSettlement()){}
-            else{buildSettlement(this.myMap);}
+        else if(expandSettlement()){
+            //successfully expands settlement.
+        }
+        else{
+            buildSettlement(this.myMap);
+        }
     }
 
     private String buildPhase(GameMap gameMap){
@@ -938,10 +978,10 @@ public class Player {
         }
 
         if(settlements.size() > 0) { //if current player has at least one settlement already
-            if (addTotoro()) {
-                finalMessage = buildMessage;
-            }
-            else if (addTiger()) { //can't add totoro, add tiger
+//            if (addTotoro()) {
+//                finalMessage = buildMessage;
+//            }
+            if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
             }
             else if (expandSettlement()) {
@@ -1067,6 +1107,7 @@ public class Player {
         removeTotoro(1);
         awardPoints(200);
     }
+
     public boolean canPlaceTotoro(Settlement settlement)
     {
         if(settlement.getSize()<5 || settlement.hasTotoro()) {
@@ -1240,7 +1281,7 @@ public class Player {
         returnMe += name +"\n\tscore: " + this.getScore() +"\n\tMeepleCount: " + this.getMeepleCount() +"\n\tTotoroCount: " + this.getTotoroCount() + "\n\tTigerCount: " + this.getTigerCount();
         return returnMe;
     }
-    
+
     public void nukeSettlements(ArrayList<TerrainTile> nukedTiles) {
         Settlement settlementToNuke = getSettlementContaining(nukedTiles.get(0));
         System.out.println("NUKING " + name + " SETTLEMENT\n" + settlementToNuke.toString());

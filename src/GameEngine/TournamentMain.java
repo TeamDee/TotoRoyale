@@ -7,7 +7,7 @@ import GameNetworking.TigerLandDelegate;
  */
 public class TournamentMain {
     public static void main(String[] args){
-        TigerLandDelegate delegate = new TigerLandDelegate("localhost", 6066);
+        TigerLandDelegate delegate = new TigerLandDelegate();
         delegate.TournamentProtocol();
     }
 }

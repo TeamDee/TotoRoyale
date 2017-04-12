@@ -38,7 +38,7 @@ public class RegexTest {
 
         Thread t = new MockTigerLandServer(6066);
         t.start();
-        TigerLandDelegate delegate = new TigerLandDelegate("localhost", 6066);
+        TigerLandDelegate delegate = new TigerLandDelegate();
         delegate.TournamentProtocol();
     }
 }
