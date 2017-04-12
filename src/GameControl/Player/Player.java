@@ -275,8 +275,7 @@ public class Player {
                         if (!adjacentSettlement.hasTotoro() && adjacentSettlement.getSize() >= 5) {
                             adjacentSettlement.addToSettlement(toBeBuiltTotoro);
                             adjacentSettlement.placedTotoro();
-                            enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, enemyPlayer.getSettlements(), adjacentSettlement));
-
+                            settlements = adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTotoro, settlements, adjacentSettlement);
                             awardPoints(200);
                         }
                     }
@@ -302,13 +301,10 @@ public class Player {
                 if (toBeBuiltTiger.getNeighborInDirection(d) instanceof TerrainTile) {
                     Settlement adjacentSettlement = getSettlementContaining((TerrainTile) toBeBuiltTiger.getNeighborInDirection(d));
                     if (adjacentSettlement != null) {
-                        if (!adjacentSettlement.hasTiger()) {
-                            adjacentSettlement.addToSettlement(toBeBuiltTiger);
-                            adjacentSettlement.placedTotoro();
-                            enemyPlayer.awardPoints(75);
-                            enemyPlayer.setSettlements(adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, enemyPlayer.getSettlements(), adjacentSettlement));
-
-                        }
+                        adjacentSettlement.addToSettlement(toBeBuiltTiger);
+                        adjacentSettlement.placedTiger();
+                        awardPoints(75);
+                        settlements = adjacentSettlement.combineAdjacentSettlementsForSingleTile(toBeBuiltTiger, settlements, adjacentSettlement);
                     }
                 }
             }

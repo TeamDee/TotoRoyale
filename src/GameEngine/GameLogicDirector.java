@@ -230,6 +230,7 @@ public class GameLogicDirector implements Runnable{
             winner = null; //score ties
         return winner;
     }
+
     public void paint(){
         gc.paint();
     }
