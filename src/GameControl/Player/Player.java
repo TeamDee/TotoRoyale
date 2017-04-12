@@ -12,6 +12,7 @@ import GameModel.Map.Tile.TerrainTile;
 import GameModel.Map.Tile.TerrainType;
 import GameModel.Map.TriHexTile;
 import GameView.Map.Constants;
+import com.sun.tools.internal.jxc.ap.Const;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1216,7 +1217,7 @@ public class Player {
         if(amount > totoroCount)
             return false;
         totoroCount-=amount;
-        checkGameOver();
+        checker();
         return true;
     }
 
@@ -1318,8 +1319,30 @@ public class Player {
         this.settlements = settlements;
     }
 
-    //added for testing
+    //added for testingGameOv
     public void clearSettlements() {
         settlements.clear();
+    }
+
+
+    public void cleanup(){
+        //scoring
+        private int score;//, expansionWorth;
+        public boolean placeTileCheck = false; //added for testing
+
+        totoroCount = Constants.TOTORO_PER_PLAYER;
+        meepleCount = Constants.MEEPLES_PER_PLAYER;
+        tigerCount = Constants.TIGER_PER_PLAYER;
+        buildMessage = "";
+        ownedTiles.clear();
+        settlements.clear();
+        activeSettlement = null;
+        AI = null;
+        expansionWorth = 0;
+        enemyPlayer = null;
+        myMap = null;
+        score = 0;
+        placeTileCheck = false;
+
     }
 }

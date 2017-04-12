@@ -138,4 +138,8 @@ public class Deck {
         array[positionA] = array[positionB];
         array[positionB] = temp;
     }
+
+    public void cleanup(){
+        deck = new Stack<TriHexTile>();
+    }
 }

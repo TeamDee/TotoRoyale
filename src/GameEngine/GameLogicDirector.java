@@ -62,6 +62,19 @@ public class GameLogicDirector implements Runnable{
         setUpPlayers();
     }
 
+    //only needed in server games
+    public void cleanup(){
+        myMap.cleanup();
+        myMap = new GameMap();
+        deck.cleanup();
+        deck = new Deck();
+        winner = null;
+        serverGame = true;
+        newGame=true;
+        isGameOver = false;
+
+    }
+
     public String tournamentMove(String tileAssigned){
         String ActionMessage = "PLACE " + tileAssigned + " AT ";
         TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
@@ -153,7 +166,7 @@ public class GameLogicDirector implements Runnable{
       NEVER CALL THIS - DAVE
      */
     public void run() {
-        while (winner == null) {
+//        while (winner == null) {
             if (newGame) {
                 initializeNewGame();
             }
@@ -172,7 +185,7 @@ public class GameLogicDirector implements Runnable{
                     gameOver();
                 }
             }
-        }
+
     }
 
     private void gameOver(){
@@ -335,6 +348,7 @@ public class GameLogicDirector implements Runnable{
         p1 = new WhitePlayer(""+playerOneId, myMap, null);
         p2 = new BlackPlayer(""+playerTwoId, myMap, p1);
         p1.setEnemyPlayer(p2);
+        p2.setEnemyPlayer(p1);
 
         players = new ArrayList<Player>();
         players.add(p1);
@@ -353,4 +367,6 @@ public class GameLogicDirector implements Runnable{
     public void setGameOver() {
         isGameOver = true;
     }
+
+
 }

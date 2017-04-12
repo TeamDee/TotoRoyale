@@ -17,8 +17,6 @@ public class GameMap {
     private int numberOfTriHextiles;
     private boolean firstTurn = true;
 
-    private List<BoardSpace> activeSpaces;
-
     public GameMap() {
         initializeBoard();
     }
@@ -602,6 +600,13 @@ public class GameMap {
 
     public int getNumberOfBoardSpaces() {
         return gameBoard2.size();
+    }
+
+    public void cleanup(){
+        playedTriHexTiles = new ArrayList<>();
+        numberOfTriHextiles =0;
+        firstTurn = true;
+        gameBoard2 = new HashMap<OffsetCoordinate,BoardSpace>();
     }
 }
 
