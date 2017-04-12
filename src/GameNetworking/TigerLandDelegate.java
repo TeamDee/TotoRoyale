@@ -42,10 +42,6 @@ public class TigerLandDelegate {
             port = Integer.parseInt(in.nextLine());
             System.out.println("Enter in order: TournamentPassword, Username, Password");
             tournamentPW = in.next(); username = in.next(); password = in.next();
-            client = new TigerLandClient(serverName, port);
-    //        tournamentPW = "FurRealz";
-    //        username = "D";
-    //        password = "D";
             gameEnded = false;
             unexpectedError = "";
             System.out.println("Game Delegate successfully created.");
@@ -84,7 +80,7 @@ public class TigerLandDelegate {
     }
 
     public boolean AuthenticationProtocol(BufferedReader in, PrintWriter out){
-        String outMessage, inMessage;
+        String outMessage, inMessage = null;
         boolean authenticated = false;
         try {
             // ENTER THUNDERDOME <tournament password>
@@ -93,7 +89,8 @@ public class TigerLandDelegate {
             System.out.println("Client: " + outMessage);
 
             // TWO SHALL ENTER, ONE SHALL LEAVE
-            inMessage = in.readLine();
+            while(inMessage == null)
+                inMessage = in.readLine();
             System.out.println("SERVER(Authenticate): " + inMessage);
 
             // I AM <username> <password>
@@ -190,20 +187,24 @@ public class TigerLandDelegate {
 
                 game1Id = null;
                 game2Id = null;
+                game3Id = null;
+                game4Id = null;
 
-                if(evenGame){
-                    game1.begin();
-                    game2.begin();
-                    game3.cleanup();
-                    game4.cleanup();
-                }
-                else{
-                    game3.begin();
-                    game4.begin();
-                    game1.cleanup();
-                    game2.cleanup();
-                }
+                GameLogicDirector temp1 = game1;
+                GameLogicDirector temp2 = game2;
+                game1 = game3;
+                game2 = game4;
+                game3 = temp1;
+                game4 = temp2;
+
+                game1.begin();
+                game2.begin();
+                game3.cleanup();
+                game4.cleanup();
+
                 evenGame = !evenGame;
+
+
 
                 serverMessage = in.readLine();
                 Matcher gameOverMatcher = FrequentlyUsedPatterns.GameOverMssgPattern.matcher(serverMessage);
