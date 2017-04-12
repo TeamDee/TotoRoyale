@@ -1313,7 +1313,7 @@ public class Player {
 
     public void cleanup(){
         score = 0;
-        placeTileCheck = false;]
+        placeTileCheck = false;
 
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
