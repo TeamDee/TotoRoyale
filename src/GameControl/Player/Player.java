@@ -221,6 +221,7 @@ public class Player {
         }
         Placement placement = new Placement(bs1, bs2, toBePlacedOn, tileOne, tileTwo, tileThree, orientation);
         myMap.implementPlacement(placement);
+        System.out.print("-------------PLACED OPPONENT--------------");
     }
 
     public void opponentNewSettlement(OffsetCoordinate location){
