@@ -5,23 +5,7 @@ package GameModel.Map;
  */
 public enum Direction {
     NORTH, NORTHEAST, SOUTHEAST, SOUTH, SOUTHWEST,NORTHWEST;
-    public static Direction getClockwise(Direction d){
-        switch(d){
-            case NORTH:
-                return NORTHEAST;
-            case NORTHEAST:
-                return SOUTHEAST;
-            case SOUTHEAST:
-                return SOUTH;
-            case SOUTH:
-                return SOUTHWEST;
-            case SOUTHWEST:
-                return NORTHWEST;
-            case NORTHWEST:
-                return NORTH;
-        }
-        return null; // this shouldn't happen but whatever
-    }
+
     public static Direction getConverse(Direction d){
         switch(d){
             case NORTH:
@@ -38,5 +22,29 @@ public enum Direction {
                 return SOUTHEAST;
         }
         return null; // this shouldn't happen but whatever
+    }
+
+    public static Direction getClockwise(Direction d) {
+        switch(d) {
+            case NORTH:     return NORTHEAST;
+            case NORTHEAST: return SOUTHEAST;
+            case SOUTHEAST: return SOUTH;
+            case SOUTH:     return SOUTHWEST;
+            case SOUTHWEST: return NORTHWEST;
+            case NORTHWEST: return NORTH;
+        }
+        return null;
+    }
+
+    public static Direction getCounterClockwise(Direction d) {
+        switch(d) {
+            case NORTH:     return NORTHWEST;
+            case NORTHEAST: return NORTH;
+            case SOUTHEAST: return NORTHEAST;
+            case SOUTH:     return SOUTHEAST;
+            case SOUTHWEST: return SOUTH;
+            case NORTHWEST: return SOUTHWEST;
+        }
+        return null;
     }
 }

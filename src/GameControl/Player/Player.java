@@ -856,7 +856,7 @@ public class Player {
     }
 
     public boolean expandSettlement() {
-        SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0), null);
+        SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0), null, false, false, false);
 
         for(int i = 0; i!= settlements.size();++i){
             Settlement s = settlements.get(i);
@@ -866,7 +866,7 @@ public class Player {
             }
         }
 
-        if (bestOverallExpansion.getValue() >= 5) {
+        if (bestOverallExpansion.getValue() >= 50) {
             executeExpansion(bestOverallExpansion);
             //System.out.println("Player Settlement Size Before: " + settlements.size());
             //settlements = bestOverallExpansion.getSettlementToExpand().combineAdjacentSettlementsForMultTiles(bestOverallExpansion.getTiles(), settlements, bestOverallExpansion.getSettlementToExpand());
@@ -881,7 +881,7 @@ public class Player {
     }
 
     public SettlementExpansion getBestExpansionForSettlement(Settlement settlement) {
-        SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement , null);
+        SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement , null, false, false, false);
         ArrayList<SettlementExpansion> allExpansions = settlement.getAllExpansions();
         for (SettlementExpansion currentExpansion: allExpansions) {
             currentExpansion.setValue(scoreSettlementExpansion(currentExpansion));
@@ -1006,8 +1006,6 @@ public class Player {
         Settlement originalSettlement = settlementExpansion.getSettlementToExpand();
         Settlement settlementAfterExpansion = new Settlement(this);
         int meepleCost = settlementExpansion.getMeepleCost();
-        boolean adjacentFriendlySettlementsHaveTotoro = false;
-        boolean adjacentFriendlySettlementsHaveTiger = false;
 
         //check if we can afford expansion
         if (meepleCost > meepleCount) {
@@ -1028,58 +1026,23 @@ public class Player {
             settlementAfterExpansion.placedTiger();
         }
 
-        //find all adjacent friendly settlements after expansion
-        for (TerrainTile tt : settlementAfterExpansion.getTiles()) {
-            for (Direction d : Direction.values()) {
-                if (tt.hasNeighborInDirection(d)) {
-                    HexTile neighbor = tt.getNeighborInDirection(d);
-                    if (neighbor.getOwner() == this && !settlementAfterExpansion.contains(tt)) {
-                        Settlement adjacentFriendlySettlement = getSettlementContaining((TerrainTile) neighbor);
-                        if (!adjacentFriendlySettlementsAfterExpansion.contains(adjacentFriendlySettlement)) {
-                            adjacentFriendlySettlementsAfterExpansion.add(adjacentFriendlySettlement);
-                            if (adjacentFriendlySettlementsHaveTotoro)
-                                adjacentFriendlySettlementsHaveTotoro = true;
-                            if (adjacentFriendlySettlement.hasTiger())
-                                adjacentFriendlySettlementsHaveTiger = true;
-                        }
-                    }
-                }
-            }
-        }
-        if(!outOfTotoroOrTigers() && expansionTiles.size() == 1 && expansionTiles.get(0).getLevel() < 3)
-        {
-            if(scoreAdjacenttoLevel1Tiles(expansionTiles.get(0)) == 50)
-            {
-                expansionValue += 100;
-            }
-        }
-        else if(!outOfTotoroOrTigers() && expansionTiles.size() == 2 && expansionTiles.get(0).getLevel() < 3)
-        {
-            for(TerrainTile j: expansionTiles)
-            {
-                if(scoreAdjacenttoLevel1Tiles(j) == 50)
-                {
-                    expansionValue += 45;
-                }
-            }
-        }
         if (outOfTotoroOrTigers()) {
             expansionValue += meepleCost * 30;
         }
         else {
             expansionValue -= meepleCost * 5;
-            if (!originalSettlement.hasTotoro() && adjacentFriendlySettlementsHaveTotoro)
-                expansionValue -= 50;
-            if (!originalSettlement.hasTiger() && adjacentFriendlySettlementsHaveTiger)
-                expansionValue -= 20;
+            if (settlementExpansion.canPlaceTotoroAfterExpansion()) {
+                expansionValue += 50;
+            }
+            if (settlementExpansion.canPlaceTigerAfterExpansion()) {
+                expansionValue += 150;
+            }
+            if (settlementExpansion.canPlaceTigerAfterExpansionAndTilePlacement()) {
+                expansionValue += 75;
+            }
         }
 
         expansionValue += expansionTiles.size()*10; //ten points per tile
-
-        if (canPlaceTotoro(settlementAfterExpansion) && !adjacentFriendlySettlementsHaveTotoro)
-            expansionValue += 50;
-        if (canPlaceTiger(settlementAfterExpansion) && !adjacentFriendlySettlementsHaveTiger)
-            expansionValue += 20;
 
         return expansionValue;
     }
@@ -1201,7 +1164,7 @@ public class Player {
             }
         }
         if(activeSettlement ==null || tigerPlacementTile ==null) {
-            System.out.println("CHECK getBestTotoroPlacementTile() in PLayer.java");
+            System.out.println("CHECK getBestTigerPlacementTile() in PLayer.java");
         }
         activeSettlement = bestSettlement;
         return  tigerPlacementTile;

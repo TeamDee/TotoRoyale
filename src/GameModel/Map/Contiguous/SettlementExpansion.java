@@ -11,13 +11,21 @@ public class SettlementExpansion {
     private ArrayList<TerrainTile> tiles;
     private Settlement settlementToExpand;
     private ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion = new ArrayList<Settlement>();
+    boolean canPlaceTotoroAfterExpansion;
+    boolean canPlaceTigerAfterExpansion;
+    boolean canPlaceTigerAfterExpansionAndTilePlacement;
     private int value;
     private int meepleCost;
 
-    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlementToExpand, ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion) {
+    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlementToExpand, ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion,
+                               boolean canPlaceTotoroAfterExpansion, boolean canPlaceTigerAfterExpansion,
+                               boolean canPlaceTigerAfterExpansionAndTilePlacement) {
         this.tiles = tiles;
         this.settlementToExpand = settlementToExpand;
         this.friendlyAdjacentSettlementsAfterExpansion = friendlyAdjacentSettlementsAfterExpansion;
+        this.canPlaceTotoroAfterExpansion = canPlaceTotoroAfterExpansion;
+        this.canPlaceTigerAfterExpansion = canPlaceTigerAfterExpansion;
+        this.canPlaceTigerAfterExpansionAndTilePlacement = canPlaceTigerAfterExpansionAndTilePlacement;
         value = 0;
         meepleCost = 0;
         if (tiles != null) {
@@ -49,5 +57,17 @@ public class SettlementExpansion {
 
     public int getMeepleCost() {
         return meepleCost;
+    }
+
+    public boolean canPlaceTotoroAfterExpansion() {
+        return canPlaceTotoroAfterExpansion;
+    }
+
+    public boolean canPlaceTigerAfterExpansion() {
+        return canPlaceTigerAfterExpansion;
+    }
+
+    public boolean canPlaceTigerAfterExpansionAndTilePlacement() {
+        return canPlaceTigerAfterExpansionAndTilePlacement;
     }
 }

@@ -228,4 +228,27 @@ public abstract class HexTile extends Tile {
         }
         return false;
     }
+
+    public boolean canPlaceTileOn() {
+        for (Direction d: Direction.values()) {
+            if (hasNeighborInDirection(d)) {
+                HexTile neighbor = getNeighborInDirection(d);
+                if (neighbor.getLevel() == getLevel()) {
+                    if (neighbor.terrainType() == TerrainType.VOLCANO) {
+                        if (hasNeighborInDirection(Direction.getClockwise(d))) {
+                            if (getNeighborInDirection(Direction.getClockwise(d)).getLevel() == getLevel()) {
+                                return true;
+                            }
+                        }
+                        if (hasNeighborInDirection(Direction.getCounterClockwise(d))) {
+                            if (getNeighborInDirection(Direction.getCounterClockwise(d)).getLevel() == getLevel()) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
