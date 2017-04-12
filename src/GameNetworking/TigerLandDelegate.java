@@ -102,8 +102,12 @@ public class TigerLandDelegate {
                 playerId = Integer.parseInt(PlayerIDMatcher.group(1));
                 authenticated = true;
             }
-            else
-                throw new IOException();
+
+            game1 = new GameLogicDirector(1, 2, true);
+            game2 = new GameLogicDirector(2, 1, true);
+            game3 = new GameLogicDirector(3, 4, true);
+            game4 = new GameLogicDirector(4, 3, true);
+            
             System.out.println("Delegate: Authentication is successful!");
         }catch(IOException ex){
             unexpectedError = "AuthenticationProtocol: " + ex.getMessage();
