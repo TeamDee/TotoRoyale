@@ -113,7 +113,7 @@ public class GameLogicDirector implements Runnable{
             x = Integer.parseInt(placementMatcher.group(2));
             y = Integer.parseInt(placementMatcher.group(3));
             z = Integer.parseInt(placementMatcher.group(4));
-            orientation = Integer.parseInt(placementMatcher.group(5));
+            orientation = Integer.parseInt(placementMatcher.group(5).trim());
             OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
             currentPlayer.placeOpponent(tht, location, orientation);
         }

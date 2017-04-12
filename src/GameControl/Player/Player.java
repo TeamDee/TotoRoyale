@@ -1217,7 +1217,7 @@ public class Player {
         if(amount > totoroCount)
             return false;
         totoroCount-=amount;
-        checker();
+        checkGameOver();
         return true;
     }
 
@@ -1327,8 +1327,8 @@ public class Player {
 
     public void cleanup(){
         //scoring
-        private int score;//, expansionWorth;
-        public boolean placeTileCheck = false; //added for testing
+        int score;//, expansionWorth;
+        boolean placeTileCheck = false; //added for testing
 
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
