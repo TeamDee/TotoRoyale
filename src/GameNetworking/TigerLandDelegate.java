@@ -232,7 +232,7 @@ public class TigerLandDelegate {
 
                 serverMessage = in.readLine();
                 Matcher gameOverMatcher = FrequentlyUsedPatterns.GameOverMssgPattern.matcher(serverMessage);
-                while(!gameOverMatcher.matches()){
+                while(serverMessage!=null && serverMessage!="" && !serverMessage.equals("null") && !gameOverMatcher.matches()){
                     MoveProtocol(in, out, serverMessage);
                     serverMessage = in.readLine();
                     gameOverMatcher = FrequentlyUsedPatterns.GameOverMssgPattern.matcher(serverMessage);
