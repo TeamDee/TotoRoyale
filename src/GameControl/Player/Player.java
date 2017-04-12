@@ -628,15 +628,23 @@ public class Player {
         }
         else
         {
+            int maxScore = 0;
+            Placement bestPlacement = null;
             for(Placement p: Placements)
             {
                 int temp = scoreTilePlacement(p);
-                if(temp == 15)
-                {
-                    returnMe = p;
-                    return returnMe;
+                if(temp > maxScore){
+                    maxScore = temp;
+                    bestPlacement = p;
                 }
+//                if(temp == 15)
+//                {
+//                    returnMe = p;
+//                    return returnMe;
+//                }
+
             }
+            returnMe = bestPlacement;
         }
         if(returnMe == null)
         {
@@ -1218,7 +1226,7 @@ public class Player {
         if(amount > totoroCount)
             return false;
         totoroCount-=amount;
-        checker();
+        checkGameOver();
         return true;
     }
 
@@ -1327,9 +1335,9 @@ public class Player {
 
 
     public void cleanup(){
-        //scoring
-        private int score;//, expansionWorth;
-        public boolean placeTileCheck = false; //added for testing
+
+        score = 0;
+        placeTileCheck = false;
 
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;

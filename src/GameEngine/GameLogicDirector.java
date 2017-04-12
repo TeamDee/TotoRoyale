@@ -46,6 +46,7 @@ public class GameLogicDirector implements Runnable{
         winner=null;
         gc = GameController.getInstance();
         serverGame = false;
+        setUpPlayers();
     }
 
     public GameLogicDirector(int playerOneId, int playerTwoId){
@@ -54,6 +55,7 @@ public class GameLogicDirector implements Runnable{
         this.playerTwoId = playerTwoId;
         winner=null;
         serverGame = false;
+        setUpPlayers();
     }
 
     public GameLogicDirector(int playerOneId, int playerTwoId, boolean serverGame){
