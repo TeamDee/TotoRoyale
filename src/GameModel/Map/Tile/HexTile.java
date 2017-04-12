@@ -96,7 +96,9 @@ public abstract class HexTile extends Tile {
     }
 
 
-
+    public boolean isOwnedBy(Player p){
+        return p == this.owner;
+    }
 
     public boolean isOwnedByWhite() {
         if (!isOccupied()) {

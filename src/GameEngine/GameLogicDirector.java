@@ -251,9 +251,8 @@ public class GameLogicDirector implements Runnable{
 
     public void AIvsAIGameTurn(){
         for(Player p: players){
-// HEAD
             try {
-                Thread.sleep(1500);
+                Thread.sleep(25);
             } catch (InterruptedException ie) {
                 System.out.println(ie.getStackTrace());
             }
