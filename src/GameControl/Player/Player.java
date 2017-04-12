@@ -807,8 +807,6 @@ public class Player {
             buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlementToExpand().getTiles().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
             buildMessage += " " + bestOverallExpansion.getTerrainToExpand();
 
-            System.out.println(buildMessage+"\n\n\n\n");
-
             return true;
         }
 
