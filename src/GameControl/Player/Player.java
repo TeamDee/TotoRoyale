@@ -228,18 +228,12 @@ public class Player {
         } else if(terrainType.compareTo("ROCK") == 0){
             expansionTiles = targetSettlement.getExpansionTiles(TerrainType.ROCK);
         }
-
-// Updated upstream
         executeExpansion(expansionTiles, targetSettlement);
-// =======
-//        executeExpansion(expansionTiles, targetSettlement);
         System.out.println("Opponent action: Expanded on " + terrainType);
-// Stashed changes
     }
 
     public void opponentNewTotoro(OffsetCoordinate location){
         TerrainTile toBeBuiltTotoro = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-// Updated upstream
         placeTotoro(toBeBuiltTotoro);
         for (Direction d : Direction.values()) {
             if (toBeBuiltTotoro.hasNeighborInDirection(d)) {
