@@ -210,15 +210,7 @@ public class Player {
 
     public void opponentNewSettlement(OffsetCoordinate location){
         TerrainTile toBeFoundSettlement = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
-// Updated upstream
         buildSettlement(toBeFoundSettlement);
-        //activeSettlement = settlements.get(settlements.size()-1);
-        //settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(toBeFoundSettlement,settlements,activeSettlement);
-//======
-//        buildSettlement(toBeFoundSettlement);
-//        activeSettlement = settlements.get(settlements.size()-1);
-//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeFoundSettlement,settlements,activeSettlement);
-// Stashed changes
         System.out.println("Opponent action: New Settlement");
     }
 
@@ -263,20 +255,12 @@ public class Player {
                 }
             }
         }
-//=======
-//        placeTotoro(toBeBuiltTotoro);
-//        activeSettlement.addToSettlement(toBeBuiltTotoro);
-//        activeSettlement.placedTotoro();
-//        this.awardPoints(200);
-//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTotoro,settlements,activeSettlement);
         System.out.println("Opponent action: Placed Totoro");
-//Stashed changes
     }
 
     public void opponentNewTiger(OffsetCoordinate location){
         TerrainTile toBeBuiltTiger = (TerrainTile) myMap.getBoardSpaceAt(location).topTile();
         placeTiger(toBeBuiltTiger);
-// Updated upstream
         for (Direction d : Direction.values()) {
             if (toBeBuiltTiger.hasNeighborInDirection(d)) {
                 if (toBeBuiltTiger.getNeighborInDirection(d) instanceof TerrainTile) {
@@ -289,13 +273,7 @@ public class Player {
                 }
             }
         }
-//=======
-//        activeSettlement.addToSettlement(toBeBuiltTiger);
-//        activeSettlement.placedTiger();
-//        settlements = activeSettlement.combineAdjacentSettlementsforSingleTile(toBeBuiltTiger,settlements,activeSettlement);
-//        this.awardPoints(75);
         System.out.println("Opponent action: Placed Tiger");
-// Stashed changes
     }
 
     public int scoreTilePlacement(Placement placement) {
@@ -833,6 +811,7 @@ public class Player {
             //System.out.println("Player Settlement Size After: " + settlements.size());
 
             buildMessage = "EXPAND SETTLEMENT AT " + bestOverallExpansion.getSettlementToExpand().getTiles().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+            buildMessage += " " + bestOverallExpansion.getTerrainToExpand().name();
 
             return true;
         }
@@ -1239,7 +1218,6 @@ public class Player {
 
 
     public void cleanup(){
-
         score = 0;
         placeTileCheck = false;
 

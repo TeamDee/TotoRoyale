@@ -27,7 +27,7 @@ public class GameLogicDirector implements Runnable{
     private boolean AIvsHuman = false;
     private boolean HumanVsHuman = false;
     private int playerOneId, playerTwoId;
-    private boolean isGameOver = false, serverGame;
+    private boolean isGameOver = false, serverGame = true;
 
     //Game specific objects
     Player p1,p2;
@@ -68,9 +68,7 @@ public class GameLogicDirector implements Runnable{
     //only needed in server games
     public void cleanup(){
         myMap.cleanup();
-        myMap = new GameMap();
-        deck.cleanup();
-        deck = new Deck();
+        myMap = new GameMap();;
         winner = null;
         serverGame = true;
         newGame=true;
@@ -342,8 +340,8 @@ public class GameLogicDirector implements Runnable{
         newGame = false; // Q: what's this for? A: see run method
 
         winner = null;
-//        gc = GameController.getInstance();
-//        gc.initViewControllerInteractions(p1, activePlayer);
+        gc = new GameController();
+        gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     private void setUpPlayers(){
@@ -363,8 +361,16 @@ public class GameLogicDirector implements Runnable{
         newGame = false; // Q: what's this for? A: see run method
         winner = null;
         gc = new GameController();//GameController.getInstance();
-        gc.initViewControllerInteractions(p1, activePlayer);
+        if(!serverGame)
+            gc.initViewControllerInteractions(p1, activePlayer);
     }
+
+    public void setUpPlayers(int player1Id, int player2Id){
+        playerOneId = player1Id;
+        playerTwoId = player2Id;
+        setUpPlayers();
+    }
+
 
     public boolean isGameOver(){
         return isGameOver;
