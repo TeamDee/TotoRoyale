@@ -151,20 +151,23 @@ public class TigerLandDelegate {
 
     public void RoundProtocol(BufferedReader in, PrintWriter out){
         String serverMessage = "";
+        boolean endOfRoundMessageRecieved = false;
         try{
             // BEGIN ROUND <rid> OF <rounds>
             serverMessage = in.readLine();
             System.out.println("SERVER(Round): " + serverMessage);
-
-            while(!FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()){
+            while(!endOfRoundMessageRecieved) {
                 serverMessage = in.readLine();
-                System.out.println("SERVER(Round): " + serverMessage);
+                if (FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()) {
+                    MatchProtocol(in, out);
+                } else if (FrequentlyUsedPatterns.RoundEndMssgPattern.matcher(serverMessage).matches() ||
+                        FrequentlyUsedPatterns.RoundEndNextMssgPattern.matcher(serverMessage).matches()) {
+                    // END OF ROUND <rid> OF <rounds> or END OF ROUND <rid> OF <rounds> WAIT FOR THE NEXT MATCH
+                    endOfRoundMessageRecieved = true;
+                }
             }
 
-            MatchProtocol(in, out);
-
             // END OF ROUND <rid> OF <rounds> or END OF ROUND <rid> OF <rounds> WAIT FOR THE NEXT MATCH
-            serverMessage = in.readLine();
             System.out.println("SERVER(Round): " + serverMessage);
             System.out.println("Delegate: End of Round Protocol!");
         } catch (IOException ex){
