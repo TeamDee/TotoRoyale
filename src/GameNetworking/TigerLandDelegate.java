@@ -27,7 +27,7 @@ public class TigerLandDelegate {
         int port;
         //Scanner in;// = new Scanner(System.in);
         try {
-           Scanner in = new Scanner(new BufferedReader(new FileReader("src/res/networking/serverInfo")));
+           Scanner in = new Scanner(new BufferedReader(new FileReader("src/networking/serverInfo")));
 
             System.out.println("What is the serverName?");
             serverName = in.nextLine();
