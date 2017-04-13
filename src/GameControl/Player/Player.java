@@ -788,7 +788,7 @@ public class Player {
     }
 
     public boolean expandSettlement() {
-        SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0), null, false, false, false);
+        SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0), TerrainType.GRASS, null, false, false, false);
 
         for(int i = 0; i!= settlements.size();++i){
             Settlement s = settlements.get(i);
@@ -814,7 +814,7 @@ public class Player {
     }
 
     public SettlementExpansion getBestExpansionForSettlement(Settlement settlement) {
-        SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement , null, false, false, false);
+        SettlementExpansion bestExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlement , TerrainType.GRASS, null, false, false, false);
         ArrayList<SettlementExpansion> allExpansions = settlement.getAllExpansions();
         for (SettlementExpansion currentExpansion: allExpansions) {
             currentExpansion.setValue(scoreSettlementExpansion(currentExpansion));

@@ -133,7 +133,7 @@ public class GameLogicDirector implements Runnable{
             if(build.contains("FOUNDED")){
                 currentPlayer.opponentNewSettlement(location);
             } else if(build.contains("EXPANDED")){
-                String terrainType = buildMatcher.group(5);
+                String terrainType = buildMatcher.group(5).trim();
                 currentPlayer.opponentExpand(location, terrainType);
             } else if(build.contains("TOTORO")){
                 currentPlayer.opponentNewTotoro(location);
@@ -340,8 +340,8 @@ public class GameLogicDirector implements Runnable{
         newGame = false; // Q: what's this for? A: see run method
 
         winner = null;
-        gc = new GameController();
-        gc.initViewControllerInteractions(p1, activePlayer);
+//        gc = new GameController();
+//        gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     private void setUpPlayers(){
@@ -356,13 +356,13 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1, this);
         currentPlayer = p1;
 
-        deck = Deck.newExampleDeck();
+        //deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
         newGame = false; // Q: what's this for? A: see run method
         winner = null;
-        gc = new GameController();//GameController.getInstance();
-        if(!serverGame)
-            gc.initViewControllerInteractions(p1, activePlayer);
+        //gc = new GameController();//GameController.getInstance();
+        //if(!serverGame)
+        //    gc.initViewControllerInteractions(p1, activePlayer);
     }
 
     public void setUpPlayers(int player1Id, int player2Id){

@@ -206,7 +206,7 @@ public class Settlement{
         boolean hasTigerAfterMerge = hasTiger();
         int finalSettlementSize = getSize();
         if (terrainType == VOLCANO) {
-            return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion, false, false, false);
+            return new SettlementExpansion(expansionTiles, this, TerrainType.VOLCANO, adjacentFriendlySettlementsAfterExpansion, false, false, false);
         }
         for (TerrainTile tt : settlement) {
             tilesToVisit.push(tt);
@@ -248,7 +248,7 @@ public class Settlement{
                 }
             }
         }
-        return new SettlementExpansion(expansionTiles, this, adjacentFriendlySettlementsAfterExpansion,
+        return new SettlementExpansion(expansionTiles, this, terrainType, adjacentFriendlySettlementsAfterExpansion,
                 finalSettlementSize >= 5 && !hasTotoroAfterMerge, isAdjacentToEmptyLevel3Tile && !hasTigerAfterMerge,
                 !hasTigerAfterMerge && isAdjacentToRaisableLevel2Tile);
     }
