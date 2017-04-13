@@ -1096,20 +1096,16 @@ public class Player {
         return null;
     }
 
-    public void cleanup(){
+    public void cleanup(GameMap myMap){
         score = 0;
         placeTileCheck = false;
-
         totoroCount = Constants.TOTORO_PER_PLAYER;
         meepleCount = Constants.MEEPLES_PER_PLAYER;
         tigerCount = Constants.TIGER_PER_PLAYER;
         buildMessage = "";
         settlements.clear();
         activeSettlement = null;
-        enemyPlayer = null;
-        myMap = null;
-        score = 0;
-        placeTileCheck = false;
-
+//        enemyPlayer = null;
+        this.myMap = myMap;
     }
 }
