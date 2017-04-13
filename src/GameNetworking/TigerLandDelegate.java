@@ -192,14 +192,6 @@ public class TigerLandDelegate {
                 game3Id = null;
                 game4Id = null;
 
-                GameLogicDirector temp1 = game1;
-                GameLogicDirector temp2 = game2;
-                game1 = game3;
-                game2 = game4;
-                game3 = temp1;
-                game4 = temp2;
-
-
                 if(evenGame){
                     game1.setUpPlayers(playerId, opponentId);
                     game2.setUpPlayers(opponentId, playerId);
