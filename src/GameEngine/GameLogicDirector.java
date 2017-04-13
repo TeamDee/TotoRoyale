@@ -152,6 +152,9 @@ public class GameLogicDirector implements Runnable{
     }
 
     public void begin(){
+        gc = new GameController();//GameController.getInstance();
+        //if(!serverGame)
+        gc.initViewControllerInteractions(p1, activePlayer);
         Thread gameThread = new Thread(this);
         gameThread.start();
     }
@@ -332,6 +335,14 @@ public class GameLogicDirector implements Runnable{
     }
 
 
+    public void makeVisibile(){
+        gc = new GameController();//GameController.getInstance();
+        gc.initViewControllerInteractions(p1, activePlayer);
+    }
+
+    public void makeInvisible(){
+    }
+
     private void initializeNewGame() {
         System.out.println("Initializing new game.");
 
@@ -340,6 +351,7 @@ public class GameLogicDirector implements Runnable{
         newGame = false; // Q: what's this for? A: see run method
 
         winner = null;
+
 //        gc = new GameController();
 //        gc.initViewControllerInteractions(p1, activePlayer);
     }
@@ -360,9 +372,7 @@ public class GameLogicDirector implements Runnable{
 //        System.out.println(deck.cardsLeft());
         newGame = false; // Q: what's this for? A: see run method
         winner = null;
-        //gc = new GameController();//GameController.getInstance();
-        //if(!serverGame)
-        //    gc.initViewControllerInteractions(p1, activePlayer);
+
     }
 
     public void setUpPlayers(int player1Id, int player2Id){

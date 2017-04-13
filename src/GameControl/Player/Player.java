@@ -933,6 +933,11 @@ public class Player {
             return 0;
         }
 
+        int terrainCount = 0;
+        if(expansionTiles.size() < 1){
+            return 0;
+        }
+
         //see what settlement will look like after expansion
         for (TerrainTile tt : originalSettlement.getTiles()) {
             settlementAfterExpansion.temporarilyAddToSettlement(tt);
