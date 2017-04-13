@@ -19,7 +19,7 @@ hs_err_pid*
 
 #login files
 serverInfo.txt
-src/res/networking/
+src/networking/
 
 # Build files
 target
