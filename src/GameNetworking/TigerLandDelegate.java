@@ -218,7 +218,6 @@ public class TigerLandDelegate {
                 evenGame = !evenGame;
                 currentGame1.begin();
                 currentGame2.begin();
-
                 serverMessage = in.readLine();
                 Matcher gameOverMatcher = FrequentlyUsedPatterns.GameOverMssgPattern.matcher(serverMessage);
                 while(serverMessage!=null && serverMessage!="" && !serverMessage.equals("null") && !gameOverMatcher.matches()){

@@ -1,4 +1,5 @@
 package GameModel.Map.Tile;
+import GameControl.Placement;
 import GameControl.Player.BlackPlayer;
 import GameControl.Player.Player;
 import GameControl.Player.WhitePlayer;
@@ -155,6 +156,14 @@ public abstract class TerrainTile extends HexTile {
             }
         }
         return enemyAdjacentTerrainTiles;
+    }
+
+    public ArrayList<Placement> getPlacementsToRaiseToLevel3(ArrayList<TerrainTile> tilesToAvoidNuking) {
+        ArrayList<Placement> placementsToRaiseToLevel3 = new ArrayList<Placement>();
+
+
+
+        return placementsToRaiseToLevel3;
     }
 }
 

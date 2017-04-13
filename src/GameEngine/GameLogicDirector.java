@@ -67,13 +67,13 @@ public class GameLogicDirector implements Runnable{
 
     //only needed in server games
     public void cleanup(){
-        myMap.cleanup();
         myMap = new GameMap();;
         winner = null;
         serverGame = true;
         newGame=true;
         isGameOver = false;
-
+        p1.cleanup();
+        p2.cleanup();
     }
 
     public String tournamentMove(String tileAssigned){

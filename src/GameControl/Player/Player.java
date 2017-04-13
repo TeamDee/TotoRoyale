@@ -793,7 +793,7 @@ public class Player {
 
         if(settlements.size() > 0) { //if current player has at least one settlement already
 //            if (addTotoro()) {
-//                finalMessage = buildMessage;  going for tigers and meeples only
+//                finalMessage = buildMessage;
 //            }
             if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
@@ -936,8 +936,9 @@ public class Player {
         //return 1; // TODO add AI in this method
     }
 
-    private int scoreTigerPlacement(TerrainTile t) {
-        int numberOfAdjacentEnemyTiles = t.getEnemyAdjacentTerrainTiles().size();
+    private int scoreTigerPlacement(TerrainTile tt) {
+        int score = 0;
+        int numberOfAdjacentEnemyTiles = tt.getEnemyAdjacentTerrainTiles().size();
         return numberOfAdjacentEnemyTiles;
         //return 1; // TODO add AI in this method
     }
@@ -978,12 +979,12 @@ public class Player {
         awardPoints(75);
     }
 
-    public TerrainTile getBestTigerPlacementTile(ArrayList<Settlement> legalTigerSettlments)
+    public TerrainTile getBestTigerPlacementTile(ArrayList<Settlement> legalTigerSettlements)
     {
         Settlement bestSettlement = null;
         TerrainTile tigerPlacementTile = null;
         int bestScore = 0;
-        for(Settlement s: legalTigerSettlments) {
+        for(Settlement s: legalTigerSettlements) {
             ArrayList<TerrainTile> potentialPlacements =  s.getLegalTigerTiles();
             for(TerrainTile t: potentialPlacements) {
                 /*if(scoreTigerPlacement(t) > bestScore) {
