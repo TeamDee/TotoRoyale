@@ -19,11 +19,12 @@ public class SettlementExpansion {
     private int value;
     private int meepleCost;
 
-    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlementToExpand, ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion,
+    public SettlementExpansion(ArrayList<TerrainTile> tiles, Settlement settlementToExpand, TerrainType terrainToExpand, ArrayList<Settlement> friendlyAdjacentSettlementsAfterExpansion,
                                boolean canPlaceTotoroAfterExpansion, boolean canPlaceTigerAfterExpansion,
                                boolean canPlaceTigerAfterExpansionAndTilePlacement) {
         this.tiles = tiles;
         this.settlementToExpand = settlementToExpand;
+        this.terrainToExpand = terrainToExpand;
         this.friendlyAdjacentSettlementsAfterExpansion = friendlyAdjacentSettlementsAfterExpansion;
         this.canPlaceTotoroAfterExpansion = canPlaceTotoroAfterExpansion;
         this.canPlaceTigerAfterExpansion = canPlaceTigerAfterExpansion;
@@ -31,9 +32,6 @@ public class SettlementExpansion {
         value = 0;
         meepleCost = 0;
         if (tiles != null) {
-            if (tiles.size() > 0) {
-                terrainToExpand = tiles.get(0).terrainType();
-            }
             for (TerrainTile tt : tiles) {
                 meepleCost += tt.getLevel();
             }
