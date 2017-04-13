@@ -346,7 +346,7 @@ public class GameLogicDirector implements Runnable{
     private void initializeNewGame() {
         System.out.println("Initializing new game.");
 
-        deck = Deck.newExampleDeck();
+//        deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
         newGame = false; // Q: what's this for? A: see run method
 
@@ -368,7 +368,7 @@ public class GameLogicDirector implements Runnable{
         activePlayer = new PlayerController(p1, this);
         currentPlayer = p1;
 
-        deck = Deck.newExampleDeck();
+//        deck = Deck.newExampleDeck();
 //        System.out.println(deck.cardsLeft());
         newGame = false; // Q: what's this for? A: see run method
         winner = null;
