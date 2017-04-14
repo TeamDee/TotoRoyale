@@ -787,7 +787,7 @@ public class Player {
             if (addTotoro()) {
                 finalMessage = buildMessage;
             }
-            if (addTiger()) { //can't add totoro, add tiger
+            else if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
             }
             else if (expandSettlement()) {
