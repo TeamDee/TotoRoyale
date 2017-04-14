@@ -664,12 +664,11 @@ public class Player {
         ArrayList<Settlement> TigerLegal = new ArrayList<Settlement>();
         for(Settlement s: settlements)
         {
-            if(canPlaceTiger(s)) //checking size and whether it has a totoro
-            {
+            if(canPlaceTiger(s)) {
                 TigerLegal.add(s);
             }
-            else{
-                //no can place totoro
+            else {
+                //no can place tiger
             }
         }
         if(TigerLegal.size() > 0) {
@@ -698,6 +697,7 @@ public class Player {
                     int currentExpansionValue = currentExpansion.getMeepleCost();
                     if (currentExpansionValue > bestExpansionValue) {
                         bestExpansion = currentExpansion;
+                        bestExpansionValue = currentExpansionValue;
                     }
                 }
             }
@@ -765,14 +765,14 @@ public class Player {
         return (totoroCount == 0 || tigerCount == 0);
     }
 
-    private void getRidOfMeeples(){
+    private void getRidOfMeeples() {
         if(meepleCount == 1){
             buildSettlement(this.myMap);
         }
-        else if(expandSettlement()){
+        else if(expandSettlementToMaximizeMeepleUsage()) {
             //successfully expands settlement.
         }
-        else{
+        else {
             buildSettlement(this.myMap);
         }
     }
