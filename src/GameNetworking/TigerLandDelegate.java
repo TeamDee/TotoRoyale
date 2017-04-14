@@ -25,10 +25,9 @@ public class TigerLandDelegate {
     public TigerLandDelegate(){
         String serverName;
         int port;
-        Scanner input = new Scanner(System.in);
+//        Scanner input = new Scanner(System.in);
         try {
-
-           Scanner in = new Scanner(new BufferedReader(new FileReader("src/networking/serverInfo")));
+            Scanner in = new Scanner(new BufferedReader(new FileReader("src/networking/serverInfo")));
 
             System.out.println("What is the serverName?");
             serverName = in.nextLine();
@@ -37,7 +36,7 @@ public class TigerLandDelegate {
 
             System.out.println("Enter in order: TournamentPassword, Username, Password");
             tournamentPW = in.next(); username = in.next(); password = in.next();
-            username = input.next(); password = input.next();
+//            username = input.next(); password = input.next();
             client= new TigerLandClient(serverName, port);
 
             gameEnded = false;
@@ -166,8 +165,6 @@ public class TigerLandDelegate {
                 }
             }
 
-            // END OF ROUND <rid> OF <rounds> or END OF ROUND <rid> OF <rounds> WAIT FOR THE NEXT MATCH
-            System.out.println("SERVER(Round): " + serverMessage);
             System.out.println("Delegate: End of Round Protocol!");
         } catch (IOException ex){
             unexpectedError = "RoundProtocol: " + ex.getMessage();
@@ -186,9 +183,6 @@ public class TigerLandDelegate {
             if(NewMatchMatcher.matches()) {
                 opponentId = Integer.parseInt(NewMatchMatcher.group(1));
 
-
-//                game1 = new GameLogicDirector(playerId, opponentId, true);
-//                game2 = new GameLogicDirector(opponentId, playerId, true);
                 game1Id = null;
                 game2Id = null;
                 game3Id = null;
@@ -270,12 +264,6 @@ public class TigerLandDelegate {
             } else{
                 placedAndBuildMssg = currentGame2.tournamentMove(tileAssigned);
             }
-//            else if(gameId.equals(game3Id)){
-//                placedAndBuildMssg = game3.tournamentMove(tileAssigned);
-//            }
-//            else if(gameId.equals(game4Id)){
-//                placedAndBuildMssg = game4.tournamentMove(tileAssigned);
-//            }
 
             clientMessage = "GAME " + gameId + " MOVE " + moveNumber + " ";
             clientMessage += placedAndBuildMssg;
@@ -325,12 +313,6 @@ public class TigerLandDelegate {
                 } else {
                     currentGame2.opponentPlayerMove(opponentMoveMssg);
                 }
-//                else if(gameId.equals(game3Id)){
-//                    game3.opponentPlayerMove(opponentMoveMssg);
-//                }
-//                else if(gameId.equals(game4Id)){
-//                    game4.opponentPlayerMove(opponentMoveMssg);
-//                }
             }
         }
         System.out.println("Delegate: End of Move Protocol!");

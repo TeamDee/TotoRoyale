@@ -24,7 +24,7 @@ public class TigerLandClient {
         try{
             dataInputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
         } catch(IOException ex){
-            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\nFailed to obtain a DataInputStream.");
+            System.out.println("\n\n\n\nFailed to obtain a DataInputStream.");
         }
         return dataInputStream;
     }
