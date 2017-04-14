@@ -75,6 +75,8 @@ public class Settlement{
     }
 
     public void addToSettlement(TerrainTile tile) {
+        if(settlement.contains(tile))
+            return;
         settlement.add(tile);
         tile.isPartOfSettlement = true;
         for (TerrainTile settlementTile : settlement) {

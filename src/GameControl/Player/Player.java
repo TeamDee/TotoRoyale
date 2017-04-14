@@ -1024,8 +1024,11 @@ public class Player {
     }
 
     public boolean removeMeeples(int amount){
-        if(amount > meepleCount)
+        if(amount > meepleCount) {
+            System.out.println("Attempting to remove more meeples than we have.");
             return false;
+
+        }
         meepleCount-=amount;
         checkGameOver();
         return true;
