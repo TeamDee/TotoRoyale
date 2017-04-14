@@ -263,7 +263,7 @@ public class Player {
             }
             if (hex.getLevel() == 1) //Nuke and potential for a tiger
                 score += 20;
-            if (hex.getLevel() == 2) //Causes a tiger to be place-able, high priority
+            if (hex.getLevel() >= 2) //Causes a tiger to be place-able, high priority
                 score += 50;
             if (hex.getLevel() >= 3) //There is no rel purpose after level 3, so not much priority
                 score += 10;
@@ -459,7 +459,7 @@ public class Player {
 
     public Placement TigerFocusAI(ArrayList<Placement> Placements)
     {
-        int value = 0;
+        int BestValuePlacement = 0;
         Placement returnMe = null;
         if(tigerCount == 0)
         {
@@ -467,26 +467,26 @@ public class Player {
         }
         else {
             for (Placement t : Placements) {
-                ArrayList<BoardSpace> BSLoactions = t.getBoardSpaces();
+                ArrayList<BoardSpace> BSLocations = t.getBoardSpaces();
                 for (Settlement s : settlements) {
                     //BSLocations 0 is a volcano Tile
                     ArrayList<TerrainTile> currentSettlement = s.getTiles();
                     HexTile temp1 = null;
                     HexTile temp2 = null;
-                    if(BSLoactions.get(1).getLevel() > 0) {
-                        temp1 = BSLoactions.get(1).topTile();
+                    if(BSLocations.get(1).getLevel() > 0) {
+                        temp1 = BSLocations.get(1).topTile();
                     }
                     else
                     {
-                        value = scoreAdjacentBoardSpaces(t,BSLoactions.get(1),s);
+                        BestValuePlacement = scoreAdjacentBoardSpaces(t,BSLocations.get(1),s);
                         returnMe = t;
                     }
-                    if(BSLoactions.get(2).getLevel() > 0) {
-                        temp2 = BSLoactions.get(2).topTile();
+                    if(BSLocations.get(2).getLevel() > 0) {
+                        temp2 = BSLocations.get(2).topTile();
                     }
                     else
                     {
-                        value = scoreAdjacentBoardSpaces(t,BSLoactions.get(2),s);
+                        BestValuePlacement = scoreAdjacentBoardSpaces(t,BSLocations.get(2),s);
                         returnMe = t;
                     }
                     for (TerrainTile tt : currentSettlement) {
@@ -494,10 +494,10 @@ public class Player {
                         if(temp1 != null) {
                             if (temp1.terrainType() != TerrainType.VOLCANO) {
                                 if (adjacentTerrainTiles.contains((TerrainTile) temp1)) {
-                                    if (value < scoreTilePlacement(t)) {
-                                        value = 20 + scoreTilePlacement(t);
+                                    if (BestValuePlacement < scoreTilePlacement(t)) {
+                                        BestValuePlacement = 20 + scoreTilePlacement(t);
                                         returnMe = t;
-                                        if (value >= 50) {
+                                        if (BestValuePlacement >= 50) {
                                             //boolean place tiger
                                             return returnMe;
                                         }
@@ -507,10 +507,10 @@ public class Player {
                         }else if(temp2 != null) {
                             if (temp2.terrainType() != TerrainType.VOLCANO) {
                                 if (adjacentTerrainTiles.contains((TerrainTile) temp2)) {
-                                    if (value < scoreTilePlacement(t)) {
-                                        value = 20 + scoreTilePlacement(t);
+                                    if (BestValuePlacement < scoreTilePlacement(t)) {
+                                        BestValuePlacement = 20 + scoreTilePlacement(t);
                                         returnMe = t;
-                                        if (value >= 50) {
+                                        if (BestValuePlacement >= 50) {
                                             //boolean place tiger
                                             return returnMe;
                                         }
@@ -520,21 +520,21 @@ public class Player {
                         }
                     }
                 }
-                if (value >= 30) {
+                if (BestValuePlacement >= 30) {
                     return returnMe;
                 }
-                if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1)))
+                if(BestValuePlacement < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLocations.get(1)))
                 {
-                    value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(1));
+                    BestValuePlacement = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLocations.get(1));
                     returnMe = t;
                 }
-                if(value < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2)))
+                if(BestValuePlacement < scoreAdjacentBoardSpacesNotNearSettlement(t,BSLocations.get(2)))
                 {
-                    value = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLoactions.get(2));
+                    BestValuePlacement = scoreAdjacentBoardSpacesNotNearSettlement(t,BSLocations.get(2));
                     returnMe = t;
                 }
             }
-            if (value >= 30) {
+            if (BestValuePlacement >= 30) {
                 return returnMe;
             }
         }
@@ -713,6 +713,7 @@ public class Player {
     }
 
     public boolean expandSettlement() {
+
         SettlementExpansion bestOverallExpansion = new SettlementExpansion(new ArrayList<TerrainTile>(), settlements.get(0), TerrainType.GRASS, null, false, false, false);
 
         for(int i = 0; i!= settlements.size();++i){
@@ -855,6 +856,10 @@ public class Player {
 
         //check if we can afford expansion
         if (meepleCost > meepleCount) {
+            return 0;
+        }
+
+        if(enemyPlayer.meepleCount > meepleCount){
             return 0;
         }
 
