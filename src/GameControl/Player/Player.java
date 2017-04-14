@@ -816,8 +816,8 @@ public class Player {
 
         for (Settlement s: settlements) {
             s.removeAnyUndergroundTiles();
+            s.removeNonTopLevelTiles();
         }
-
         return finalMessage;
     }
 

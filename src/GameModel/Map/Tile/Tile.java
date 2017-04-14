@@ -17,9 +17,7 @@ public abstract class Tile {
         this. level = level;
     }
 
-    public int getLevel(){
-        return level;
-    }
+
 
     public abstract OffsetCoordinate getLocation();
 }

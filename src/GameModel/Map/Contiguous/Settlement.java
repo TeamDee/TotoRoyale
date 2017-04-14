@@ -403,18 +403,22 @@ public class Settlement{
         checkForNotTopLevelTiles();
     }
 
+    public void removeNonTopLevelTiles(){
+        for(int i=0; i!=settlement.size();++i){
+            for(TerrainTile t: this.settlement){
+                if(t.getLevel()!=t.getBoardSpace().topTile().getLevel()){
+                    settlement.remove(t);
+                }
+            }
+        }
+    }
+
     public void checkForNotTopLevelTiles() {
         for(int i=0; i!=settlement.size();++i){
             for(TerrainTile t: this.settlement){
                 if(t.getLevel()!=t.getBoardSpace().topTile().getLevel()){
                     System.out.println("TILE NOT AT TOP LEVEL BUT IN SETTLEMENT");
-
-                    try {
-                        Thread.sleep(1000000);
-                    }
-                    catch(InterruptedException ie){
-
-                    }
+                    removeNonTopLevelTiles();
                 }
             }
         }
