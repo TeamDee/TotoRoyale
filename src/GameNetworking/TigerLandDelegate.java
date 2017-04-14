@@ -47,6 +47,13 @@ public class TigerLandDelegate {
         }
     }
 
+    public TigerLandDelegate(String servername, int port) {
+        client = new TigerLandClient(servername, port);
+        gameEnded = false;
+        tournamentPW = "hello";
+        username = "TEAM_D"; password = "PASS_D";
+    }
+
     public TigerLandClient getClient() { return client; }
 
     public void TournamentProtocol(){
