@@ -283,7 +283,10 @@ public abstract class HexTile extends Tile {
         ArrayList<TerrainTile> adjacentTerrainTiles = getAdjacentTerrainTiles();
         for (TerrainTile tt: adjacentTerrainTiles) {
             if (tt.isOwnedBy(player)) {
-                adjacentSettlements.add(player.getSettlementContaining(tt));
+                Settlement adjacentSettlement = player.getSettlementContaining(tt);
+                if (!adjacentSettlements.contains(adjacentSettlement)) {
+                    adjacentSettlements.add(adjacentSettlement);
+                }
             }
         }
         return adjacentSettlements;

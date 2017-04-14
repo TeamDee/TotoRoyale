@@ -938,9 +938,10 @@ public class Player {
 
     private int scoreTigerPlacement(TerrainTile tt) {
         int score = 0;
-        int numberOfAdjacentEnemyTiles = tt.getEnemyAdjacentTerrainTiles().size();
-        return numberOfAdjacentEnemyTiles;
-        //return 1; // TODO add AI in this method
+        if (tt.hasNeighborBelongingToPlayer(enemyPlayer)) {
+            score += 20;    //deny the enemy the tiger placement
+        }
+        return score;
     }
 
     public TerrainTile getBestTotoroPlacementTile(ArrayList<Settlement> legalTotoroSettlements)
@@ -983,16 +984,16 @@ public class Player {
     {
         Settlement bestSettlement = null;
         TerrainTile tigerPlacementTile = null;
-        int bestScore = 0;
+        int bestScore = -1;
         for(Settlement s: legalTigerSettlements) {
             ArrayList<TerrainTile> potentialPlacements =  s.getLegalTigerTiles();
-            for(TerrainTile t: potentialPlacements) {
-                /*if(scoreTigerPlacement(t) > bestScore) {
+            for(TerrainTile tt: potentialPlacements) {
+                int currentScore = scoreTigerPlacement(tt);
+                if(currentScore > bestScore) {
                     bestSettlement = s;
-                    tigerPlacementTile = t;
-                }*/
-                bestSettlement = s;
-                tigerPlacementTile = t;
+                    tigerPlacementTile = tt;
+                    bestScore = currentScore;
+                }
             }
         }
         if(activeSettlement ==null || tigerPlacementTile ==null) {
