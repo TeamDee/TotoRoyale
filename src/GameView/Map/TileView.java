@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import GameModel.Map.Coordinates.OffsetCoordinate;
+import GameModel.Map.Tile.HexTile;
 import GameModel.Map.Tile.Tile;
 import GameView.Tileables.TigerView;
 import GameView.Tileables.TileableView;
@@ -80,7 +81,7 @@ public abstract class TileView{
             //tv.drawToGraphics(g, myViewport);
         }
 
-        switch (myTile.getLevel()){
+        switch (((HexTile)myTile).getLevel()){
             case 0:
                 break;
             case 1:

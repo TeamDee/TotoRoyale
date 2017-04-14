@@ -223,6 +223,10 @@ public abstract class HexTile extends Tile {
         settlementSize = 0;
     }
 
+    public int getLevel(){
+        return this.myBoardSpace.getLevel();
+    }
+
     public boolean hasNeighborBelongingToPlayer(Player player) {
         for (Direction d : Direction.values()) {
             if (hasNeighborInDirection(d)) {
