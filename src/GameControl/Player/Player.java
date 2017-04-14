@@ -664,12 +664,11 @@ public class Player {
         ArrayList<Settlement> TigerLegal = new ArrayList<Settlement>();
         for(Settlement s: settlements)
         {
-            if(canPlaceTiger(s)) //checking size and whether it has a totoro
-            {
+            if(canPlaceTiger(s)) {
                 TigerLegal.add(s);
             }
-            else{
-                //no can place totoro
+            else {
+                //no can place tiger
             }
         }
         if(TigerLegal.size() > 0) {
@@ -698,6 +697,7 @@ public class Player {
                     int currentExpansionValue = currentExpansion.getMeepleCost();
                     if (currentExpansionValue > bestExpansionValue) {
                         bestExpansion = currentExpansion;
+                        bestExpansionValue = currentExpansionValue;
                     }
                 }
             }
@@ -767,14 +767,14 @@ public class Player {
         return (totoroCount == 0 || tigerCount == 0);
     }
 
-    private void getRidOfMeeples(){
+    private void getRidOfMeeples() {
         if(meepleCount == 1){
             buildSettlement(this.myMap);
         }
-        else if(expandSettlement()){
+        else if(expandSettlementToMaximizeMeepleUsage()) {
             //successfully expands settlement.
         }
-        else{
+        else {
             buildSettlement(this.myMap);
         }
     }
@@ -958,9 +958,10 @@ public class Player {
 
     private int scoreTigerPlacement(TerrainTile tt) {
         int score = 0;
-        int numberOfAdjacentEnemyTiles = tt.getEnemyAdjacentTerrainTiles().size();
-        return numberOfAdjacentEnemyTiles;
-        //return 1; // TODO add AI in this method
+        if (tt.hasNeighborBelongingToPlayer(enemyPlayer)) {
+            score += 20;    //deny the enemy the tiger placement
+        }
+        return score;
     }
 
     public TerrainTile getBestTotoroPlacementTile(ArrayList<Settlement> legalTotoroSettlements)
@@ -1003,16 +1004,16 @@ public class Player {
     {
         Settlement bestSettlement = null;
         TerrainTile tigerPlacementTile = null;
-        int bestScore = 0;
+        int bestScore = -1;
         for(Settlement s: legalTigerSettlements) {
             ArrayList<TerrainTile> potentialPlacements =  s.getLegalTigerTiles();
-            for(TerrainTile t: potentialPlacements) {
-                /*if(scoreTigerPlacement(t) > bestScore) {
+            for(TerrainTile tt: potentialPlacements) {
+                int currentScore = scoreTigerPlacement(tt);
+                if(currentScore > bestScore) {
                     bestSettlement = s;
-                    tigerPlacementTile = t;
-                }*/
-                bestSettlement = s;
-                tigerPlacementTile = t;
+                    tigerPlacementTile = tt;
+                    bestScore = currentScore;
+                }
             }
         }
         if(activeSettlement ==null || tigerPlacementTile ==null) {
