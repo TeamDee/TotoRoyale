@@ -261,4 +261,18 @@ public class BoardSpace {
             return getLocation().toString() + "\tlevel: 0\tBoardspace";
         }
     }
+
+    public void cleanUp(){
+        for(HexTile ht: tiles){
+            ht.cleanUp();
+        }
+        tiles = null;
+        location =null;
+        north = null;
+        south =null;
+        northeast = null;
+        northwest = null;
+        southeast = null;
+        southwest = null;
+    }
 }

@@ -36,7 +36,8 @@ public class ViewFrame extends JFrame {
         // ViewportStack.add(MainMenuViewport.getInstance());
         // ViewportStack.add(SimpleStatsViewport.getInstance());
         ViewportOrder.add(ActiveGameViewport.getInstance());
-        if (ActiveGameViewport.getInstance() == null) System.out.println("null");
+        if (ActiveGameViewport.getInstance() == null)
+            System.out.println("null");
         // ViewportStack.add(ExtendedStatsViewport.getInstance());
         // ViewportStack.add(PauseMenuViewport.getInstance());
         addViewport(ActiveGameViewport.getInstance());

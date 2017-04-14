@@ -182,7 +182,6 @@ public abstract class HexTile extends Tile {
     public BoardSpace getBoardSpace(){
         return myBoardSpace;
     }
-    public void setBoardSpace(BoardSpace boardSpace) { this.myBoardSpace = boardSpace; }
 
     public OffsetCoordinate getLocation(){
         if(myBoardSpace != null)
@@ -224,7 +223,7 @@ public abstract class HexTile extends Tile {
     }
 
     public int getLevel(){
-        return this.myBoardSpace.getLevel();
+        return this.level;
     }
 
     public boolean hasNeighborBelongingToPlayer(Player player) {
@@ -294,5 +293,17 @@ public abstract class HexTile extends Tile {
             }
         }
         return adjacentSettlements;
+    }
+
+    /*
+    for garbage collection; call this when you're done with this tile
+     */
+    public void cleanUp(){
+        north = null;
+        northEast = null;
+        northWest = null;
+        south = null;
+        southEast = null;
+        southWest = null;
     }
 }

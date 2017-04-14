@@ -867,10 +867,10 @@ public class Player {
             if(meepleCount>10)
                 expansionValue -= meepleCost * 5;
             else if(meepleCount>5) {
-                expansionValue -= meepleCost * 15;
+                expansionValue -= meepleCost * 30;
             }
             else
-                expansionValue -= meepleCost *50;
+                expansionValue -= meepleCost * 1000;
 
             if (settlementExpansion.canPlaceTotoroAfterExpansion()) {
                 if(totoroCount == 1)
