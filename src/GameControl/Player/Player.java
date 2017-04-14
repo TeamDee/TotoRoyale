@@ -704,6 +704,8 @@ public class Player {
         }
         if (bestExpansionValue > 0) {
             executeExpansion(bestExpansion);
+            buildMessage = "EXPAND SETTLEMENT AT " + bestExpansion.getSettlementToExpand().getTiles().get(0).getBoardSpace().getLocation().getCubicCoordinate().toString();
+            buildMessage += " " + bestExpansion.getTerrainToExpand();
             return true;
         } else {
             return false;
