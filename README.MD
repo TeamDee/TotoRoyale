@@ -8,7 +8,8 @@ TEAM D – we have implemented every requirement asked of us.
 			Tile Placement is implemented 
 			
 	Build phase is implemented 
-			Building a totoro sanctuary is implemented (works locally,  but for server reasons we commented it out. (The AI strategy is geared toward building Tiger playgrounds and placing meeples)
+			Building a totoro sanctuary is implemented (works locally,  but for server reasons we commented it out. (The
+			    AI strategy is geared toward building Tiger playgrounds and placing meeples)
 			
 			Building a tiger playground is implemented 
 		
@@ -16,7 +17,9 @@ TEAM D – we have implemented every requirement asked of us.
 		
 	Scoring is implemented 	
 
-	AI is implemented 
+	AI is implemented
+
+To get more knowledge on how to run the program, please see TigerIsland_CodeDocumentationandCompilation.docx.
 
 
 
