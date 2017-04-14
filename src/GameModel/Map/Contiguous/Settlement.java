@@ -13,6 +13,7 @@ import java.util.Stack;
 import static GameModel.Map.Tile.TerrainType.VOLCANO;
 
 /**
+ * A Settlement is an collection of TerrainTiles owned by a player, this class stores said tiles and gives some reasonable functionality
  * Created by conor on 3/20/2017.
  */
 public class Settlement{

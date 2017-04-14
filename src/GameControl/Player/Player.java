@@ -751,6 +751,8 @@ public class Player {
     public boolean buildSettlement(GameMap gameMap) {
         //choose the best available settlement
         //if we settle... currently the only option
+        if(meepleCount < 1)
+            return false;
         ArrayList<TerrainTile> legalTilesToBuildSettlementOn = getLegalTilesToBuildSettlementOn(gameMap);
         TerrainTile bestPlaceToSettle = getBestTileToBuildSettlementOn(legalTilesToBuildSettlementOn);
         buildSettlement(bestPlaceToSettle);

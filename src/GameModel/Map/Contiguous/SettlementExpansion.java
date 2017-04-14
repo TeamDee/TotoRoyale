@@ -33,7 +33,7 @@ public class SettlementExpansion {
         meepleCost = 0;
         if (tiles != null) {
             for (TerrainTile tt : tiles) {
-                meepleCost += tt.getLevel();
+                meepleCost += tt.getBoardSpace().getLevel();
             }
         }
     }
