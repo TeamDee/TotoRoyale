@@ -25,7 +25,7 @@ public class TigerLandDelegate {
     public TigerLandDelegate(){
         String serverName;
         int port;
-        //Scanner in;// = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         try {
 
            Scanner in = new Scanner(new BufferedReader(new FileReader("src/networking/serverInfo")));
@@ -37,6 +37,7 @@ public class TigerLandDelegate {
 
             System.out.println("Enter in order: TournamentPassword, Username, Password");
             tournamentPW = in.next(); username = in.next(); password = in.next();
+            username = input.next(); password = input.next();
             client= new TigerLandClient(serverName, port);
 
             gameEnded = false;
@@ -104,7 +105,6 @@ public class TigerLandDelegate {
                 authenticated = true;
             }
 
-
             game1 = new GameLogicDirector(1, 2, true);
             game2 = new GameLogicDirector(2, 1, true);
             game3 = new GameLogicDirector(3, 4, true);
@@ -153,11 +153,10 @@ public class TigerLandDelegate {
         String serverMessage = "";
         boolean endOfRoundMessageRecieved = false;
         try{
-            // BEGIN ROUND <rid> OF <rounds>
-            serverMessage = in.readLine();
-            System.out.println("SERVER(Round): " + serverMessage);
             while(!endOfRoundMessageRecieved) {
+                // BEGIN ROUND <rid> OF <rounds>
                 serverMessage = in.readLine();
+                System.out.println("SERVER(Round): " + serverMessage);
                 if (FrequentlyUsedPatterns.RoundBeginMssgPattern.matcher(serverMessage).matches()) {
                     MatchProtocol(in, out);
                 } else if (FrequentlyUsedPatterns.RoundEndMssgPattern.matcher(serverMessage).matches() ||
