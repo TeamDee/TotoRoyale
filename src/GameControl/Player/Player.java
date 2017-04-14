@@ -808,7 +808,8 @@ public class Player {
             }
             else {
                 System.out.println("Player " + this + "cannot legally move");
-                myLogicDirector.setGameOver();
+                if(myLogicDirector != null) //todo
+                    myLogicDirector.setGameOver();
             }
         }
         else {
@@ -863,15 +864,32 @@ public class Player {
             expansionValue += meepleCost * 30;
         }
         else {
-            expansionValue -= meepleCost * 5;
+            if(meepleCount>10)
+                expansionValue -= meepleCost * 5;
+            else if(meepleCount>5) {
+                expansionValue -= meepleCost * 15;
+            }
+            else
+                expansionValue -= meepleCost *50;
+
             if (settlementExpansion.canPlaceTotoroAfterExpansion()) {
-                expansionValue += 50;
+                if(totoroCount == 1)
+                    expansionValue += 10000;
+                else if(totoroCount == 2)
+                    expansionValue += 50;
             }
             if (settlementExpansion.canPlaceTigerAfterExpansion()) {
-                expansionValue += 150;
+                if(tigerCount == 1)
+                    expansionValue += 10000;
+                else if( tigerCount == 2)
+                    expansionValue += 125;
             }
             if (settlementExpansion.canPlaceTigerAfterExpansionAndTilePlacement()) {
-                expansionValue += 75;
+
+                if(tigerCount == 1)
+                    expansionValue += 100;
+                else if(tigerCount == 2)
+                    expansionValue += 50;
             }
         }
 
