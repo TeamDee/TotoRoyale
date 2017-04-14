@@ -817,7 +817,12 @@ public class Player {
     //TODO add AI logic
     public String takeTurn(GameMap gameMap, TriHexTile tile) {
         String result = placementPhase(gameMap, tile);
-        result += " " + buildPhase(gameMap);
+        String buildMessage = buildPhase(gameMap);
+        if(buildMessage.trim().equals("")){
+            result += " UNABLE TO BUILD";
+        }else {
+            result += " " + buildMessage;
+        }
         return result;
     }
 
