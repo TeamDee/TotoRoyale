@@ -405,12 +405,16 @@ public class Settlement{
     }
 
     public void removeNonTopLevelTiles(){
+        ArrayList<TerrainTile> toRemove = new ArrayList<>();
         for(int i=0; i!=settlement.size();++i){
             for(TerrainTile t: this.settlement){
                 if(t.getLevel()!=t.getBoardSpace().topTile().getLevel()){
-                    settlement.remove(t);
+                    toRemove.add(t);
                 }
             }
+        }
+        for(TerrainTile t: toRemove){
+            settlement.remove(t);
         }
     }
 
@@ -419,6 +423,7 @@ public class Settlement{
             for(TerrainTile t: this.settlement){
                 if(t.getLevel()!=t.getBoardSpace().topTile().getLevel()){
                     System.out.println("TILE NOT AT TOP LEVEL BUT IN SETTLEMENT");
+
                     removeNonTopLevelTiles();
                 }
             }
@@ -431,12 +436,13 @@ public class Settlement{
                 if(settlement.get(i) == settlement.get(j)){
                     System.out.println("REPEATED TILES IN SETTLEMENT");
 
+                    /*
                     try {
                         Thread.sleep(1000000);
                     }
                     catch(InterruptedException ie){
 
-                    }
+                    } */
                 }
             }
         }
@@ -463,12 +469,13 @@ public class Settlement{
                         System.out.print("\n");
                     }
                 }
+                /*
                 try {
                     Thread.sleep(1000000);
                 }
                 catch(InterruptedException ie){
 
-                }
+                }*/
             }
         }
     }
