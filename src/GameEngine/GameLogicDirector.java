@@ -11,6 +11,7 @@ import GameModel.Map.Tile.Deck;
 import GameModel.Map.TriHexTile;
 import GameNetworking.FrequentlyUsedPatterns;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -75,69 +76,89 @@ public class GameLogicDirector implements Runnable{
     }
 
     public String tournamentMove(String tileAssigned){
-        String ActionMessage = "PLACE " + tileAssigned + " AT ";
-        TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
-        ActionMessage += currentPlayer.takeTurn(myMap, tht);
-        nextPlayer();
-        //paint();
-        endRoundChecks();
-        if(winner != null)
-            setGameOver();
-        return ActionMessage;
+        try {
+            String ActionMessage = "PLACE " + tileAssigned + " AT ";
+            TriHexTile tht = TriHexTile.makeTriHexTileFromString(tileAssigned);
+            ActionMessage += currentPlayer.takeTurn(myMap, tht);
+            nextPlayer();
+            //paint();
+            endRoundChecks();
+            if (winner != null)
+                setGameOver();
+            return ActionMessage;
+        }catch(Exception e)
+        {
+            return " UNABLE TO BUILD";
+        }
     }
 
     public void opponentPlayerMove(String moveMssg){
-        int cutPoint = 0;
-        if(moveMssg.contains("FOUNDED")){
-            cutPoint = moveMssg.indexOf("FOUNDED");
-        } else if(moveMssg.contains("EXPANDED")){
-            cutPoint = moveMssg.indexOf("EXPANDED");
-        } else if(moveMssg.contains("BUILT")){
-            cutPoint = moveMssg.indexOf("BUILT");
-        }
-        String placeMssg = moveMssg.substring(0, cutPoint);
-        String buildMssg = moveMssg.substring(cutPoint);
+        try {
+            int cutPoint = 0;
+            if (moveMssg.contains("FOUNDED")) {
+                cutPoint = moveMssg.indexOf("FOUNDED");
+            } else if (moveMssg.contains("EXPANDED")) {
+                cutPoint = moveMssg.indexOf("EXPANDED");
+            } else if (moveMssg.contains("BUILT")) {
+                cutPoint = moveMssg.indexOf("BUILT");
+            }
+            String placeMssg = moveMssg.substring(0, cutPoint);
+            String buildMssg = moveMssg.substring(cutPoint);
 
-        opponentPlayerPlace(placeMssg);
-        opponentPlayerBuild(buildMssg);
-        System.out.println("Opponent placement: " + placeMssg);
-        System.out.println("Opponent built: " + buildMssg);
-        nextPlayer();
+            opponentPlayerPlace(placeMssg);
+            opponentPlayerBuild(buildMssg);
+            System.out.println("Opponent placement: " + placeMssg);
+            System.out.println("Opponent built: " + buildMssg);
+            nextPlayer();
+        }catch (Exception e)
+        {
+            //do nothing
+        }
         //paint();
     }
 
     public void opponentPlayerPlace(String placement){
-        int x,y,z, orientation;
-        Matcher placementMatcher = FrequentlyUsedPatterns.PlacementMssgPattern.matcher(placement);
-        if(placementMatcher.matches()){
-            TriHexTile tht = TriHexTile.makeTriHexTileFromString(placementMatcher.group(1));
-            x = Integer.parseInt(placementMatcher.group(2));
-            y = Integer.parseInt(placementMatcher.group(3));
-            z = Integer.parseInt(placementMatcher.group(4));
-            orientation = Integer.parseInt(placementMatcher.group(5).trim());
-            OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
-            currentPlayer.placeOpponent(tht, location, orientation);
+        try {
+            int x, y, z, orientation;
+            Matcher placementMatcher = FrequentlyUsedPatterns.PlacementMssgPattern.matcher(placement);
+            if (placementMatcher.matches()) {
+                TriHexTile tht = TriHexTile.makeTriHexTileFromString(placementMatcher.group(1));
+                x = Integer.parseInt(placementMatcher.group(2));
+                y = Integer.parseInt(placementMatcher.group(3));
+                z = Integer.parseInt(placementMatcher.group(4));
+                orientation = Integer.parseInt(placementMatcher.group(5).trim());
+                OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
+                currentPlayer.placeOpponent(tht, location, orientation);
+            }
+        }catch (Exception e)
+        {
+            //do nothing
         }
     }
 
     public void opponentPlayerBuild(String build){
-        int x,y,z;
-        Matcher buildMatcher = FrequentlyUsedPatterns.BuildPattern.matcher(build);
-        if(buildMatcher.matches()){
-            x = Integer.parseInt(buildMatcher.group(2));
-            y = Integer.parseInt(buildMatcher.group(3));
-            z = Integer.parseInt(buildMatcher.group(4));
-            OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
-            if(build.contains("FOUNDED")){
-                currentPlayer.opponentNewSettlement(location);
-            } else if(build.contains("EXPANDED")){
-                String terrainType = buildMatcher.group(5).trim();
-                currentPlayer.opponentExpand(location, terrainType);
-            } else if(build.contains("TOTORO")){
-                currentPlayer.opponentNewTotoro(location);
-            } else if(build.contains("TIGER")){
-                currentPlayer.opponentNewTiger(location);
+        try {
+            int x, y, z;
+            Matcher buildMatcher = FrequentlyUsedPatterns.BuildPattern.matcher(build);
+            if (buildMatcher.matches()) {
+                x = Integer.parseInt(buildMatcher.group(2));
+                y = Integer.parseInt(buildMatcher.group(3));
+                z = Integer.parseInt(buildMatcher.group(4));
+                OffsetCoordinate location = new CubicCoordinate(x, y, z).getOffsetCoordinate();
+                if (build.contains("FOUNDED")) {
+                    currentPlayer.opponentNewSettlement(location);
+                } else if (build.contains("EXPANDED")) {
+                    String terrainType = buildMatcher.group(5).trim();
+                    currentPlayer.opponentExpand(location, terrainType);
+                } else if (build.contains("TOTORO")) {
+                    currentPlayer.opponentNewTotoro(location);
+                } else if (build.contains("TIGER")) {
+                    currentPlayer.opponentNewTiger(location);
+                }
             }
+        }catch (Exception e)
+        {
+            //do nothing
         }
     }
 

@@ -111,45 +111,49 @@ public class Player {
     }
 
     public String placementPhase(GameMap gameMap, TriHexTile tile){
-        ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
-        ArrayList<Placement> placementsThatFixesBuild = new ArrayList<Placement>();
-        Placement mapPlacementThatFixesNoBuildOptionsProblem = null;
-        if(noLegalBuildMoves(gameMap)){
-            //todo
-            //check to see if our "map" placement will leave us with a legal build move so we don't forfeit
-            for(Placement p: placements){
-                myMap.temporaryPlacement(p);
-                if(noLegalBuildMoves(gameMap)){
-                    //not helpful move, ignore
+        try {
+            ArrayList<Placement> placements = gameMap.getLegalMapPlacements(tile);
+            ArrayList<Placement> placementsThatFixesBuild = new ArrayList<Placement>();
+            Placement mapPlacementThatFixesNoBuildOptionsProblem = null;
+            if (noLegalBuildMoves(gameMap)) {
+                //todo
+                //check to see if our "map" placement will leave us with a legal build move so we don't forfeit
+                for (Placement p : placements) {
+                    myMap.temporaryPlacement(p);
+                    if (noLegalBuildMoves(gameMap)) {
+                        //not helpful move, ignore
+                    } else {
+                        mapPlacementThatFixesNoBuildOptionsProblem = p;
+                        placementsThatFixesBuild.add(p);
+                    }
+                    myMap.revokeLastPlacement();
                 }
-                else{
-                    mapPlacementThatFixesNoBuildOptionsProblem = p;
-                    placementsThatFixesBuild.add(p);
+                if (mapPlacementThatFixesNoBuildOptionsProblem == null) {
+                    placements = new ArrayList<Placement>();
                 }
-                myMap.revokeLastPlacement();
             }
-            if(mapPlacementThatFixesNoBuildOptionsProblem == null){
-                placements = new ArrayList<Placement>();
+
+            if (placements.size() == 0) {   //todo OR the seen placements aren't good enough
+                placements.addAll(gameMap.getLegalTablePlacements(tile)); //note this only gets level 0 placements
+                System.out.println("NO LEGAL LEVEL >1 PLACEMENTS");
             }
-        }
+            //placementAI
+            Placement stupidPlacement = placementAI(placements);
+            //Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
 
-        if(placements.size() == 0) {   //todo OR the seen placements aren't good enough
-            placements.addAll(gameMap.getLegalTablePlacements(tile)); //note this only gets level 0 placements
-            System.out.println("NO LEGAL LEVEL >1 PLACEMENTS");
-        }
-        //placementAI
-        Placement stupidPlacement = placementAI(placements);
-        //Placement stupidPlacement = placements.get(random.nextInt(placements.size())); //todo iterate through placements for the best option
-
-        OffsetCoordinate volcanoLocation = stupidPlacement.getVolcanoLocation();
+            OffsetCoordinate volcanoLocation = stupidPlacement.getVolcanoLocation();
 
 //        if(mapPlacementThatFixesNoBuildOptionsProblem != null){
 //            placeTile(gameMap, mapPlacementThatFixesNoBuildOptionsProblem);
 //        } else {
 //            placeTile(gameMap, stupidPlacement);
 //        }
-        placeTile(gameMap, stupidPlacement);
-        return volcanoLocation.getCubicCoordinate().toString() + " " + stupidPlacement.getOrientation();
+            placeTile(gameMap, stupidPlacement);
+            return volcanoLocation.getCubicCoordinate().toString() + " " + stupidPlacement.getOrientation();
+        }
+        catch (Exception e){
+            return " UNABLE TO BUILD";
+        }
     }
 
     public void placeOpponent(TriHexTile tht, OffsetCoordinate location, int orientation){
@@ -770,61 +774,66 @@ public class Player {
     }
 
     private String buildPhase(GameMap gameMap) {
+        try {
+            for (Settlement settlement : settlements) {
+                settlement.checkSettlementsLegality();
+            }
 
-        for(Settlement settlement: settlements){
-            settlement.checkSettlementsLegality();
-        }
+            String finalMessage = "";
 
-        String finalMessage = "";
+            if (outOfTotoroOrTigers()) {
+                getRidOfMeeples();
+                finalMessage = buildMessage;
+                return finalMessage;
+            }
 
-        if(outOfTotoroOrTigers()){
-            getRidOfMeeples();
-            finalMessage = buildMessage;
+            if (settlements.size() > 0) { //if current player has at least one settlement already
+    //
+                if (addTiger()) { //can't add totoro, add tiger
+                    finalMessage = buildMessage;
+                } else if (addTotoro()) {
+                    finalMessage = buildMessage;
+                } else if (expandSettlement()) {
+                    finalMessage = buildMessage;
+                } else if (buildSettlement(gameMap)) {
+                    finalMessage = buildMessage;
+                } else {
+                    System.out.println("Player " + this + "cannot legally move");
+                    //finalMessage = " UNABLE TO BUILD";
+                    if (myLogicDirector != null) //todo
+                        myLogicDirector.setGameOver();
+                }
+            } else {
+                buildSettlement(gameMap);
+                finalMessage = buildMessage;
+            }
+
+            for (Settlement s : settlements) {
+                s.removeAnyUndergroundTiles();
+                s.removeNonTopLevelTiles();
+            }
             return finalMessage;
         }
-
-        if(settlements.size() > 0) { //if current player has at least one settlement already
-//
-            if (addTiger()) { //can't add totoro, add tiger
-                finalMessage = buildMessage;
-            }
-            else if (addTotoro()) {
-                 finalMessage = buildMessage;
-            }
-            else if (expandSettlement()) {
-                finalMessage = buildMessage;
-            }
-            else if (buildSettlement(gameMap)) {
-                finalMessage = buildMessage;
-            }
-            else {
-                System.out.println("Player " + this + "cannot legally move");
-                if(myLogicDirector != null) //todo
-                    myLogicDirector.setGameOver();
-            }
+        catch (Exception e)
+        {
+            return " UNABLE TO BUILD";
         }
-        else {
-            buildSettlement(gameMap);
-            finalMessage = buildMessage;
-        }
-
-        for (Settlement s: settlements) {
-            s.removeAnyUndergroundTiles();
-            s.removeNonTopLevelTiles();
-        }
-        return finalMessage;
     }
 
     //TODO add AI logic
     public String takeTurn(GameMap gameMap, TriHexTile tile) {
-        String result = placementPhase(gameMap, tile);
-        String buildMessage = buildPhase(gameMap);
-        if(buildMessage.trim().equals("")){
-            result += " UNABLE TO BUILD";
-        }else {
-            result += " " + buildMessage;
+        try {
+            String result = placementPhase(gameMap, tile);
+            String buildMessage = buildPhase(gameMap);
+            if (buildMessage.trim().equals("")) {
+                result += " UNABLE TO BUILD";
+            } else {
+                result += " " + buildMessage;
+            }
+            return result;
+        }catch (Exception e){
+            return " UNABLE TO BUILD";
         }
-        return result;
     }
 
     public void placeTile(GameMap gameMap, Placement placement) {
