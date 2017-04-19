@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 public class MeepleView implements TileableView{
     public int numMeeples;
     public BufferedImage myImage;
-    public BufferedImage singleMeeple;
+    public static BufferedImage singleMeeple;
 
     private JPanel parent;
 

@@ -419,23 +419,32 @@ public class Settlement{
     }
 
     public void checkForNotTopLevelTiles() {
+        boolean removeTopLevelTiles = false;
         for(int i=0; i!=settlement.size();++i){
             for(TerrainTile t: this.settlement){
                 if(t.getLevel()!=t.getBoardSpace().topTile().getLevel()){
                     System.out.println("TILE NOT AT TOP LEVEL BUT IN SETTLEMENT");
-
-                    removeNonTopLevelTiles();
+                    removeTopLevelTiles = true;
                 }
             }
+        }
+        if(removeTopLevelTiles)
+            removeNonTopLevelTiles();
+    }
+
+    public void removeRepeatedTiles(ArrayList<TerrainTile> tilesToRemove){
+        for(TerrainTile t: tilesToRemove){
+            settlement.remove(t);
         }
     }
 
     public void checkForRepeatedTiles() {
+        ArrayList<TerrainTile> tilesToRemove = new ArrayList<>();
         for(int i=0; i!=settlement.size();++i){
             for(int j = i+1; j!=settlement.size(); ++j){
                 if(settlement.get(i) == settlement.get(j)){
                     System.out.println("REPEATED TILES IN SETTLEMENT");
-
+                    tilesToRemove.add(settlement.get(j));
                     /*
                     try {
                         Thread.sleep(1000000);
@@ -446,6 +455,7 @@ public class Settlement{
                 }
             }
         }
+        removeRepeatedTiles(tilesToRemove);
     }
 
     public void checkForNonAdjacentTiles() {
@@ -500,11 +510,15 @@ public class Settlement{
     }
 
     public void removeAnyUndergroundTiles() {
+        ArrayList<TerrainTile> tilesToRemove = new ArrayList<TerrainTile>();
         for (TerrainTile tt: settlement) {
             if (tt.getLevel() < tt.getBoardSpace().getLevel()) {
-                settlement.remove(tt);
+                tilesToRemove.add(tt);
                 System.out.println("FOUND AND REMOVED UNDERGROUND TILE " + tt + "\nFROM SETTLEMENT\n" + this);
             }
+        }
+        for(TerrainTile tt: tilesToRemove){
+            settlement.remove(tt);
         }
     }
 }

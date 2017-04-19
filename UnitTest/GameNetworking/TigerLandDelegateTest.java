@@ -2,6 +2,7 @@ package GameNetworking;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -11,6 +12,7 @@ import java.net.Socket;
 /**
  * Created by Z_K on 4/6/2017.
  */
+@Ignore
 public class TigerLandDelegateTest {
     TigerLandDelegate delegate;
     ServerSocket server;

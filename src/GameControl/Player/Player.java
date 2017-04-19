@@ -638,20 +638,7 @@ public class Player {
             activeSettlement.addToSettlement(placeTotoroHere);
             activeSettlement.placedTotoro();
             System.out.println("ADDED TOTORO AT " + placeTotoroHere + "\nIN SETTLEMENT\n" + activeSettlement);
-            ArrayList<TerrainTile> adjacentTerrainTiles = placeTotoroHere.getAdjacentTerrainTiles();
-            for (TerrainTile adjacentTerrainTile: adjacentTerrainTiles) {
-                if (adjacentTerrainTile.isOwnedBy(this)) {
-                    Settlement settlementToMergeWith = getSettlementContaining(adjacentTerrainTile);
-                    ArrayList<TerrainTile> tilesToMergeWith = settlementToMergeWith.getTiles();
-                    for (TerrainTile tileToMergeWith: tilesToMergeWith) {
-                        activeSettlement.addToSettlement(tileToMergeWith);
-                    }
-                    if (settlementToMergeWith.hasTiger()) {
-                        activeSettlement.hasTiger();
-                    }
-                    settlements.remove(settlementToMergeWith);
-                }
-            }
+            settlements = activeSettlement.combineAdjacentSettlementsForSingleTile(placeTotoroHere,settlements,activeSettlement);
             buildMessage = "BUILD TOTORO SANCTUARY AT " + placeTotoroHere.getBoardSpace().getLocation().getCubicCoordinate().toString();
             return true;
         }
@@ -797,11 +784,12 @@ public class Player {
         }
 
         if(settlements.size() > 0) { //if current player has at least one settlement already
-//            if (addTotoro()) {
-//                finalMessage = buildMessage;
-//            }
+//
             if (addTiger()) { //can't add totoro, add tiger
                 finalMessage = buildMessage;
+            }
+            else if (addTotoro()) {
+                 finalMessage = buildMessage;
             }
             else if (expandSettlement()) {
                 finalMessage = buildMessage;
@@ -830,7 +818,12 @@ public class Player {
     //TODO add AI logic
     public String takeTurn(GameMap gameMap, TriHexTile tile) {
         String result = placementPhase(gameMap, tile);
-        result += " " + buildPhase(gameMap);
+        String buildMessage = buildPhase(gameMap);
+        if(buildMessage.trim().equals("")){
+            result += " UNABLE TO BUILD";
+        }else {
+            result += " " + buildMessage;
+        }
         return result;
     }
 

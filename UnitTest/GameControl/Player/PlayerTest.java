@@ -39,7 +39,7 @@ public class PlayerTest {
         TerrainTile north = new Grass();
         TerrainTile center = new Grass();
         TerrainTile south = new Grass();
-        Settlement settlement = new Settlement();
+        Settlement settlement = new Settlement(player1);
         north.setLevel(1);
         center.setLevel(1);
         south.setLevel(1);
@@ -54,7 +54,7 @@ public class PlayerTest {
         settlement.addToSettlement(center);
         settlement.addToSettlement(south);
         player1.clearSettlements();
-        player1.addSettlement(settlement);
+        player1.settlement(settlement);
         Assert.assertEquals(3, settlement.getSettlementSize());
         player1.nukeSettlements(new ArrayList<TerrainTile>(center));
         ArrayList<Settlement> playerSettlements = player1.getSettlements();

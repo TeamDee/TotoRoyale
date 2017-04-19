@@ -47,6 +47,13 @@ public class TigerLandDelegate {
         }
     }
 
+    public TigerLandDelegate(String servername, int port) {
+        client = new TigerLandClient(servername, port);
+        gameEnded = false;
+        tournamentPW = "hello";
+        username = "TEAM_D"; password = "PASS_D";
+    }
+
     public TigerLandClient getClient() { return client; }
 
     public void TournamentProtocol(){
@@ -124,8 +131,10 @@ public class TigerLandDelegate {
         try {
             while(nextGame) {
                 // NEW CHALLENGE <cid> YOU WILL PLAY <rounds> MATCHES
+                // while(serverMessage == null)
                 serverMessage = in.readLine();
                 System.out.println("SERVER(Challenge): " + serverMessage);
+
                 Matcher ChallengeMatcher = FrequentlyUsedPatterns.ChallengeMssgPattern.matcher(serverMessage);
                 if (ChallengeMatcher.matches()) {
                     challengeId = Integer.parseInt(ChallengeMatcher.group(1));

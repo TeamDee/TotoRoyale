@@ -152,7 +152,7 @@ public class GameLogicDirector implements Runnable{
     public void begin(){
         gc = new GameController();//GameController.getInstance();
         //if(!serverGame)
-        gc.initViewControllerInteractions(p1, activePlayer);
+        //gc.initViewControllerInteractions(p1, activePlayer);
         Thread gameThread = new Thread(this);
         gameThread.start();
     }
